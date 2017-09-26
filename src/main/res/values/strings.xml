@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+<string name="app_name">Feavr</string>
+<string name="app_version">v1.0.0</string>
+
+<!-- Scan Dialog -->
+<string name="scan_dialog_title">Scanning for Heart Monitor...</string>
+<string name="cancel">Cancel</string>
+
+
+<!-- Bluetooth permission -->
+<string name="request_permissions_text">Without the location permission, the APP is unable to scan for Bluetooth LE devices, and will not be able to connect to the heartbeat monitor. Are you sure you want to deny this permission? (you will not be able to perform any measure without it)</string>
+<string name="request_permissions_settings_text">This APP requires location permission in order to scan for Bluetooth LE devices. Without it, you will not be able to connect to the Heart Beat Monitor. Do you want to open the APP settings in order to allow location permission?</string>
+<string name="request_bluetooth_text">This APP requires Bluetooth to connect to the Heart Rate Monitor. Are you sure you want to deny this permission? (you will not be able to perform any measure without it)</string>
+<string name="open_settings">Open APP settings</string>
+<string name="dont_allow">Don\'t allow</string>
+<string name="retry">Retry</string>
+<string name="permission_denied">Permission denied</string>
+<string name="unknown_device">n/a</string>
+<string name="bluetooth_required">Bluetooth Required</string>
+
+
+<string name="ble_not_supported">BLE is not supported</string>
+<string name="label_data">Data:</string>
+<string name="label_device_address">Device address:</string>
+<string name="label_state">BLE State:</string>
+<string name="label_artikcloud_deviceid">ARTIK Cloud Device ID:</string>
+<string name="NA">N/A</string>
+<string name="no_data">No data</string>
+<string name="connected">Connected</string>
+<string name="disconnected">Disconnected</string>
+<string name="title_devices">BLE Device Scan</string>
+<string name="error_bluetooth_not_supported">Bluetooth not supported.</string>
+
+<string name="unknown_characteristic">Unknown characteristic</string>
+<string name="unknown_service">Unknown service</string>
+
+<!-- Notifications -->
+<string name="ble_notification_title">Connected to BLE device</string>
+
+
+<!-- Technical Settings Activity -->
+<string name="title_activity_technical_settings">Technical Settings</string>
+
+
+
+<!-- Menu items -->
+<string name="menu_connect">BLE Connect</string>
+<string name="menu_disconnect">BLE Disconnect</string>
+<string name="menu_scan">Scan</string>
+<string name="menu_stop">Stop</string>
+<string name="menu_logout_cloud">Logout</string>
+
+
+<!-- Technical settings -->
+    <string name="technical_settings_text">In order to detect your device, make sure the Bluetooth
+    is turned on and select your device from the list. If your device comply with Bluetooth
+    Low-Energy norm, the APP will detect it automatically, you won\'t have any pairing to do. \nAll devices reachable are displayed on the list, select yours and the setting is done.</string>
+<string name="technical_settings_close">Close</string>
+<string name="scan">Connect to a device</string>
+<string name="disconnect">Disconnect</string>
+<string name="connected_to">Connected to \ </string>
+<string name="not_connected">No device connected</string>
+<string name="bpm">BPM: \ </string>
+
+
+<!-- Technical settings -->
+<string name="user_settings_text">User Settings</string>
+<string name="title_activity_user_settings">User Settings</string>
+
+<!-- menu -->
+<string name="navigation_drawer_open">Open navigation drawer</string>
+<string name="navigation_drawer_close">Close navigation drawer</string>
+
+<string name="action_technical_settings">Technical Settings</string>
+<string name="action_settings">Settings</string>
+
+
+<string name="becare">BLE Handler</string>
+
+</resources>

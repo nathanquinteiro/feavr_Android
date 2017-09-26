@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">5dp</dimen>
+    <dimen name="activity_vertical_margin">5dp</dimen>
+
+    <!-- Main activity -->
+    <dimen name="drawer_item_height">32dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="nav_header_vertical_spacing">5dp</dimen>
+    <dimen name="nav_header_height">5dp</dimen>
+    <dimen name="fab_margin">5dp</dimen>
+    <!-- Devices Scan Dialog -->
+    <dimen name="dialog_device_margin">4dp</dimen>
+
+    <!-- Technical Settings -->
+    <dimen name="technical_settings_battery_height">40dp</dimen>
+    <dimen name="technical_settings_battery_width">80dp</dimen>
+    <dimen name="technical_settings_battery_inner_margin">3dp</dimen>
+    <dimen name="technical_settings_battery_circle_margin">1dp</dimen>
+    <dimen name="technical_settings_image_height">60dp</dimen>
+    <dimen name="technical_settings_text_size">8dp</dimen>
+    <dimen name="devices_list_divider">4px</dimen>
+</resources>
