@@ -20,7 +20,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 
-import quinteiro.nathan.feavr.ui.camera.GraphicOverlay;
+import quinteiro.nathan.feavr.UI.camera.GraphicOverlay;
 import com.google.android.gms.vision.barcode.Barcode;
 
 /**

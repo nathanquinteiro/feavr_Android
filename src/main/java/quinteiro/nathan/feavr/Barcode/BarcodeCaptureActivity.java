@@ -44,10 +44,10 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.CommonStatusCodes;
 
 import quinteiro.nathan.feavr.R;
-import quinteiro.nathan.feavr.ui.camera.CameraSource;
-import quinteiro.nathan.feavr.ui.camera.CameraSourcePreview;
+import quinteiro.nathan.feavr.UI.camera.CameraSource;
+import quinteiro.nathan.feavr.UI.camera.CameraSourcePreview;
 
-import quinteiro.nathan.feavr.ui.camera.GraphicOverlay;
+import quinteiro.nathan.feavr.UI.camera.GraphicOverlay;
 import com.google.android.gms.vision.MultiProcessor;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;

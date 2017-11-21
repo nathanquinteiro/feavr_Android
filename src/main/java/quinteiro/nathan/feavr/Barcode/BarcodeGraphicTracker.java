@@ -18,7 +18,7 @@ package quinteiro.nathan.feavr.Barcode;
 import android.content.Context;
 import android.support.annotation.UiThread;
 
-import quinteiro.nathan.feavr.ui.camera.GraphicOverlay;
+import quinteiro.nathan.feavr.UI.camera.GraphicOverlay;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.Tracker;
 import com.google.android.gms.vision.barcode.Barcode;
