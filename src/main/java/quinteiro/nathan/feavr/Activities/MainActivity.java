@@ -31,11 +31,8 @@ import quinteiro.nathan.feavr.Unity.UnityPlayerActivity;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private final static int NB_RR_ON_GRAPH = 20;
-
     private BluetoothLEService mBLEService;
 
-    private ArrayList<Double> rrData = new ArrayList<>();
 
     private TextView bpmTextView;
 
@@ -126,6 +123,10 @@ public class MainActivity extends AppCompatActivity
                 BLEManager.startBluetoothService(this);
 
             }
+        }
+        if (id == R.id.nav_connect) {
+            Intent intent = new Intent(this, ConnectActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

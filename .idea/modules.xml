@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Feavr.iml" filepath="$PROJECT_DIR$/Feavr.iml" />
+      <module fileurl="file://$PROJECT_DIR$/feavr_Android.iml" filepath="$PROJECT_DIR$/feavr_Android.iml" />
     </modules>
   </component>
 </project>

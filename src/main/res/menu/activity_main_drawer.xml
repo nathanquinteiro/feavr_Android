@@ -28,6 +28,11 @@
                 android:id="@+id/nav_technical_settings"
                 android:icon="@drawable/ic_menu_manage"
                 android:title="@string/action_technical_settings" />
+
+            <item
+                android:id="@+id/nav_connect"
+                android:icon="@drawable/ic_menu_share"
+                android:title="@string/action_connect" />
         </menu>
     </item>
 
