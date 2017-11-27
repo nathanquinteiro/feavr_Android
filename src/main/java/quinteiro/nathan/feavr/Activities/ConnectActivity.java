@@ -19,6 +19,7 @@ import quinteiro.nathan.feavr.Barcode.*;
 public class ConnectActivity extends AppCompatActivity {
 
     private final int BARCODE_READER_REQUEST_CODE = 1;
+    private final int BARCODE_GENERATOR_REQUEST_CODE = 2;
 
     private boolean mConnected = false;
 
@@ -47,6 +48,17 @@ public class ConnectActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), BarcodeCaptureActivity.class);
                 startActivityForResult(intent, BARCODE_READER_REQUEST_CODE);
+
+            }
+        });
+
+        generate = (Button) findViewById(R.id.btGenerate);
+        generate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), BarcodeGeneratorActivity.class);
+                startActivity(intent);
+
 
             }
         });
