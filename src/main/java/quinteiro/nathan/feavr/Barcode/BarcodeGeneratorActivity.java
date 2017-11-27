@@ -46,6 +46,10 @@ public class BarcodeGeneratorActivity extends Activity {
 
         twBarcode.setText(ipAddress);
 
+        //TODO Use a spinner (generate the qrcode take sometimes...)
+
+        //TODO Save state
+
         try {
             bitmap = TextToImageEncode(ipAddress);
             imageViewBarcode.setImageBitmap(bitmap);
@@ -62,7 +66,8 @@ public class BarcodeGeneratorActivity extends Activity {
         try {
             bitMatrix = new MultiFormatWriter().encode(
                     Value,
-                    BarcodeFormat.DATA_MATRIX.QR_CODE,
+                    //BarcodeFormat.DATA_MATRIX.QR_CODE,
+                    BarcodeFormat.QR_CODE,
                     QRcodeWidth, QRcodeWidth, null
             );
 

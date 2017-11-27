@@ -98,5 +98,7 @@ Google Vision
     <string name="barcode_error">"Error reading barcode: %1$s"</string>
     <string name="textSwMultiPlayer">Multi-player Mode :</string>
     <string name="textTvScanResult">Not connected</string>
+    <string name="text_qr_code_generator">QR Code Generator</string>
+    <string name="text_qr_code_scanner">QR Code Scanner</string>
 
 </resources>
