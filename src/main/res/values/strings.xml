@@ -96,5 +96,7 @@ Google Vision
     <string name="barcode_success">Barcode read successfully</string>
     <string name="barcode_failure">No barcode captured</string>
     <string name="barcode_error">"Error reading barcode: %1$s"</string>
+    <string name="textSwMultiPlayer">Multi-player Mode :</string>
+    <string name="textTvScanResult">Not connected</string>
 
 </resources>

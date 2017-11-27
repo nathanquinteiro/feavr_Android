@@ -15,30 +15,50 @@
     tools:showIn="@layout/app_bar_connection">
 
 
-    <Button
-        android:id="@+id/btScan"
+    <Switch
+        android:id="@+id/swMultiPlayer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="18dp"
-        android:text="QR Code Scanner" />
+        android:text="@string/textSwMultiPlayer" />
 
     <Button
         android:id="@+id/btGenerate"
-        android:layout_width="wrap_content"
+
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/btScan"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="28dp"
-        android:text="QR Code Generator" />
+
+        android:layout_below="@id/swMultiPlayer"
+
+        android:layout_marginTop="12dp"
+        android:text="QR Code Generator"
+
+        android:visibility="invisible"/>
+
+    <Button
+        android:id="@+id/btScan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btGenerate"
+
+
+        android:layout_marginTop="10dp"
+        android:text="QR Code Scanner"
+        android:visibility="invisible"
+        />
+
 
     <TextView
         android:id="@+id/tvScanResult"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="sdasdfasfdadsd" />
+        android:layout_marginBottom="80dp"
+        android:text="@string/textTvScanResult" />
+
+
 
 </RelativeLayout>

@@ -8,6 +8,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
@@ -26,6 +28,8 @@ public class ConnectActivity extends AppCompatActivity {
     private Button scan;
     private Button generate;
 
+    private Switch switchMultiPlayer;
+
     private TextView tvResult;
 
     @Override
@@ -41,6 +45,23 @@ public class ConnectActivity extends AppCompatActivity {
         }
 
         tvResult = (TextView) findViewById(R.id.tvScanResult);
+
+        switchMultiPlayer = (Switch) findViewById(R.id.swMultiPlayer);
+        switchMultiPlayer.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    generate.setVisibility(View.VISIBLE);
+                    scan.setVisibility(View.VISIBLE);
+
+                } else{
+                    generate.setVisibility(View.INVISIBLE);
+                    scan.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
+
 
         scan = (Button) findViewById(R.id.btScan);
         scan.setOnClickListener(new View.OnClickListener() {
