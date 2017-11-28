@@ -2,15 +2,22 @@ package quinteiro.nathan.feavr.Barcode;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Queue;
 
 import quinteiro.nathan.feavr.R;
 
@@ -30,6 +37,8 @@ public class BarcodeGeneratorActivity extends Activity {
     public Bitmap bitmap;
     public ImageView imageViewBarcode;
     public TextView twBarcode;
+    public TextView twIPRec;
+    public String ip = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +48,14 @@ public class BarcodeGeneratorActivity extends Activity {
         imageViewBarcode  = (ImageView) findViewById(R.id.ivBarCode);
         twBarcode = (TextView) findViewById(R.id.twBarCode);
 
+        twIPRec = (TextView) findViewById(R.id.twIPRec);
+
 
         String ipAddress = getIPAddress(true);
 
 
 
-        twBarcode.setText(ipAddress);
+        twBarcode.setText("My IP : "+ipAddress);
 
         //TODO Use a spinner (generate the qrcode take sometimes...)
 
@@ -58,7 +69,118 @@ public class BarcodeGeneratorActivity extends Activity {
         }
 
 
+
+        class getIpAsync extends AsyncTask<Void, Void, String> {
+
+            @Override
+            protected String doInBackground(Void... voids) {
+
+                int server_port = 12345;
+                byte[] message = new byte[500];
+                DatagramPacket p = new DatagramPacket(message, message.length);
+                DatagramSocket s = null;
+                try {
+                    s = new DatagramSocket(server_port);
+                    s.receive(p);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                String text = new String(message, 0, p.getLength());
+
+
+                return text;
+
+
+
+            }
+
+            @Override
+            protected void onPostExecute(String s){
+                if (R.id.twIPRec!=1){
+
+                    TextView tw = (TextView) findViewById(R.id.twIPRec);
+                    tw.setText("Other IP : "+s);
+
+
+                }
+            }
+        }
+
+        new getIpAsync().execute();
+        //getIpAsync a = new getIpAsync();
+        //a.doInBackground();
+
+
+
+
+/*
+        Runnable getIP = new Runnable() {
+
+
+
+
+            @Override
+            public void run() {
+                //client side : http://www.helloandroid.com/tutorials/simple-udp-communication-example
+                int server_port = 12345;
+                byte[] message = new byte[500];
+                DatagramPacket p = new DatagramPacket(message, message.length);
+                DatagramSocket s = null;
+                try {
+                    s = new DatagramSocket(server_port);
+                    s.receive(p);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                String text = new String(message, 0, p.getLength());
+                Log.e("Udp",text);
+                //ip=text;
+                //ip = text;
+
+                TextView tw = (TextView) findViewById(R.id.twIPRec);
+                tw.setText("Other IP : "+text);
+
+
+
+
+                //twIPRec.setText("Other IP : "+text);
+
+            }
+        };
+
+        new Thread(getIP).start();
+*/
+
+
+
+        /*twIPRec.post(new Runnable() {
+            @Override
+            public void run() {
+
+                int server_port = 12345;
+                byte[] message = new byte[500];
+                DatagramPacket p = new DatagramPacket(message, message.length);
+                DatagramSocket s = null;
+                try {
+                    s = new DatagramSocket(server_port);
+                    s.receive(p);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                String text = new String(message, 0, p.getLength());
+                Log.e("Udp",text);
+                twIPRec.setText("Other IP : "+ text);
+
+            }
+        });*/
+
+
+
     }
+
 
 
     Bitmap TextToImageEncode(String Value) throws WriterException {

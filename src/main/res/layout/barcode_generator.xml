@@ -22,5 +22,11 @@
         android:layout_height="300dp"
         app:srcCompat="@drawable/ic_filter_vintage_black_24dp" />
 
+    <TextView
+        android:id="@+id/twIPRec"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/text_tw_ip_rec" />
+
 
 </LinearLayout>

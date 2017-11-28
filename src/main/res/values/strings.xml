@@ -100,5 +100,6 @@ Google Vision
     <string name="textTvScanResult">Not connected</string>
     <string name="text_qr_code_generator">QR Code Generator</string>
     <string name="text_qr_code_scanner">QR Code Scanner</string>
+    <string name="text_tw_ip_rec">None</string>
 
 </resources>

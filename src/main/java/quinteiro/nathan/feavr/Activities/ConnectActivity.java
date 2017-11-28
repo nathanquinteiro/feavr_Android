@@ -15,6 +15,16 @@ import android.widget.TextView;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
 
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.util.Collections;
+import java.util.List;
+
 import quinteiro.nathan.feavr.R;
 import quinteiro.nathan.feavr.Barcode.*;
 
@@ -27,6 +37,8 @@ public class ConnectActivity extends AppCompatActivity {
 
     private Button scan;
     private Button generate;
+
+    private Button testBt;
 
     private Switch switchMultiPlayer;
 
@@ -83,6 +95,42 @@ public class ConnectActivity extends AppCompatActivity {
 
             }
         });
+
+        testBt = (Button) findViewById(R.id.button2);
+        testBt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("BtTest","----pushed");
+
+                String messageStr="Hello";
+                DatagramSocket s = null;
+                InetAddress local = null;
+                int server_port = 12345;
+                try {
+                    s = new DatagramSocket();
+                    local = InetAddress.getByName("192.168.1.25");
+                } catch (SocketException | UnknownHostException e) {
+                    e.printStackTrace();
+                }
+
+                int msg_length=messageStr.length();
+                byte[] message = messageStr.getBytes();
+
+                DatagramPacket p = new DatagramPacket(message, msg_length,local,server_port);
+                try {
+                    assert s != null;
+                    s.send(p);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+
+
+
+
+            }
+        });
     }
 
     @Override
@@ -93,9 +141,67 @@ public class ConnectActivity extends AppCompatActivity {
                     Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
                     String text = barcode.displayValue;
                     tvResult.setText(text);
+
+
+                    //ici
+                    DatagramSocket s = null;
+                    InetAddress local = null;
+                    int server_port = 12345;
+                    try {
+                        s = new DatagramSocket();
+                        //local = InetAddress.getByName("192.168.1.25");
+                        local = InetAddress.getByName(text);
+                    } catch (SocketException | UnknownHostException e) {
+                        e.printStackTrace();
+                    }
+
+
+                    //get my ip
+                    String myIp = getIPAddress(true);
+
+                    int msg_length=myIp.length();
+                    byte[] message = myIp.getBytes();
+
+                    DatagramPacket p = new DatagramPacket(message, msg_length,local,server_port);
+                    try {
+                        assert s != null;
+                        s.send(p);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+
                 }
             }
         }
+    }
+
+    public static String getIPAddress(boolean useIPv4) {
+        try {
+            List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
+            for (NetworkInterface intf : interfaces) {
+                List<InetAddress> addrs = Collections.list(intf.getInetAddresses());
+                for (InetAddress addr : addrs) {
+                    if (!addr.isLoopbackAddress()) {
+                        String sAddr = addr.getHostAddress();
+                        //boolean isIPv4 = InetAddressUtils.isIPv4Address(sAddr);
+                        boolean isIPv4 = sAddr.indexOf(':') < 0;
+
+                        if (useIPv4) {
+                            if (isIPv4)
+                                return sAddr;
+                        } else {
+                            if (!isIPv4) {
+                                int delim = sAddr.indexOf('%'); // drop ip6 zone suffix
+                                return delim < 0 ? sAddr.toUpperCase() : sAddr.substring(0, delim).toUpperCase();
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception ex) {
+        } // for now eat exceptions
+        return "";
     }
 
 

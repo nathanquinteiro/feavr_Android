@@ -59,6 +59,14 @@
         android:layout_marginBottom="80dp"
         android:text="@string/textTvScanResult" />
 
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tvScanResult"
+        android:layout_alignStart="@+id/tvScanResult"
+        android:layout_marginBottom="48dp"
+        android:text="udp test send" />
 
 
 </RelativeLayout>
