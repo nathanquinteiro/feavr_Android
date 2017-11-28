@@ -45,7 +45,7 @@ public class BarcodeGeneratorActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.barcode_generator);
 
-        imageViewBarcode  = (ImageView) findViewById(R.id.ivBarCode);
+        //imageViewBarcode  = (ImageView) findViewById(R.id.ivBarCode);
         twBarcode = (TextView) findViewById(R.id.twBarCode);
 
         twIPRec = (TextView) findViewById(R.id.twIPRec);
@@ -61,129 +61,22 @@ public class BarcodeGeneratorActivity extends Activity {
 
         //TODO Save state
 
-        try {
+        /*try {
             bitmap = TextToImageEncode(ipAddress);
-            imageViewBarcode.setImageBitmap(bitmap);
+            //imageViewBarcode.setImageBitmap(bitmap);
         } catch (WriterException e) {
             e.printStackTrace();
-        }
+        }*/
 
-
-
-        class getIpAsync extends AsyncTask<Void, Void, String> {
-
-            @Override
-            protected String doInBackground(Void... voids) {
-
-                int server_port = 12345;
-                byte[] message = new byte[500];
-                DatagramPacket p = new DatagramPacket(message, message.length);
-                DatagramSocket s = null;
-                try {
-                    s = new DatagramSocket(server_port);
-                    s.receive(p);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                String text = new String(message, 0, p.getLength());
-
-
-                return text;
-
-
-
-            }
-
-            @Override
-            protected void onPostExecute(String s){
-                if (R.id.twIPRec!=1){
-
-                    TextView tw = (TextView) findViewById(R.id.twIPRec);
-                    tw.setText("Other IP : "+s);
-
-
-                }
-            }
-        }
-
+        new generateQRCode().execute(ipAddress);
         new getIpAsync().execute();
-        //getIpAsync a = new getIpAsync();
-        //a.doInBackground();
-
-
-
-
-/*
-        Runnable getIP = new Runnable() {
-
-
-
-
-            @Override
-            public void run() {
-                //client side : http://www.helloandroid.com/tutorials/simple-udp-communication-example
-                int server_port = 12345;
-                byte[] message = new byte[500];
-                DatagramPacket p = new DatagramPacket(message, message.length);
-                DatagramSocket s = null;
-                try {
-                    s = new DatagramSocket(server_port);
-                    s.receive(p);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                String text = new String(message, 0, p.getLength());
-                Log.e("Udp",text);
-                //ip=text;
-                //ip = text;
-
-                TextView tw = (TextView) findViewById(R.id.twIPRec);
-                tw.setText("Other IP : "+text);
-
-
-
-
-                //twIPRec.setText("Other IP : "+text);
-
-            }
-        };
-
-        new Thread(getIP).start();
-*/
-
-
-
-        /*twIPRec.post(new Runnable() {
-            @Override
-            public void run() {
-
-                int server_port = 12345;
-                byte[] message = new byte[500];
-                DatagramPacket p = new DatagramPacket(message, message.length);
-                DatagramSocket s = null;
-                try {
-                    s = new DatagramSocket(server_port);
-                    s.receive(p);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                String text = new String(message, 0, p.getLength());
-                Log.e("Udp",text);
-                twIPRec.setText("Other IP : "+ text);
-
-            }
-        });*/
-
 
 
     }
 
 
 
-    Bitmap TextToImageEncode(String Value) throws WriterException {
+    /*Bitmap TextToImageEncode(String Value) throws WriterException {
         BitMatrix bitMatrix;
         try {
             bitMatrix = new MultiFormatWriter().encode(
@@ -216,7 +109,7 @@ public class BarcodeGeneratorActivity extends Activity {
 
         bitmap.setPixels(pixels, 0, 500, 0, 0, bitMatrixWidth, bitMatrixHeight);
         return bitmap;
-    }
+    }*/
 
 
     public static String getIPAddress(boolean useIPv4) {
@@ -245,6 +138,101 @@ public class BarcodeGeneratorActivity extends Activity {
         } catch (Exception ex) {
         } // for now eat exceptions
         return "";
+    }
+
+    private class generateQRCode extends AsyncTask<String, Void, Bitmap>{
+
+        @Override
+        protected Bitmap doInBackground(String... strings) {
+
+            String Value = strings[0];
+
+            BitMatrix bitMatrix = null;
+            try {
+                bitMatrix = new MultiFormatWriter().encode(
+                        Value,
+                        //BarcodeFormat.DATA_MATRIX.QR_CODE,
+                        BarcodeFormat.QR_CODE,
+                        QRcodeWidth, QRcodeWidth, null
+                );
+
+            } catch (IllegalArgumentException Illegalargumentexception) {
+
+                return null;
+            } catch (WriterException e) {
+                e.printStackTrace();
+            }
+            int bitMatrixWidth = bitMatrix.getWidth();
+
+            int bitMatrixHeight = bitMatrix.getHeight();
+
+            int[] pixels = new int[bitMatrixWidth * bitMatrixHeight];
+
+            for (int y = 0; y < bitMatrixHeight; y++) {
+                int offset = y * bitMatrixWidth;
+
+                for (int x = 0; x < bitMatrixWidth; x++) {
+
+                    pixels[offset + x] = bitMatrix.get(x, y) ?
+                            getResources().getColor(R.color.QRCodeBlackColor):getResources().getColor(R.color.QRCodeWhiteColor);
+                }
+            }
+            Bitmap bitmap = Bitmap.createBitmap(bitMatrixWidth, bitMatrixHeight, Bitmap.Config.ARGB_4444);
+
+            bitmap.setPixels(pixels, 0, 500, 0, 0, bitMatrixWidth, bitMatrixHeight);
+            return bitmap;
+
+
+            //return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(Bitmap s){
+
+            imageViewBarcode  = (ImageView) findViewById(R.id.ivBarCode);
+            imageViewBarcode.setImageBitmap(s);
+
+
+
+        }
+    }
+
+    private class getIpAsync extends AsyncTask<Void, Void, String> {
+
+        @Override
+        protected String doInBackground(Void... voids) {
+
+            int server_port = 12345;
+            byte[] message = new byte[500];
+            DatagramPacket p = new DatagramPacket(message, message.length);
+            DatagramSocket s = null;
+            try {
+                s = new DatagramSocket(server_port);
+                s.receive(p);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            String text = new String(message, 0, p.getLength());
+
+
+            return text;
+
+
+
+        }
+
+        @Override
+        protected void onPostExecute(String s){
+            if (R.id.twIPRec!=1){
+
+                TextView tw = (TextView) findViewById(R.id.twIPRec);
+                tw.setText("Other IP : "+s);
+
+
+            }
+        }
     }
 
 }
