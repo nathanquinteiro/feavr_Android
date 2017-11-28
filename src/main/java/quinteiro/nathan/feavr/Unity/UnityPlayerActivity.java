@@ -71,7 +71,7 @@ public class UnityPlayerActivity extends Activity
 				bpm = intent.getIntExtra(BluetoothLEService.BPM_DATA, -1);
 				if(bpm != -1) {
 					Log.e("Received", "BPM: " + bpm);
-					FeavrReceiver.setVal(bpm);
+					FeavrReceiver.setBPM(bpm);
 				}
 
 				rrValues = intent.getDoubleArrayExtra(BluetoothLEService.RR_DATA);
