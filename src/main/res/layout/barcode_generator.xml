@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/topLayout"
@@ -9,24 +9,40 @@
     android:layout_height="match_parent"
     android:keepScreenOn="true">
 
-
     <TextView
         android:id="@+id/twBarCode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello World!" />
 
-    <ImageView
-        android:id="@+id/ivBarCode"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        app:srcCompat="@drawable/ic_filter_vintage_black_24dp" />
 
     <TextView
         android:id="@+id/twIPRec"
+        android:layout_below="@id/twBarCode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/text_tw_ip_rec" />
 
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/ivBarCode"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_below="@id/twIPRec"
+        app:srcCompat="@drawable/ic_filter_vintage_black_24dp"
+        android:visibility="invisible"/>
+
+    <ProgressBar
+        android:id="@+id/progressBarQRCode"
+        android:layout_below="@id/twIPRec"
+        android:indeterminate="true"
+
+
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true" />
+
+
+
+</RelativeLayout>

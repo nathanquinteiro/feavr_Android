@@ -1,11 +1,16 @@
 package quinteiro.nathan.feavr.Barcode;
 
+import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 
@@ -32,13 +37,17 @@ import com.google.zxing.common.BitMatrix;
 
 public class BarcodeGeneratorActivity extends Activity {
 
-    public final static int QRcodeWidth = 500 ;
+    public final static int QRcodeWidth = 200 ;
 
     public Bitmap bitmap;
     public ImageView imageViewBarcode;
     public TextView twBarcode;
     public TextView twIPRec;
     public String ip = "";
+    public ProgressBar pBar;
+
+
+    public ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,11 +62,16 @@ public class BarcodeGeneratorActivity extends Activity {
 
         String ipAddress = getIPAddress(true);
 
+        //pBar = (ProgressBar) findViewById(R.id.progressBarQRCode);
+        //pBar.setIndeterminate(true);
+
+
+
 
 
         twBarcode.setText("My IP : "+ipAddress);
 
-        //TODO Use a spinner (generate the qrcode take sometimes...)
+
 
         //TODO Save state
 
@@ -67,6 +81,16 @@ public class BarcodeGeneratorActivity extends Activity {
         } catch (WriterException e) {
             e.printStackTrace();
         }*/
+
+        progress = new ProgressDialog(this);
+
+
+        progress.setTitle("Generating QRCode");
+        progress.setMessage("Please Wait ......");
+        progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
+        progress.show();
+
+        progress.setMax(100);
 
         new generateQRCode().execute(ipAddress);
         new getIpAsync().execute();
@@ -140,7 +164,7 @@ public class BarcodeGeneratorActivity extends Activity {
         return "";
     }
 
-    private class generateQRCode extends AsyncTask<String, Void, Bitmap>{
+    private class generateQRCode extends AsyncTask<String, Integer, Bitmap>{
 
         @Override
         protected Bitmap doInBackground(String... strings) {
@@ -171,6 +195,8 @@ public class BarcodeGeneratorActivity extends Activity {
             for (int y = 0; y < bitMatrixHeight; y++) {
                 int offset = y * bitMatrixWidth;
 
+                publishProgress((int) ((y/ (float) bitMatrixHeight)*100));
+
                 for (int x = 0; x < bitMatrixWidth; x++) {
 
                     pixels[offset + x] = bitMatrix.get(x, y) ?
@@ -179,11 +205,19 @@ public class BarcodeGeneratorActivity extends Activity {
             }
             Bitmap bitmap = Bitmap.createBitmap(bitMatrixWidth, bitMatrixHeight, Bitmap.Config.ARGB_4444);
 
-            bitmap.setPixels(pixels, 0, 500, 0, 0, bitMatrixWidth, bitMatrixHeight);
+            //bitmap.setPixels(pixels, 0, 500, 0, 0, bitMatrixWidth, bitMatrixHeight);
+            bitmap.setPixels(pixels, 0, QRcodeWidth, 0, 0, bitMatrixWidth, bitMatrixHeight);
             return bitmap;
 
 
             //return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... p) {
+            Log.e("a",""+p[0]);
+            progress.setProgress(p[0]);
+
         }
 
 
@@ -192,7 +226,12 @@ public class BarcodeGeneratorActivity extends Activity {
 
             imageViewBarcode  = (ImageView) findViewById(R.id.ivBarCode);
             imageViewBarcode.setImageBitmap(s);
+            imageViewBarcode.setVisibility(View.VISIBLE);
 
+            pBar = (ProgressBar) findViewById(R.id.progressBarQRCode);
+            pBar.setVisibility(View.INVISIBLE);
+
+            progress.dismiss();
 
 
         }
@@ -233,6 +272,9 @@ public class BarcodeGeneratorActivity extends Activity {
 
             }
         }
+
+
+
     }
 
 }
