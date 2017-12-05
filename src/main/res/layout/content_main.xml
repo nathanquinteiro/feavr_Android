@@ -21,12 +21,42 @@
         android:id="@+id/tv_bpm" />
 
     <Button
-        android:text="Button"
+        android:id="@+id/btStartGame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_bpm"
+        android:layout_centerHorizontal="true"
+        android:text="Button" />
+
+    <Button
+        android:id="@+id/buttonStartNW"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/btStartGame" />
+        android:layout_marginEnd="11dp"
+        android:layout_toStartOf="@+id/btStartGame"
+        android:text="Start NW"
+        android:visibility="invisible"/>
+
+    <Button
+        android:id="@+id/buttonSENDPOS"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/buttonStartNW"
+        android:layout_below="@+id/buttonStartNW"
+        android:layout_marginTop="13dp"
+        android:text="SEND POS"
+        android:visibility="invisible"/>
+
+    <Button
+        android:id="@+id/buttonSENDBPM"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/buttonSENDPOS"
+        android:layout_below="@+id/buttonSENDPOS"
+        android:layout_marginTop="18dp"
+        android:text="SEND BPM"
+        android:visibility="invisible"/>
 
 
 </RelativeLayout>

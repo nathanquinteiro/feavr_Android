@@ -14,6 +14,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,6 +28,7 @@ import quinteiro.nathan.feavr.BLE.BLEManager;
 import quinteiro.nathan.feavr.BLE.BluetoothLEService;
 import quinteiro.nathan.feavr.R;
 import quinteiro.nathan.feavr.Unity.UnityPlayerActivity;
+import quinteiro.nathan.feavr.utils.NetworkMulti;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -37,6 +39,11 @@ public class MainActivity extends AppCompatActivity
     private TextView bpmTextView;
 
     private Button btStartGame;
+
+    private Button btStartNW;
+    private Button btSendBPM;
+    private Button btSendPOS;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +71,87 @@ public class MainActivity extends AppCompatActivity
 
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
 
+        btStartNW = (Button) findViewById(R.id.buttonStartNW);
+        btSendBPM = (Button) findViewById(R.id.buttonSENDBPM);
+        btSendPOS = (Button) findViewById(R.id.buttonSENDPOS);
+
+        if(NetworkMulti.getInstance().isCoTested()){
+            btStartNW.setVisibility(View.VISIBLE);
+            btSendBPM.setVisibility(View.VISIBLE);
+            btSendPOS.setVisibility(View.VISIBLE);
+        }
+
+
+        btStartNW.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /*NetworkMulti.getInstance().initRcvMsg(new NetworkMulti.networkMultiListenerNewPosition() {
+                                                          @Override
+                                                          public void getNewPosition(float[] p) {
+                                                              Log.e("-*-","Receive new position : "+p[0]+p[1]);
+
+                                                          }
+                                                      },
+
+                                                    new NetworkMulti.networkMultiListenerNewBPM() {
+                                                        @Override
+                                                        public void getNewBPM(int bpm) {
+                                                            Log.e("-*-","Receive new bpm : "+bpm);
+
+                                                        }
+                                                    });*/
+
+                Log.e("-","StartNw run");
+                new logMsg().run();
+
+            }
+        });
+
+        btSendBPM.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NetworkMulti.getInstance().sendBpm(83);
+            }
+        });
+
+        btSendPOS.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                float[] ppos ={1,1};
+                NetworkMulti.getInstance().sendPositions(ppos);
+            }
+        });
+
+
+
+
+
+
+    }
+
+    private class logMsg implements Runnable{
+        @Override
+        public void run() {
+
+            NetworkMulti.getInstance().initRcvMsg(new NetworkMulti.networkMultiListenerNewPosition() {
+                                                      @Override
+                                                      public void getNewPosition(float[] p) {
+                                                          Log.e("-*-","Receive new position : "+p[0]+p[1]);
+
+                                                      }
+                                                  },
+
+                    new NetworkMulti.networkMultiListenerNewBPM() {
+                        @Override
+                        public void getNewBPM(int bpm) {
+                            Log.e("-*-","Receive new bpm : "+bpm);
+
+                        }
+                    });
+
+
+
+        }
     }
 
     private View.OnClickListener startGameListener = new View.OnClickListener() {
@@ -77,6 +165,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+
+        if(NetworkMulti.getInstance().isCoTested()){
+            btStartNW.setVisibility(View.VISIBLE);
+            btSendBPM.setVisibility(View.VISIBLE);
+            btSendPOS.setVisibility(View.VISIBLE);
+        }
 
         //registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
     }

@@ -3,6 +3,7 @@ package quinteiro.nathan.feavr.Barcode;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,12 +21,16 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Queue;
 
 import quinteiro.nathan.feavr.R;
+import quinteiro.nathan.feavr.utils.NetworkUtils;
 
+import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
@@ -43,11 +48,16 @@ public class BarcodeGeneratorActivity extends Activity {
     public ImageView imageViewBarcode;
     public TextView twBarcode;
     public TextView twIPRec;
-    public String ip = "";
+
     public ProgressBar pBar;
 
 
+
     public ProgressDialog progress;
+
+    private  getIpAsync myGetIpTaks;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,13 +70,20 @@ public class BarcodeGeneratorActivity extends Activity {
         twIPRec = (TextView) findViewById(R.id.twIPRec);
 
 
-        String ipAddress = getIPAddress(true);
+        //String ipAddress = getIPAddress(true);
+        String ipAddress = NetworkUtils.getIP4();
 
         //pBar = (ProgressBar) findViewById(R.id.progressBarQRCode);
         //pBar.setIndeterminate(true);
 
 
+        if(ipAddress.isEmpty()){
+            Log.e("e","empytx");
+        } else  {
+            Log.e("e","no empty");
+        }
 
+        Log.e("IP :",ipAddress);
 
 
         twBarcode.setText("My IP : "+ipAddress);
@@ -92,77 +109,28 @@ public class BarcodeGeneratorActivity extends Activity {
 
         progress.setMax(100);
 
+        Log.e("-","-onCreate-");
+
+
         new generateQRCode().execute(ipAddress);
-        new getIpAsync().execute();
+
+        myGetIpTaks = new getIpAsync();
+        myGetIpTaks.execute();
+        //new getIpAsync().execute();
 
 
     }
 
+    @Override
+    protected void onPause() {
 
+        Log.d("IpTask","onPause");
+        myGetIpTaks.cancel(true);
 
-    /*Bitmap TextToImageEncode(String Value) throws WriterException {
-        BitMatrix bitMatrix;
-        try {
-            bitMatrix = new MultiFormatWriter().encode(
-                    Value,
-                    //BarcodeFormat.DATA_MATRIX.QR_CODE,
-                    BarcodeFormat.QR_CODE,
-                    QRcodeWidth, QRcodeWidth, null
-            );
-
-        } catch (IllegalArgumentException Illegalargumentexception) {
-
-            return null;
-        }
-        int bitMatrixWidth = bitMatrix.getWidth();
-
-        int bitMatrixHeight = bitMatrix.getHeight();
-
-        int[] pixels = new int[bitMatrixWidth * bitMatrixHeight];
-
-        for (int y = 0; y < bitMatrixHeight; y++) {
-            int offset = y * bitMatrixWidth;
-
-            for (int x = 0; x < bitMatrixWidth; x++) {
-
-                pixels[offset + x] = bitMatrix.get(x, y) ?
-                        getResources().getColor(R.color.QRCodeBlackColor):getResources().getColor(R.color.QRCodeWhiteColor);
-            }
-        }
-        Bitmap bitmap = Bitmap.createBitmap(bitMatrixWidth, bitMatrixHeight, Bitmap.Config.ARGB_4444);
-
-        bitmap.setPixels(pixels, 0, 500, 0, 0, bitMatrixWidth, bitMatrixHeight);
-        return bitmap;
-    }*/
-
-
-    public static String getIPAddress(boolean useIPv4) {
-        try {
-            List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
-            for (NetworkInterface intf : interfaces) {
-                List<InetAddress> addrs = Collections.list(intf.getInetAddresses());
-                for (InetAddress addr : addrs) {
-                    if (!addr.isLoopbackAddress()) {
-                        String sAddr = addr.getHostAddress();
-                        //boolean isIPv4 = InetAddressUtils.isIPv4Address(sAddr);
-                        boolean isIPv4 = sAddr.indexOf(':') < 0;
-
-                        if (useIPv4) {
-                            if (isIPv4)
-                                return sAddr;
-                        } else {
-                            if (!isIPv4) {
-                                int delim = sAddr.indexOf('%'); // drop ip6 zone suffix
-                                return delim < 0 ? sAddr.toUpperCase() : sAddr.substring(0, delim).toUpperCase();
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (Exception ex) {
-        } // for now eat exceptions
-        return "";
+        super.onPause();
     }
+
+
 
     private class generateQRCode extends AsyncTask<String, Integer, Bitmap>{
 
@@ -210,13 +178,11 @@ public class BarcodeGeneratorActivity extends Activity {
             return bitmap;
 
 
-            //return null;
         }
 
         @Override
         protected void onProgressUpdate(Integer... p) {
-            Log.e("a",""+p[0]);
-            progress.setProgress(p[0]);
+
 
         }
 
@@ -239,21 +205,69 @@ public class BarcodeGeneratorActivity extends Activity {
 
     private class getIpAsync extends AsyncTask<Void, Void, String> {
 
+        private final String TAG_IP ="GET_IP";
         @Override
         protected String doInBackground(Void... voids) {
+
+            boolean timeout = true;
 
             int server_port = 12345;
             byte[] message = new byte[500];
             DatagramPacket p = new DatagramPacket(message, message.length);
             DatagramSocket s = null;
+
+            Log.e(TAG_IP, "Listen task");
+            int i = 0;
+
             try {
                 s = new DatagramSocket(server_port);
-                s.receive(p);
-            } catch (IOException e) {
+                s.setSoTimeout(1000);
+            } catch (SocketException e) {
                 e.printStackTrace();
             }
 
-            String text = new String(message, 0, p.getLength());
+            while (timeout && !isCancelled()) {
+
+                timeout = false;
+
+
+                try {
+
+                    Log.e(TAG_IP,"after new");
+
+                    s.receive(p);
+                } catch (SocketTimeoutException e) {
+                    Log.e(TAG_IP, "socket timeout exception");
+                    //e.printStackTrace();
+                    i = 1;
+
+                    timeout = true;
+
+
+                } catch (SocketException e) {
+                    //Log.e(TAG_IP, "socket exception");
+                    timeout = true;
+                    i = 2;
+
+                } catch (IOException e) {
+                    Log.e(TAG_IP, "IO exception");
+                    e.printStackTrace();
+                    timeout = true;
+                    i = 3;
+                }
+
+            }
+            Log.e(TAG_IP, "" + i);
+            String text;
+
+            s.close();
+
+            if (!timeout && !isCancelled()){
+
+                text = new String(message, 0, p.getLength());
+        } else {
+                text="-";
+            }
 
 
             return text;
@@ -264,17 +278,23 @@ public class BarcodeGeneratorActivity extends Activity {
 
         @Override
         protected void onPostExecute(String s){
-            if (R.id.twIPRec!=1){
+
+
+            if(NetworkUtils.isValidIP4(s)){
+
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("ip",s);
+                setResult(CommonStatusCodes.SUCCESS,returnIntent);
+                finish();
+
+            } else {
+
+                Log.e(TAG_IP,"Wrong IP received :"+s);
 
                 TextView tw = (TextView) findViewById(R.id.twIPRec);
-                tw.setText("Other IP : "+s);
-
+                tw.setText("Invalid ip received  : "+s);
 
             }
         }
-
-
-
     }
-
 }

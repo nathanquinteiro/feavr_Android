@@ -101,5 +101,8 @@ Google Vision
     <string name="text_qr_code_generator">QR Code Generator</string>
     <string name="text_qr_code_scanner">QR Code Scanner</string>
     <string name="text_tw_ip_rec">None</string>
+    <string name="text_test_connection">Test Connection</string>
+    <string name="tvConnectionState">No Connected</string>
+    <string name="tvConnectionStateCO">Successfully connected</string>
 
 </resources>
