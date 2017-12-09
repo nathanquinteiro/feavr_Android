@@ -14,6 +14,8 @@ public class FeavrReceiver {
     public static int bpm = 0;
     public static float[] position = {0,0};
 
+
+    //CALL BY UNITY TO GET THE BPM
     public static int getBPM() {
         Log.e("UNITY","getVal called");
         return bpm;
