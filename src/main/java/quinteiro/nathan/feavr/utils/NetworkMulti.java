@@ -329,7 +329,9 @@ public class NetworkMulti {
             rcv_T = new receiveMsg();
             rcv_T.setList(listPos,listBPM);
 
+            Log.e("NW-multi","RunThread");
             rcv_T.run();
+            Log.e("NW-multi","Thread started !");
 
 
         }
@@ -337,7 +339,7 @@ public class NetworkMulti {
 
     }
 
-    public void stopRcvMsg(){
+    /*public void stopRcvMsg(){
         if(rcv_T!= null){
             rcv_T.stopRCV();
 
@@ -351,9 +353,111 @@ public class NetworkMulti {
 
             rcv_T=null;
         }
+    }*/
+
+
+    private class receiveMsg implements Runnable{
+
+        private final String TAG_RCV_MSG ="RECV_MSG";
+
+        private networkMultiListenerNewPosition listPos = null;
+        private networkMultiListenerNewBPM listBPM = null;
+
+        private boolean  active = true;
+
+
+        public void setList(final networkMultiListenerNewPosition lp, final networkMultiListenerNewBPM lb){
+            listPos=lp;
+            listBPM=lb;
+
+        }
+
+        @Override
+        public void run() {
+
+            byte[] message = new byte[500];
+            DatagramPacket p = new DatagramPacket(message, message.length);
+            DatagramSocket s = null;
+
+
+            int i = 0;
+
+            try {
+                s = new DatagramSocket(server_port);
+                s.setSoTimeout(1000);
+            } catch (SocketException e) {
+                e.printStackTrace();
+                active=false;
+                Log.e(TAG_RCV_MSG,"-fails init socket or fail set timout");
+                return;
+            }
+
+
+            boolean validMsg = true;
+            while (active) {
+
+                try {
+                    //quand meme mettre timout pour désactivé après si non on s'en sort jamais ....
+
+                    s.receive(p);
+                    validMsg = true;
+                } catch (IOException e) {
+                    //e.printStackTrace();
+                    //Log.e(TAG_RCV_MSG,"-IOException receive msg");
+
+                    validMsg = false;
+
+                }
+
+                if(validMsg){
+
+                    String text;
+                    text = new String(message, 0, p.getLength());
+
+
+                    String[] splitted = text.split("/");
+
+                    if (splitted.length != 0) {
+
+                        if (splitted[0].equals(MSG_POS)) {
+
+                            if (splitted.length == 3) {
+
+                                float[] ppos = {Float.parseFloat(splitted[1]), Float.parseFloat(splitted[2])};
+                                listPos.getNewPosition(ppos);
+
+                            } else {
+                                Log.e(TAG_RCV_MSG, "Wrong size msg pos :" + splitted.length);
+                            }
+
+
+                        } else if (splitted[0].equals(MSG_BPM)) {
+
+                            if (splitted.length == 2) {
+                                int b = Integer.parseInt(splitted[1]);
+                                listBPM.getNewBPM(b);
+
+                            } else {
+                                Log.e(TAG_RCV_MSG, "Wrong size msg bmp :" + splitted.length);
+                            }
+
+                        }
+
+                    }
+                }
+
+
+            }
+
+            if (s != null) {
+                s.close();
+            }
+
+
+        }
     }
 
-    private class receiveMsg extends Thread{
+    /*private class receiveMsg extends Thread{
         private final String TAG_RCV_MSG ="RECV_MSG";
 
         private networkMultiListenerNewPosition listPos = null;
@@ -463,7 +567,7 @@ public class NetworkMulti {
 
 
         }
-    }
+    }*/
 
 
 

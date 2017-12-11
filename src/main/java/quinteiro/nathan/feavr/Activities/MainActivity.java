@@ -44,6 +44,8 @@ public class MainActivity extends AppCompatActivity
     private Button btSendBPM;
     private Button btSendPOS;
 
+    private logMsg myLogMsg;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +104,8 @@ public class MainActivity extends AppCompatActivity
                                                     });*/
 
                 Log.e("-","StartNw run");
-                new logMsg().run();
+                myLogMsg = new logMsg();
+                myLogMsg.run();
 
             }
         });

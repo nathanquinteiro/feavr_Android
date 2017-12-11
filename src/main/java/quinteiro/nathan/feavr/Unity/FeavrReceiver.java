@@ -15,12 +15,13 @@ public class FeavrReceiver {
     public static float[] position = {0,0};
 
 
-    //CALL BY UNITY TO GET THE BPM
+    //Call by unity to get the BPM
     public static int getBPM() {
         Log.e("UNITY","getVal called");
         return bpm;
     }
 
+    // Call by UnityPlayerActivity to set the new BPM value
     public static void setBPM(int newBPM) {
         bpm = newBPM;
         Log.e("Android", "setVal called with value: " + newBPM);
@@ -30,11 +31,14 @@ public class FeavrReceiver {
         }
     }
 
+
     public static float[] getPosition() {
         Log.e("Android", "getPosition called");
         return position;
     }
 
+
+    // Call by unity to give the position ...
     public static void setPosition(float x, float z) {
         Log.e("UNITY","setVal called with values: " + x + " " + z);
         position[0] = x;
