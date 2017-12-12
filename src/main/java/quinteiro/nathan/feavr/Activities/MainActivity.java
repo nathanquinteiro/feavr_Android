@@ -22,6 +22,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 
+import com.google.vr.sdk.proto.nano.Analytics;
+
 import java.util.ArrayList;
 
 import quinteiro.nathan.feavr.BLE.BLEManager;
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity
     private Button btStartNW;
     private Button btSendBPM;
     private Button btSendPOS;
+    private Button btFastStartNW;
 
     private logMsg myLogMsg;
 
@@ -76,12 +79,40 @@ public class MainActivity extends AppCompatActivity
         btStartNW = (Button) findViewById(R.id.buttonStartNW);
         btSendBPM = (Button) findViewById(R.id.buttonSENDBPM);
         btSendPOS = (Button) findViewById(R.id.buttonSENDPOS);
+        btFastStartNW = (Button) findViewById(R.id.fast_STRTNW);
+
+
 
         if(NetworkMulti.getInstance().isCoTested()){
             btStartNW.setVisibility(View.VISIBLE);
             btSendBPM.setVisibility(View.VISIBLE);
             btSendPOS.setVisibility(View.VISIBLE);
         }
+
+        btFastStartNW.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NetworkMulti.getInstance();
+                NetworkMulti.getInstance().setIP("192.168.1.40");
+                NetworkMulti.getInstance().forceSetCoTested();
+
+                NetworkMulti.getInstance().startRcvMsgThread(new NetworkMulti.networkMultiListenerNewBPM() {
+                    @Override
+                    public void getNewBPM(int bpm) {
+                        Log.e("MAIN-ACT", "rcv bmp : " + bpm);
+                    }
+                }, new NetworkMulti.networkMultiListenerNewPosition() {
+                    @Override
+                    public void getNewPosition(float[] p) {
+                        Log.e("MAIN-ACT", "rcv pos : " + p[0]+", "+p[1]);
+
+                    }
+                });
+                Log.e("-","StartNw run Started !!!");
+
+
+            }
+        });
 
 
         btStartNW.setOnClickListener(new View.OnClickListener() {
@@ -104,8 +135,23 @@ public class MainActivity extends AppCompatActivity
                                                     });*/
 
                 Log.e("-","StartNw run");
-                myLogMsg = new logMsg();
-                myLogMsg.run();
+                //myLogMsg = new logMsg();
+                //myLogMsg.run();
+
+                NetworkMulti.getInstance().startRcvThread(new NetworkMulti.networkMultiListenerNewBPM() {
+                    @Override
+                    public void getNewBPM(int bpm) {
+                        Log.e("MAIN-ACT", "rcv bmp : " + bpm);
+                    }
+                }, new NetworkMulti.networkMultiListenerNewPosition() {
+                    @Override
+                    public void getNewPosition(float[] p) {
+                        Log.e("MAIN-ACT", "rcv pos : " + p[0]+", "+p[1]);
+
+                    }
+                });
+                Log.e("-","StartNw run Started !!!");
+
 
             }
         });

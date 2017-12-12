@@ -67,6 +67,10 @@ public class NetworkMulti {
         return this.connectionTested;
     }
 
+    public void forceSetCoTested(){
+        this.connectionTested=true;
+    }
+
 
 
     public boolean testConnection(){
@@ -355,6 +359,165 @@ public class NetworkMulti {
         }
     }*/
 
+    Thread rcvThread;
+
+    public void startRcvThread(final networkMultiListenerNewBPM lb, final networkMultiListenerNewPosition lp){
+
+        final networkMultiListenerNewBPM list_BPM = lb;
+        final networkMultiListenerNewPosition list_Pos = lp;
+
+        if(rcvThread==null){
+            rcvThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+
+                    int i = 1;
+
+                    while (true){
+
+                        i++;
+
+                        if(i%300000000==0){
+                            i=1;
+                            Log.e("nwM","moddullo");
+                            list_BPM.getNewBPM(123);
+                            float[] ppos = {1,4};
+                            list_Pos.getNewPosition(ppos);
+                        }
+
+
+                    }
+
+                }
+            });
+            rcvThread.start();
+        }
+    }
+
+    Thread rcvMsgThread;
+
+    public void startRcvMsgThread(final networkMultiListenerNewBPM lb, final networkMultiListenerNewPosition lp){
+
+        final networkMultiListenerNewBPM list_BPM = lb;
+        final networkMultiListenerNewPosition list_Pos = lp;
+
+        final String TAG_RCV_MSG = "newTh";
+
+        if(rcvMsgThread==null) {
+
+            rcvMsgThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+////////////////////
+///
+/// //////////////
+
+
+                    byte[] message = new byte[500];
+                    DatagramPacket p = new DatagramPacket(message, message.length);
+                    DatagramSocket s = null;
+
+                    boolean active = true;
+                    int i = 0;
+
+                    try {
+                        s = new DatagramSocket(server_port);
+                        s.setSoTimeout(1000);
+                    } catch (SocketException e) {
+                        e.printStackTrace();
+                        active=false;
+                        Log.e(TAG_RCV_MSG,"-fails init socket or fail set timout");
+                        return;
+                    }
+
+
+                    boolean validMsg = true;
+                    while (active) {
+
+                        try {
+                            //quand meme mettre timout pour désactivé après si non on s'en sort jamais ....
+
+                            s.receive(p);
+                            validMsg = true;
+                        } catch (IOException e) {
+                            //e.printStackTrace();
+                            //Log.e(TAG_RCV_MSG,"-IOException receive msg");
+
+                            validMsg = false;
+
+                        }
+
+                        if(validMsg){
+
+                            String text;
+                            text = new String(message, 0, p.getLength());
+
+
+                            String[] splitted = text.split("/");
+
+                            if (splitted.length != 0) {
+
+                                if (splitted[0].equals(MSG_POS)) {
+
+                                    if (splitted.length == 3) {
+
+                                        float[] ppos = {Float.parseFloat(splitted[1]), Float.parseFloat(splitted[2])};
+                                        list_Pos.getNewPosition(ppos);
+
+                                    } else {
+                                        Log.e(TAG_RCV_MSG, "Wrong size msg pos :" + splitted.length);
+                                    }
+
+
+                                } else if (splitted[0].equals(MSG_BPM)) {
+
+                                    if (splitted.length == 2) {
+                                        int b = Integer.parseInt(splitted[1]);
+                                        list_BPM.getNewBPM(b);
+
+                                    } else {
+                                        Log.e(TAG_RCV_MSG, "Wrong size msg bmp :" + splitted.length);
+                                    }
+
+                                }
+
+                            }
+                        }
+
+
+                    }
+
+                    if (s != null) {
+                        s.close();
+                    }
+
+
+
+
+
+                    //////////////////////
+                    /*int i = 1;
+
+                    while (true) {
+
+                        i++;
+
+                        if (i % 100000000 == 0) {
+                            i = 1;
+                            Log.e("nwM", "moddulloFast");
+                            list_BPM.getNewBPM(123);
+                            float[] ppos = {1, 4};
+                            list_Pos.getNewPosition(ppos);
+                        }
+
+
+                    }*/
+
+                }
+            });
+            rcvMsgThread.start();
+        }
+    }
 
     private class receiveMsg implements Runnable{
 

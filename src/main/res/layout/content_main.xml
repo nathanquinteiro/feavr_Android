@@ -58,5 +58,13 @@
         android:text="SEND BPM"
         android:visibility="invisible"/>
 
+    <Button
+        android:id="@+id/fast_STRTNW"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/buttonStartNW"
+        android:layout_toEndOf="@+id/tv_bpm"
+        android:text="FAST StartNW" />
+
 
 </RelativeLayout>
