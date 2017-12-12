@@ -75,5 +75,23 @@
         android:layout_toEndOf="@+id/tv_bpm"
         android:text="Stop Test TH" />
 
+    <Button
+        android:id="@+id/buttonStopNW"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/buttonStartNW"
+        android:layout_alignEnd="@+id/buttonSENDPOS"
+        android:text="Stop NW"
+        android:visibility="invisible"/>
+
+    <TextView
+        android:id="@+id/tvRCV_BPM"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/buttonSENDBPM"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="18dp"
+        android:text="TextView" />
+
 
 </RelativeLayout>

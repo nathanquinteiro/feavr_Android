@@ -24,6 +24,8 @@ import android.widget.TextView;
 
 import com.google.vr.sdk.proto.nano.Analytics;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 import quinteiro.nathan.feavr.BLE.BLEManager;
@@ -47,9 +49,16 @@ public class MainActivity extends AppCompatActivity
     private Button btSendPOS;
     private Button btFastStartNW;
 
+    private Button btStopNW;
+
+    private TextView tvRcvBpm;
+
     private Button btStopTestTH;
 
-    private logMsg myLogMsg;
+    private String bmpLastVal ="none";
+
+    //private logMsg myLogMsg;
+
 
 
     @Override
@@ -85,13 +94,33 @@ public class MainActivity extends AppCompatActivity
 
         btStopTestTH = (Button) findViewById(R.id.stopTestTH);
 
+        btStopNW = (Button) findViewById(R.id.buttonStopNW);
+
+        tvRcvBpm = (TextView) findViewById(R.id.tv_bpm);
+
+        tvRcvBpm.setText(bmpLastVal);
 
 
         if(NetworkMulti.getInstance().isCoTested()){
             btStartNW.setVisibility(View.VISIBLE);
             btSendBPM.setVisibility(View.VISIBLE);
             btSendPOS.setVisibility(View.VISIBLE);
+            btStopNW.setVisibility(View.VISIBLE);
+        } else {
+
+            btStartNW.setVisibility(View.INVISIBLE);
+            btSendBPM.setVisibility(View.INVISIBLE);
+            btSendPOS.setVisibility(View.INVISIBLE);
+            btStopNW.setVisibility(View.INVISIBLE);
+
         }
+
+        btStopNW.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NetworkMulti.getInstance().stopRcvMsgThread();
+            }
+        });
 
         btStopTestTH.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,12 +131,34 @@ public class MainActivity extends AppCompatActivity
 
         btFastStartNW.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 NetworkMulti.getInstance();
                 NetworkMulti.getInstance().setIP("192.168.1.40");
                 NetworkMulti.getInstance().forceSetCoTested();
 
-                NetworkMulti.getInstance().startTestThread(new NetworkMulti.networkMultiListenerNewBPM() {
+                NetworkMulti.getInstance().startTestThread(new NetworkMulti.networkMultiListener() {
+                    @Override
+                    public void setPosition(float[] p) {
+                        Log.e("MAIN-ACT", "rcv pos : " + p[0]+", "+p[1]);
+                        Log.e("MAIN-ACT","invalidate View");
+
+
+
+
+                    }
+
+                    @Override
+                    public void setBPM(int bpm) {
+                        Log.e("MAIN-ACT", "rcv bmp : " + bpm);
+
+                        bmpLastVal = ""+bpm;
+                        //TODO test that :
+                        view.postInvalidate();
+
+                    }
+                });
+
+                /*NetworkMulti.getInstance().startTestThread(new NetworkMulti.networkMultiListenerNewBPM() {
                     @Override
                     public void getNewBPM(int bpm) {
                         Log.e("MAIN-ACT", "rcv bmp : " + bpm);
@@ -118,7 +169,7 @@ public class MainActivity extends AppCompatActivity
                         Log.e("MAIN-ACT", "rcv pos : " + p[0]+", "+p[1]);
 
                     }
-                });
+                });*/
                 Log.e("-","StartNw run Started !!!");
 
 
@@ -129,38 +180,28 @@ public class MainActivity extends AppCompatActivity
         btStartNW.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*NetworkMulti.getInstance().initRcvMsg(new NetworkMulti.networkMultiListenerNewPosition() {
-                                                          @Override
-                                                          public void getNewPosition(float[] p) {
-                                                              Log.e("-*-","Receive new position : "+p[0]+p[1]);
-
-                                                          }
-                                                      },
-
-                                                    new NetworkMulti.networkMultiListenerNewBPM() {
-                                                        @Override
-                                                        public void getNewBPM(int bpm) {
-                                                            Log.e("-*-","Receive new bpm : "+bpm);
-
-                                                        }
-                                                    });*/
 
                 Log.e("-","StartNw run");
-                //myLogMsg = new logMsg();
-                //myLogMsg.run();
 
-                NetworkMulti.getInstance().startTestThread(new NetworkMulti.networkMultiListenerNewBPM() {
+                NetworkMulti.getInstance().startRcvThread(new NetworkMulti.networkMultiListener() {
                     @Override
-                    public void getNewBPM(int bpm) {
-                        Log.e("MAIN-ACT", "rcv bmp : " + bpm);
-                    }
-                }, new NetworkMulti.networkMultiListenerNewPosition() {
-                    @Override
-                    public void getNewPosition(float[] p) {
+                    public void setPosition(float[] p) {
                         Log.e("MAIN-ACT", "rcv pos : " + p[0]+", "+p[1]);
 
                     }
+
+                    @Override
+                    public void setBPM(int bpm) {
+                        Log.e("MAIN-ACT", "rcv bmp : " + bpm);
+
+
+
+
+
+                    }
                 });
+
+
                 Log.e("-","StartNw run Started !!!");
 
 
@@ -189,30 +230,6 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    private class logMsg implements Runnable{
-        @Override
-        public void run() {
-
-            NetworkMulti.getInstance().initRcvMsg(new NetworkMulti.networkMultiListenerNewPosition() {
-                                                      @Override
-                                                      public void getNewPosition(float[] p) {
-                                                          Log.e("-*-","Receive new position : "+p[0]+p[1]);
-
-                                                      }
-                                                  },
-
-                    new NetworkMulti.networkMultiListenerNewBPM() {
-                        @Override
-                        public void getNewBPM(int bpm) {
-                            Log.e("-*-","Receive new bpm : "+bpm);
-
-                        }
-                    });
-
-
-
-        }
-    }
 
     private View.OnClickListener startGameListener = new View.OnClickListener() {
         @Override

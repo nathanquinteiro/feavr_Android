@@ -30,7 +30,7 @@ public class NetworkMulti {
     private InetAddress outLocal = null;
 
 
-    private receiveMsg rcv_T=null;
+    //private receiveMsg rcv_T=null;
 
     final private String MSG_POS = "POSITION";
     final private String MSG_BPM = "BPM";
@@ -317,17 +317,13 @@ public class NetworkMulti {
 
 
 
-    //Stuff with listener
 
+    // old verion not working !!!
+    /*
     public void initRcvMsg(final networkMultiListenerNewPosition listPos, final networkMultiListenerNewBPM listBPM){
 
 
-        // this is a thread
 
-
-        //check
-
-        //Thread rcv_T = new Thread(new receiveMsg());
 
         if(rcv_T == null){
             rcv_T = new receiveMsg();
@@ -341,7 +337,7 @@ public class NetworkMulti {
         }
 
 
-    }
+    }*/
 
     /*public void stopRcvMsg(){
         if(rcv_T!= null){
@@ -361,10 +357,10 @@ public class NetworkMulti {
 
     Thread testThread;
 
-    private boolean active = true;
+    private boolean testThreadActive = true;
 
     public void stopTestThread(){
-        active=false;
+        testThreadActive=false;
         if(testThread!= null){
             try {
                 Log.e("testT","before join");
@@ -380,12 +376,13 @@ public class NetworkMulti {
         }
     }
 
-    public void startTestThread(final networkMultiListenerNewBPM lb, final networkMultiListenerNewPosition lp){
+    //public void startTestThread(final networkMultiListenerNewBPM lb, final networkMultiListenerNewPosition lp){
+    public void startTestThread(final networkMultiListener l){
+        //final networkMultiListenerNewBPM list_BPM = lb;
+        //final networkMultiListenerNewPosition list_Pos = lp;
+        final networkMultiListener listener = l;
 
-        final networkMultiListenerNewBPM list_BPM = lb;
-        final networkMultiListenerNewPosition list_Pos = lp;
-
-        active=true;
+        testThreadActive=true;
 
         if(testThread==null){
             testThread = new Thread(new Runnable() {
@@ -393,18 +390,20 @@ public class NetworkMulti {
                 public void run() {
 
                     int i = 1;
-                    Log.e("TestT","run, active : "+active);
+                    Log.e("TestT","run, active : "+testThreadActive);
 
-                    while (active){
+                    while (testThreadActive){
 
                         i++;
 
-                        if(i%50000000==0){
+                        if(i%10000000==0){
                             i=1;
                             Log.e("nwM","moddullo");
-                            list_BPM.getNewBPM(123);
+                            //list_BPM.getNewBPM(123);
                             float[] ppos = {1,4};
-                            list_Pos.getNewPosition(ppos);
+                            //list_Pos.getNewPosition(ppos);
+                            listener.setBPM(1234);
+                            listener.setPosition(ppos);
                         }
 
 
@@ -419,47 +418,48 @@ public class NetworkMulti {
     }
 
     Thread rcvMsgThread;
+    boolean rcvThreadActive = true;
 
-    public void startRcvMsgThread(final networkMultiListenerNewBPM lb, final networkMultiListenerNewPosition lp){
+    public void stopRcvMsgThread(){
+        rcvThreadActive = false;
+    }
 
-        final networkMultiListenerNewBPM list_BPM = lb;
-        final networkMultiListenerNewPosition list_Pos = lp;
+    //public void startRcvMsgThread(final networkMultiListenerNewBPM lb, final networkMultiListenerNewPosition lp){
+    public void startRcvThread(final networkMultiListener l){
+        //final networkMultiListenerNewBPM list_BPM = lb;
+        //final networkMultiListenerNewPosition list_Pos = lp;
+        final networkMultiListener listener =l;
 
-        final String TAG_RCV_MSG = "newTh";
+        final String TAG_RCV_MSG = "RCV-T";
 
         if(rcvMsgThread==null) {
 
             rcvMsgThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
-////////////////////
-///
-/// //////////////
 
+                    rcvThreadActive = true;
 
                     byte[] message = new byte[500];
                     DatagramPacket p = new DatagramPacket(message, message.length);
                     DatagramSocket s = null;
 
-                    boolean active = true;
-                    int i = 0;
 
                     try {
                         s = new DatagramSocket(server_port);
-                        s.setSoTimeout(1000);
+                        s.setSoTimeout(500);
                     } catch (SocketException e) {
                         e.printStackTrace();
-                        active=false;
-                        Log.e(TAG_RCV_MSG,"-fails init socket or fail set timout");
+                        rcvThreadActive=false;
+                        Log.e(TAG_RCV_MSG,"-fails init socket or fail set timeout");
                         return;
                     }
 
 
-                    boolean validMsg = true;
-                    while (active) {
+                    boolean validMsg ;
+                    while (rcvThreadActive) {
 
                         try {
-                            //quand meme mettre timout pour désactivé après si non on s'en sort jamais ....
 
                             s.receive(p);
                             validMsg = true;
@@ -486,7 +486,7 @@ public class NetworkMulti {
                                     if (splitted.length == 3) {
 
                                         float[] ppos = {Float.parseFloat(splitted[1]), Float.parseFloat(splitted[2])};
-                                        list_Pos.getNewPosition(ppos);
+                                        listener.setPosition(ppos);
 
                                     } else {
                                         Log.e(TAG_RCV_MSG, "Wrong size msg pos :" + splitted.length);
@@ -497,52 +497,26 @@ public class NetworkMulti {
 
                                     if (splitted.length == 2) {
                                         int b = Integer.parseInt(splitted[1]);
-                                        list_BPM.getNewBPM(b);
+                                        listener.setBPM(b);
 
                                     } else {
                                         Log.e(TAG_RCV_MSG, "Wrong size msg bmp :" + splitted.length);
                                     }
-
                                 }
-
                             }
                         }
-
-
                     }
 
                     if (s != null) {
                         s.close();
                     }
-
-
-
-
-
-                    //////////////////////
-                    /*int i = 1;
-
-                    while (true) {
-
-                        i++;
-
-                        if (i % 100000000 == 0) {
-                            i = 1;
-                            Log.e("nwM", "moddulloFast");
-                            list_BPM.getNewBPM(123);
-                            float[] ppos = {1, 4};
-                            list_Pos.getNewPosition(ppos);
-                        }
-
-
-                    }*/
-
                 }
             });
             rcvMsgThread.start();
         }
     }
 
+    /*
     private class receiveMsg implements Runnable{
 
         private final String TAG_RCV_MSG ="RECV_MSG";
@@ -581,6 +555,7 @@ public class NetworkMulti {
 
 
             boolean validMsg = true;
+
             while (active) {
 
                 try {
@@ -642,7 +617,7 @@ public class NetworkMulti {
 
 
         }
-    }
+    }*/
 
     /*private class receiveMsg extends Thread{
         private final String TAG_RCV_MSG ="RECV_MSG";
@@ -757,13 +732,9 @@ public class NetworkMulti {
     }*/
 
 
-
-    public interface networkMultiListenerNewPosition{
-        void getNewPosition(float[] p);
-    }
-
-    public interface networkMultiListenerNewBPM{
-        void getNewBPM(int bpm);
+    public interface networkMultiListener{
+        void setPosition(float[] p);
+        void setBPM(int bpm);
     }
 
 
