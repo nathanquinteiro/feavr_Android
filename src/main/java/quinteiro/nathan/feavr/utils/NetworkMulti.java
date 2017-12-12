@@ -359,25 +359,47 @@ public class NetworkMulti {
         }
     }*/
 
-    Thread rcvThread;
+    Thread testThread;
 
-    public void startRcvThread(final networkMultiListenerNewBPM lb, final networkMultiListenerNewPosition lp){
+    private boolean active = true;
+
+    public void stopTestThread(){
+        active=false;
+        if(testThread!= null){
+            try {
+                Log.e("testT","before join");
+                testThread.join();
+                Log.e("testT","after join");
+                testThread=null;
+            } catch (InterruptedException e) {
+
+                e.printStackTrace();
+            }
+        } else {
+            Log.e("testT","call stop but thread is null");
+        }
+    }
+
+    public void startTestThread(final networkMultiListenerNewBPM lb, final networkMultiListenerNewPosition lp){
 
         final networkMultiListenerNewBPM list_BPM = lb;
         final networkMultiListenerNewPosition list_Pos = lp;
 
-        if(rcvThread==null){
-            rcvThread = new Thread(new Runnable() {
+        active=true;
+
+        if(testThread==null){
+            testThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
 
                     int i = 1;
+                    Log.e("TestT","run, active : "+active);
 
-                    while (true){
+                    while (active){
 
                         i++;
 
-                        if(i%300000000==0){
+                        if(i%50000000==0){
                             i=1;
                             Log.e("nwM","moddullo");
                             list_BPM.getNewBPM(123);
@@ -390,7 +412,9 @@ public class NetworkMulti {
 
                 }
             });
-            rcvThread.start();
+            testThread.start();
+        } else {
+            Log.e("TestT","call start but probably already started");
         }
     }
 

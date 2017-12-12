@@ -64,7 +64,16 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/buttonStartNW"
         android:layout_toEndOf="@+id/tv_bpm"
-        android:text="FAST StartNW" />
+        android:text="Start Test TH" />
+
+    <Button
+        android:id="@+id/stopTestTH"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/buttonSENDPOS"
+        android:layout_alignBottom="@+id/buttonSENDPOS"
+        android:layout_toEndOf="@+id/tv_bpm"
+        android:text="Stop Test TH" />
 
 
 </RelativeLayout>

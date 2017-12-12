@@ -47,6 +47,8 @@ public class MainActivity extends AppCompatActivity
     private Button btSendPOS;
     private Button btFastStartNW;
 
+    private Button btStopTestTH;
+
     private logMsg myLogMsg;
 
 
@@ -81,6 +83,8 @@ public class MainActivity extends AppCompatActivity
         btSendPOS = (Button) findViewById(R.id.buttonSENDPOS);
         btFastStartNW = (Button) findViewById(R.id.fast_STRTNW);
 
+        btStopTestTH = (Button) findViewById(R.id.stopTestTH);
+
 
 
         if(NetworkMulti.getInstance().isCoTested()){
@@ -89,6 +93,13 @@ public class MainActivity extends AppCompatActivity
             btSendPOS.setVisibility(View.VISIBLE);
         }
 
+        btStopTestTH.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NetworkMulti.getInstance().stopTestThread();
+            }
+        });
+
         btFastStartNW.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,7 +107,7 @@ public class MainActivity extends AppCompatActivity
                 NetworkMulti.getInstance().setIP("192.168.1.40");
                 NetworkMulti.getInstance().forceSetCoTested();
 
-                NetworkMulti.getInstance().startRcvMsgThread(new NetworkMulti.networkMultiListenerNewBPM() {
+                NetworkMulti.getInstance().startTestThread(new NetworkMulti.networkMultiListenerNewBPM() {
                     @Override
                     public void getNewBPM(int bpm) {
                         Log.e("MAIN-ACT", "rcv bmp : " + bpm);
@@ -138,7 +149,7 @@ public class MainActivity extends AppCompatActivity
                 //myLogMsg = new logMsg();
                 //myLogMsg.run();
 
-                NetworkMulti.getInstance().startRcvThread(new NetworkMulti.networkMultiListenerNewBPM() {
+                NetworkMulti.getInstance().startTestThread(new NetworkMulti.networkMultiListenerNewBPM() {
                     @Override
                     public void getNewBPM(int bpm) {
                         Log.e("MAIN-ACT", "rcv bmp : " + bpm);
