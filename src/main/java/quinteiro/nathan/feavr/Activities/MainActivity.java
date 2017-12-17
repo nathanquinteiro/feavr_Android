@@ -14,6 +14,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,12 +22,17 @@ import android.widget.Button;
 import android.widget.TextView;
 
 
+import com.google.vr.sdk.proto.nano.Analytics;
+
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 import quinteiro.nathan.feavr.BLE.BLEManager;
 import quinteiro.nathan.feavr.BLE.BluetoothLEService;
 import quinteiro.nathan.feavr.R;
 import quinteiro.nathan.feavr.Unity.UnityPlayerActivity;
+import quinteiro.nathan.feavr.utils.NetworkMulti;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -37,6 +43,23 @@ public class MainActivity extends AppCompatActivity
     private TextView bpmTextView;
 
     private Button btStartGame;
+
+    private Button btStartNW;
+    private Button btSendBPM;
+    private Button btSendPOS;
+    private Button btFastStartNW;
+
+    private Button btStopNW;
+
+    private TextView tvRcvBpm;
+
+    private Button btStopTestTH;
+
+    private String bmpLastVal ="none";
+
+    //private logMsg myLogMsg;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +87,149 @@ public class MainActivity extends AppCompatActivity
 
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
 
+        btStartNW = (Button) findViewById(R.id.buttonStartNW);
+        btSendBPM = (Button) findViewById(R.id.buttonSENDBPM);
+        btSendPOS = (Button) findViewById(R.id.buttonSENDPOS);
+        btFastStartNW = (Button) findViewById(R.id.fast_STRTNW);
+
+        btStopTestTH = (Button) findViewById(R.id.stopTestTH);
+
+        btStopNW = (Button) findViewById(R.id.buttonStopNW);
+
+        tvRcvBpm = (TextView) findViewById(R.id.tv_bpm);
+
+        tvRcvBpm.setText(bmpLastVal);
+
+
+        if(NetworkMulti.getInstance().isCoTested()){
+            btStartNW.setVisibility(View.VISIBLE);
+            btSendBPM.setVisibility(View.VISIBLE);
+            btSendPOS.setVisibility(View.VISIBLE);
+            btStopNW.setVisibility(View.VISIBLE);
+        } else {
+
+            btStartNW.setVisibility(View.INVISIBLE);
+            btSendBPM.setVisibility(View.INVISIBLE);
+            btSendPOS.setVisibility(View.INVISIBLE);
+            btStopNW.setVisibility(View.INVISIBLE);
+
+        }
+
+        btStopNW.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NetworkMulti.getInstance().stopRcvMsgThread();
+            }
+        });
+
+        btStopTestTH.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NetworkMulti.getInstance().stopTestThread();
+            }
+        });
+
+        btFastStartNW.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                NetworkMulti.getInstance();
+                NetworkMulti.getInstance().setIP("192.168.1.40");
+                NetworkMulti.getInstance().forceSetCoTested();
+
+                NetworkMulti.getInstance().startTestThread(new NetworkMulti.networkMultiListener() {
+                    @Override
+                    public void setPosition(float[] p) {
+                        Log.e("MAIN-ACT", "rcv pos : " + p[0]+", "+p[1]);
+                        Log.e("MAIN-ACT","invalidate View");
+
+
+
+
+                    }
+
+                    @Override
+                    public void setBPM(int bpm) {
+                        Log.e("MAIN-ACT", "rcv bmp : " + bpm);
+
+                        bmpLastVal = ""+bpm;
+                        //TODO test that :
+                        view.postInvalidate();
+
+                    }
+                });
+
+                /*NetworkMulti.getInstance().startTestThread(new NetworkMulti.networkMultiListenerNewBPM() {
+                    @Override
+                    public void getNewBPM(int bpm) {
+                        Log.e("MAIN-ACT", "rcv bmp : " + bpm);
+                    }
+                }, new NetworkMulti.networkMultiListenerNewPosition() {
+                    @Override
+                    public void getNewPosition(float[] p) {
+                        Log.e("MAIN-ACT", "rcv pos : " + p[0]+", "+p[1]);
+
+                    }
+                });*/
+                Log.e("-","StartNw run Started !!!");
+
+
+            }
+        });
+
+
+        btStartNW.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Log.e("-","StartNw run");
+
+                NetworkMulti.getInstance().startRcvThread(new NetworkMulti.networkMultiListener() {
+                    @Override
+                    public void setPosition(float[] p) {
+                        Log.e("MAIN-ACT", "rcv pos : " + p[0]+", "+p[1]);
+
+                    }
+
+                    @Override
+                    public void setBPM(int bpm) {
+                        Log.e("MAIN-ACT", "rcv bmp : " + bpm);
+
+
+
+
+
+                    }
+                });
+
+
+                Log.e("-","StartNw run Started !!!");
+
+
+            }
+        });
+
+        btSendBPM.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NetworkMulti.getInstance().sendBpm(83);
+            }
+        });
+
+        btSendPOS.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                float[] ppos ={1,1};
+                NetworkMulti.getInstance().sendPositions(ppos);
+            }
+        });
+
+
+
+
+
+
     }
+
 
     private View.OnClickListener startGameListener = new View.OnClickListener() {
         @Override
@@ -77,6 +242,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+
+        if(NetworkMulti.getInstance().isCoTested()){
+            btStartNW.setVisibility(View.VISIBLE);
+            btSendBPM.setVisibility(View.VISIBLE);
+            btSendPOS.setVisibility(View.VISIBLE);
+        }
 
         //registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
     }

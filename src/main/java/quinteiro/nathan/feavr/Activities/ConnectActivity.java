@@ -27,6 +27,8 @@ import java.util.List;
 
 import quinteiro.nathan.feavr.R;
 import quinteiro.nathan.feavr.Barcode.*;
+import quinteiro.nathan.feavr.utils.NetworkMulti;
+import quinteiro.nathan.feavr.utils.NetworkUtils;
 
 public class ConnectActivity extends AppCompatActivity {
 
@@ -35,14 +37,25 @@ public class ConnectActivity extends AppCompatActivity {
 
     private boolean mConnected = false;
 
+    private String otherIP = "";
+    private boolean ipExchanged = false;
+    private  boolean connectionTested = false;
+
     private Button scan;
     private Button generate;
 
     private Button testBt;
 
+    private Button testConnectionBt;
+
     private Switch switchMultiPlayer;
 
     private TextView tvResult;
+
+    private TextView tvCoState;
+
+
+    final private String TAG_CA ="ConnectActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +103,8 @@ public class ConnectActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), BarcodeGeneratorActivity.class);
-                startActivity(intent);
+                //startActivity(intent);
+                startActivityForResult(intent, BARCODE_GENERATOR_REQUEST_CODE);
 
 
             }
@@ -131,6 +145,46 @@ public class ConnectActivity extends AppCompatActivity {
 
             }
         });
+
+
+
+        tvCoState = (TextView) findViewById(R.id.tvConnectionState);
+
+        testConnectionBt = (Button) findViewById(R.id.btTestCo);
+
+        if(NetworkMulti.getInstance().isIpSetted()){
+            testConnectionBt.setVisibility(View.VISIBLE);
+        }
+        if(NetworkMulti.getInstance().isCoTested()){
+            tvCoState.setText(R.string.tvConnectionStateCO);
+        } else {
+            tvCoState.setText(R.string.tvConnectionState);
+        }
+
+        testConnectionBt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(NetworkMulti.getInstance().isIpSetted()){
+
+                    Log.e(TAG_CA,"testCO ");
+
+                    connectionTested = NetworkMulti.getInstance().testConnection();
+
+                    if(NetworkMulti.getInstance().isCoTested()){
+
+                        tvCoState.setText(R.string.tvConnectionStateCO);
+                    } else {
+                        tvCoState.setText("FAILS!");
+                    }
+
+
+
+
+                } else {
+                    Log.e(TAG_CA,"testCO but ip not setted");
+                }
+            }
+        });
     }
 
     @Override
@@ -141,6 +195,15 @@ public class ConnectActivity extends AppCompatActivity {
                     Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
                     String text = barcode.displayValue;
                     tvResult.setText(text);
+                    otherIP=text;
+                    ipExchanged=true;
+                    testConnectionBt.setVisibility(View.VISIBLE);
+
+                    if(NetworkUtils.isValidIP4(text)){
+                        NetworkMulti.getInstance().setIP(text);
+
+                    }
+
 
 
                     //ici
@@ -157,7 +220,7 @@ public class ConnectActivity extends AppCompatActivity {
 
 
                     //get my ip
-                    String myIp = getIPAddress(true);
+                    String myIp = NetworkUtils.getIP4();
 
                     int msg_length=myIp.length();
                     byte[] message = myIp.getBytes();
@@ -174,35 +237,32 @@ public class ConnectActivity extends AppCompatActivity {
                 }
             }
         }
-    }
 
-    public static String getIPAddress(boolean useIPv4) {
-        try {
-            List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
-            for (NetworkInterface intf : interfaces) {
-                List<InetAddress> addrs = Collections.list(intf.getInetAddresses());
-                for (InetAddress addr : addrs) {
-                    if (!addr.isLoopbackAddress()) {
-                        String sAddr = addr.getHostAddress();
-                        //boolean isIPv4 = InetAddressUtils.isIPv4Address(sAddr);
-                        boolean isIPv4 = sAddr.indexOf(':') < 0;
+        if (requestCode == BARCODE_GENERATOR_REQUEST_CODE){
+            if(resultCode == CommonStatusCodes.SUCCESS){
 
-                        if (useIPv4) {
-                            if (isIPv4)
-                                return sAddr;
-                        } else {
-                            if (!isIPv4) {
-                                int delim = sAddr.indexOf('%'); // drop ip6 zone suffix
-                                return delim < 0 ? sAddr.toUpperCase() : sAddr.substring(0, delim).toUpperCase();
-                            }
-                        }
-                    }
+                // get other ip from data ...
+
+
+                if(data != null) {
+                    String ip = data.getStringExtra("ip");
+                    Log.e("----",ip);
+                    tvResult.setText(ip);
+                    otherIP = ip;
+                    ipExchanged=true;
+
+
+                    NetworkMulti.getInstance().setIP(ip);
+                    testConnectionBt.setVisibility(View.VISIBLE);
+
+
+
+                } else {
+                    Log.e("----","data null");
+
                 }
             }
-        } catch (Exception ex) {
-        } // for now eat exceptions
-        return "";
+
+        }
     }
-
-
 }

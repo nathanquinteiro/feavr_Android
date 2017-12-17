@@ -49,6 +49,28 @@
         android:visibility="invisible"
         />
 
+    <Button
+        android:id="@+id/btTestCo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btScan"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:visibility="invisible"
+        android:text="@string/text_test_connection" />
+
+
+    <TextView
+        android:id="@+id/tvConnectionState"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btTestCo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+
+        android:text="@string/tvConnectionState" />
+
+
 
     <TextView
         android:id="@+id/tvScanResult"
@@ -67,6 +89,8 @@
         android:layout_alignStart="@+id/tvScanResult"
         android:layout_marginBottom="48dp"
         android:text="udp test send" />
+
+
 
 
 </RelativeLayout>
