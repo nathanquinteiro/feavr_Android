@@ -8,6 +8,8 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/feavrwatch" />
+            <option value="$PROJECT_DIR$/feavrwear" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

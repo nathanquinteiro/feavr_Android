@@ -10,6 +10,7 @@ buildscript {
     }
 }
 
+
 allprojects {
     repositories {
         google()
@@ -18,36 +19,45 @@ allprojects {
             dirs 'libs'
         }
     }
+
+    project.ext {
+        constants = [some_path      : "/SOME_PATH",
+                     another_path   : "/ANOTHER_PATH",
+                     acknowledge    : "/ACKNOWLEDGE_PATH",
+                     start_activity : "/START_ACTIVITY",
+                     a_key          : "a_key",
+                     some_other_key : "some_other_key",
+                     a_location_key : "a_location_key",
+                     location_key   : "location_key",
+                     location_path  : "/LOCATION_PATH",
+                     heart_rate_key : "heart_rate_key",
+                     heart_rate_path: "/HEART_RATE_PATH"];
+    }
 }
 
 apply plugin: 'com.android.application'
 
 dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:25.1.1'
     compile 'com.android.support:design:25.1.1'
     compile(name: 'gvr-permissionsupport-release', ext: 'aar')
     compile(name: 'gvr', ext: 'aar')
     compile(name: 'unitygvr', ext: 'aar')
     compile 'com.google.android.gms:play-services-vision:9.4.0+'
-
     compile 'com.journeyapps:zxing-android-embedded:3.5.0'
     compile 'com.google.zxing:core:3.2.0'
-
-
 }
 
 
 android {
     compileSdkVersion 25
     buildToolsVersion '26.0.2'
-
     defaultConfig {
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 25
     }
-
     lintOptions {
         abortOnError false
     }
@@ -59,8 +69,22 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-unity.txt'
-
         }
+
+        buildTypes.each {
+            project.ext.constants.each {
+                    // Create module constants as both String constants and string resources
+                    //    String constants used in Java as BuildConfig.k ("k" being the key used)
+                    //    Resources are used as usual:
+                    //         in Java as [getApplicationContext().]getString(R.string.a_key)
+                    //         in XML as @string/app_name
+                k, v ->
+                    it.buildConfigField 'String', k, "\"${v}\""
+                    it.resValue 'string', k, v
+            }
+        }
+    }
+    productFlavors {
     }
 
 }
