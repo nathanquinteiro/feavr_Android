@@ -9,7 +9,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Random;
 
 import quinteiro.nathan.feavr.utils.NetworkMulti;
 
@@ -23,12 +30,55 @@ public class gameTabActivity extends AppCompatActivity {
 
     LinearLayout ll;
 
+    Random random ;
+
+
+    boolean lightOn = true;
+
+    Button btLight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_game_tab);
 
+        random = new Random();
+        btLight = (Button) findViewById(R.id.btLight);
+        btLight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(NetworkMulti.getInstance().isCoTested()){
+
+                    JSONObject a = new JSONObject();
+
+                    boolean[] li = new boolean[15];
+
+
+                    JSONArray b = null;
+
+                    for(int i = 0 ; i<li.length;i++){
+                        li[i] = random.nextBoolean();
+                    }
+
+                    try {
+                        b = new JSONArray(li);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    try {
+                        a.put("event",b);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    NetworkMulti.getInstance().sendEvent(a.toString());
+
+
+                }
+                    //NetworkMulti.getInstance().
+            }
+        });
 
         Boolean testMode = getIntent().getExtras().getBoolean(MainActivity.EXTRA_TEST_MODE);
 
@@ -92,6 +142,8 @@ public class gameTabActivity extends AppCompatActivity {
 
 
                 }
+
+
             };
 
 
@@ -133,7 +185,7 @@ public class gameTabActivity extends AppCompatActivity {
         @Override
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
 
-            setMeasuredDimension(widthMeasureSpec,heightMeasureSpec/2);
+            setMeasuredDimension(widthMeasureSpec,heightMeasureSpec);
 
         }
 

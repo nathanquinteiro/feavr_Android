@@ -36,6 +36,7 @@ public class NetworkMulti {
 
     final private String MSG_POS = "POSITION";
     final private String MSG_BPM = "BPM";
+    final private String MSG_EVENT = "EVENT";
     final private int server_port = 12345;
 
 
@@ -243,6 +244,15 @@ public class NetworkMulti {
 
         }
     }
+    public void sendEvent(String msg){
+
+        if(this.isCoTested()){
+            String fmsg = MSG_EVENT;
+            fmsg+="/"+msg;
+            sendMsg(fmsg);
+        }
+
+    }
 
     private void sendMsg(String msg){
 
@@ -377,6 +387,8 @@ public class NetworkMulti {
             Log.e("testT","call stop but thread is null");
         }
     }
+
+
 
 
 
@@ -556,6 +568,97 @@ public class NetworkMulti {
             Log.e("TestT","call start but probably already started");
         }
     }
+
+
+
+    Thread rcvEventThread;
+    boolean rcvEventThreadActive = true;
+
+    public void startRcvEventThread(final networkEventListener l){
+
+        final networkEventListener lIstener = l;
+        final String TAG_RCV_EVENT = "RCV_EVENT";
+
+        if(rcvEventThread==null){
+
+
+            rcvEventThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+
+                    rcvEventThreadActive = true;
+
+                    byte[] message = new byte[500];
+                    DatagramPacket p = new DatagramPacket(message, message.length);
+                    DatagramSocket s = null;
+
+
+                    try {
+                        s = new DatagramSocket(server_port);
+                        s.setSoTimeout(500);
+                    } catch (SocketException e) {
+                        e.printStackTrace();
+                        rcvEventThreadActive=false;
+                        Log.e(TAG_RCV_EVENT,"-fails init socket or fail set timeout");
+                        return;
+                    }
+
+
+                    boolean validMsg ;
+                    while (rcvThreadActive) {
+
+                        try {
+
+                            s.receive(p);
+                            validMsg = true;
+                        } catch (IOException e) {
+                            //e.printStackTrace();
+                            //Log.e(TAG_RCV_MSG,"-IOException receive msg");
+
+                            validMsg = false;
+
+                        }
+
+                        if(validMsg){
+
+                            String text;
+                            text = new String(message, 0, p.getLength());
+
+
+                            String[] splitted = text.split("/");
+
+                            if (splitted.length != 0) {
+
+                                if (splitted[0].equals(MSG_EVENT)) {
+
+                                    if (splitted.length == 2) {
+
+                                        //float[] ppos = {Float.parseFloat(splitted[1]), Float.parseFloat(splitted[2])};
+                                        //listener.setPosition(ppos);
+                                        lIstener.setEvent(splitted[1]);
+
+                                    } else {
+                                        Log.e(TAG_RCV_EVENT, "Wrong size msg pos :" + splitted.length);
+                                    }
+
+
+                                }
+                            }
+                        }
+                    }
+
+                    if (s != null) {
+                        s.close();
+                    }
+                }
+            });
+            rcvEventThread.start();
+        }
+    }
+
+
+
+
 
     Thread rcvMsgThread;
     boolean rcvThreadActive = true;
@@ -875,6 +978,12 @@ public class NetworkMulti {
     public interface networkMultiListener{
         void setPosition(float[] p);
         void setBPM(int bpm);
+        //void setEvent(String msg);
+    }
+
+    public interface networkEventListener{
+        void setEvent(String msg);
+
     }
 
 

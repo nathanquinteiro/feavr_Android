@@ -25,6 +25,9 @@ import android.widget.TextView;
 
 import com.google.vr.sdk.proto.nano.Analytics;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
@@ -245,6 +248,24 @@ public class MainActivity extends AppCompatActivity
     private View.OnClickListener startGameListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+
+            NetworkMulti.getInstance().startRcvEventThread(new NetworkMulti.networkEventListener() {
+                @Override
+                public void setEvent(String msg) {
+                    try {
+                        JSONObject a = new JSONObject(msg);
+                        JSONArray b = a.getJSONArray("event");
+
+                        
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+
+
             Intent intent = new Intent(MainActivity.this, UnityPlayerActivity.class);
             startActivity(intent);
         }
