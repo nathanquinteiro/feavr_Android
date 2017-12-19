@@ -9,3 +9,4 @@ src/main/jniLibs
 /build
 /captures
 .externalNativeBuild
+.*/
