@@ -42,6 +42,17 @@ public class gameTabActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_game_tab);
 
+
+        Boolean testMode = getIntent().getExtras().getBoolean(MainActivity.EXTRA_TEST_MODE);
+
+        Log.e("EXTRA","value : "+testMode);
+
+
+        setContentView(R.layout.activity_game_tab);
+        ll = (LinearLayout) findViewById(R.id.gameLayout);
+
+
+
         random = new Random();
         btLight = (Button) findViewById(R.id.btLight);
         btLight.setOnClickListener(new View.OnClickListener() {
@@ -67,7 +78,7 @@ public class gameTabActivity extends AppCompatActivity {
                     }
 
                     try {
-                        a.put("event",b);
+                        a.put("lamp",b);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -76,17 +87,10 @@ public class gameTabActivity extends AppCompatActivity {
 
 
                 }
-                    //NetworkMulti.getInstance().
+                //NetworkMulti.getInstance().
             }
         });
 
-        Boolean testMode = getIntent().getExtras().getBoolean(MainActivity.EXTRA_TEST_MODE);
-
-        Log.e("EXTRA","value : "+testMode);
-
-
-        setContentView(R.layout.activity_game_tab);
-        ll = (LinearLayout) findViewById(R.id.gameLayout);
 
 
 

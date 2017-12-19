@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import quinteiro.nathan.feavr.BLE.BLEManager;
 import quinteiro.nathan.feavr.BLE.BluetoothLEService;
 import quinteiro.nathan.feavr.R;
+import quinteiro.nathan.feavr.Unity.FeavrReceiver;
 import quinteiro.nathan.feavr.Unity.UnityPlayerActivity;
 import quinteiro.nathan.feavr.utils.NetworkMulti;
 
@@ -252,15 +253,18 @@ public class MainActivity extends AppCompatActivity
             NetworkMulti.getInstance().startRcvEventThread(new NetworkMulti.networkEventListener() {
                 @Override
                 public void setEvent(String msg) {
+
+                    FeavrReceiver.setEvent(msg);
+                    /*
                     try {
                         JSONObject a = new JSONObject(msg);
                         JSONArray b = a.getJSONArray("event");
 
-                        
+
 
                     } catch (JSONException e) {
                         e.printStackTrace();
-                    }
+                    }*/
 
                 }
             });

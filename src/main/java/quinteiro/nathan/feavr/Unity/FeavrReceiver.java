@@ -20,6 +20,8 @@ public class FeavrReceiver {
     }
 
     public static void setEvent(String event) {
+
+        Log.e("FVRRECEIVER","New event : "+event);
         FeavrReceiver.event = event;
     }
 
