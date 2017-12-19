@@ -10,6 +10,8 @@ import java.net.SocketException;
 
 import java.net.UnknownHostException;
 
+import quinteiro.nathan.feavr.Activities.MainActivity;
+
 /**
  * Created by jeremie on 04.12.17.
  */
@@ -376,6 +378,8 @@ public class NetworkMulti {
         }
     }
 
+
+
     //public void startTestThread(final networkMultiListenerNewBPM lb, final networkMultiListenerNewPosition lp){
     public void startTestThread(final networkMultiListener l){
         //final networkMultiListenerNewBPM list_BPM = lb;
@@ -384,27 +388,163 @@ public class NetworkMulti {
 
         testThreadActive=true;
 
+        final int minX = -4;
+        final int minY = -4;
+
+        final int maxX = 59;
+        final int maxY = 59;
+
+
         if(testThread==null){
             testThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
 
-                    int i = 1;
+
+                    int xMax = 63;
+                    int yMax = 63;
+
+                    int b = 0;
+
+
+                    //int i = 1;
                     Log.e("TestT","run, active : "+testThreadActive);
 
                     while (testThreadActive){
 
-                        i++;
+//randomNum = minimum + (int)(Math.random() * maximum);
 
-                        if(i%10000000==0){
+                        int x =0;
+                        int y =0;
+                        int ll = 56;
+
+                        for(int sector =0; sector<4;sector++){
+                            switch (sector) {
+                                case 0:
+                                    x=0;
+                                    y=0;
+                                    for(int i = 0;i<ll;i++) {
+
+                                        x=i;
+                                        float[] ppos = {x,y};
+                                        listener.setBPM(80+(int)(Math.random()*10));
+                                        listener.setPosition(ppos);
+                                        try {
+                                            Thread.sleep(250);
+                                        } catch (InterruptedException e) {
+                                            //
+                                        }
+
+
+                                    }
+
+                                        break;
+                                case 1:
+
+                                    x=56;
+                                    y=0;
+                                    for(int i = 0;i<ll;i++) {
+
+                                        y=i;
+                                        float[] ppos = {x,y};
+                                        listener.setBPM(90+(int)(Math.random()*10));
+                                        listener.setPosition(ppos);
+                                        try {
+                                            Thread.sleep(250);
+                                        } catch (InterruptedException e) {
+                                            //
+                                        }
+
+
+                                    }
+
+                                    break;
+
+                                case 2:
+
+                                    x=56;
+                                    y=56;
+                                    for(int i = 56;i>1;i--) {
+
+                                        x=i;
+                                        float[] ppos = {x,y};
+                                        listener.setBPM(90+(int)(Math.random()*10));
+                                        listener.setPosition(ppos);
+                                        try {
+                                            Thread.sleep(250);
+                                        } catch (InterruptedException e) {
+                                            //
+                                        }
+
+
+                                    }
+
+                                    break;
+                                case 3:
+
+                                    x=0;
+                                    y=56;
+                                    for(int i = 56;i>1;i--) {
+
+                                        y=i;
+                                        float[] ppos = {x,y};
+                                        listener.setBPM(90+(int)(Math.random()*10));
+                                        listener.setPosition(ppos);
+                                        try {
+                                            Thread.sleep(250);
+                                        } catch (InterruptedException e) {
+                                            //
+                                        }
+
+
+                                    }
+
+                                    break;
+
+
+                            }
+                        }
+
+                        /*try {
+                            Thread.sleep(500);
+                        } catch (InterruptedException e) {
+                            //e.printStackTrace();
+                        }
+                        x+= 10;
+                        y+= 10;
+
+                        b+=4;
+
+                        float[] ppos = {x%xMax,y%yMax};
+
+                        listener.setBPM(80+(b%5));
+                        listener.setPosition(ppos);*/
+
+
+
+
+
+
+
+
+
+                        /*i++;
+
+                        if(i%5000000==0){
                             i=1;
                             Log.e("nwM","moddullo");
                             //list_BPM.getNewBPM(123);
-                            float[] ppos = {1,4};
-                            //list_Pos.getNewPosition(ppos);
-                            listener.setBPM(1234);
+                            //float[] ppos = {1,4};
+                            x++;
+                            y++;
+                            b++;
+                            float[] ppos = {x%xMax,y%yMax};
+
+                            listener.setBPM(80+(b%5));
                             listener.setPosition(ppos);
-                        }
+
+
+                        }*/
 
 
                     }

@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Switch;
 import android.widget.TextView;
 
 
@@ -55,7 +56,14 @@ public class MainActivity extends AppCompatActivity
 
     private Button btStopTestTH;
 
+    private Button btStartDraw;
+
     private String bmpLastVal ="none";
+
+    private Switch swDemoMode ;
+
+
+    final static public String EXTRA_TEST_MODE = "TEST_MODE";
 
     //private logMsg myLogMsg;
 
@@ -86,6 +94,9 @@ public class MainActivity extends AppCompatActivity
 
 
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+
+
+        swDemoMode = (Switch) findViewById(R.id.sw_demo_mode);
 
         btStartNW = (Button) findViewById(R.id.buttonStartNW);
         btSendBPM = (Button) findViewById(R.id.buttonSENDBPM);
@@ -223,8 +234,8 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-
-
+        btStartDraw = (Button) findViewById(R.id.startDrawTab);
+        btStartDraw.setOnClickListener(startGameTabListener);
 
 
 
@@ -235,6 +246,17 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(MainActivity.this, UnityPlayerActivity.class);
+            startActivity(intent);
+        }
+    };
+
+    private View.OnClickListener startGameTabListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            //Intent intent = new Intent(MainActivity.this, gameTabActivity.class);
+            Intent intent = new Intent(getApplicationContext(), gameTabActivity.class);
+
+            intent.putExtra(EXTRA_TEST_MODE,swDemoMode.isChecked());
             startActivity(intent);
         }
     };
