@@ -13,7 +13,15 @@ import quinteiro.nathan.feavr.utils.NetworkMulti;
 public class FeavrReceiver {
     public static int bpm = 0;
     public static float[] position = {0,0};
+    public static String event = null;
 
+    public static String getEvent() {
+        return event;
+    }
+
+    public static void setEvent(String event) {
+        FeavrReceiver.event = event;
+    }
 
     //Call by unity to get the BPM
     public static int getBPM() {
