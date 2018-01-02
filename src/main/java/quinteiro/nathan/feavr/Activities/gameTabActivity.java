@@ -74,14 +74,15 @@ public class gameTabActivity extends AppCompatActivity {
                     try {
                         b = new JSONArray(li);
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        //e.printStackTrace();
                     }
 
                     try {
-                        a.put("lamp",b);
+                        a.put("lamps",b);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+
 
                     NetworkMulti.getInstance().sendEvent(a.toString());
 
