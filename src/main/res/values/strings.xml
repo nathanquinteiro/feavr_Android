@@ -76,6 +76,11 @@
     <string name="action_settings">Settings</string>
 
     <string name="action_connect">Connect</string>
+    <string name="action_high_score">High scores</string>
+    <string name="action_help">Help</string>
+    <string name="action_connect_multi">Connect multiplayer</string>
+
+
 
 
     <string name="becare">BLE Handler</string>
@@ -99,7 +104,17 @@ Google Vision
     <string name="textSwMultiPlayer">Multi-player Mode :</string>
     <string name="textTvScanResult">Not connected</string>
     <string name="text_qr_code_generator">QR Code Generator</string>
+
+    <string name="text_title_multi">Multiplayer mode  </string>
+    <string name="text_info_multi">Generate the a QRCode on a device and scan it from the other device. Please make sure that the both devices are connected to internet and in the same network. </string>
+
+    <string name="text_st_connection">Connection state : </string>
+    <string name="text_current_st_connection"> no connected </string>
+    <string name="text_current_st_connection_noIP">The QRCode scanned is not a valid address</string>
+    <string name="text_current_st_connected">Correctly connected </string>
+
     <string name="text_qr_code_scanner">QR Code Scanner</string>
+    <string name="text_reset_co">Reset connection</string>
     <string name="text_tw_ip_rec">None</string>
     <string name="text_test_connection">Test Connection</string>
     <string name="tvConnectionState">No Connected</string>

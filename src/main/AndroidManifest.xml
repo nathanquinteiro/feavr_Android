@@ -82,6 +82,11 @@
 
         <activity android:name=".Activities.gameTabActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+
+        <activity android:name=".Activities.MultiPlayerConnectActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+
+            />
     </application>
 
 </manifest>

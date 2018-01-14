@@ -347,6 +347,11 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
         }
 
+        if ( id == R.id.nav_connect_multi_players){
+            Intent intent = new Intent(this, MultiPlayerConnectActivity.class);
+            startActivity(intent);
+        }
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

@@ -430,6 +430,8 @@ public class NetworkMulti {
                         int y =0;
                         int ll = 56;
 
+                        int randomNumber =0;
+
                         for(int sector =0; sector<4;sector++){
                             switch (sector) {
                                 case 0:
@@ -437,7 +439,9 @@ public class NetworkMulti {
                                     y=0;
                                     for(int i = 0;i<ll;i++) {
 
+                                        randomNumber = (int)(Math.random()*2-1);
                                         x=i;
+                                        y=randomNumber;
                                         float[] ppos = {x,y};
                                         listener.setBPM(80+(int)(Math.random()*10));
                                         listener.setPosition(ppos);
@@ -457,7 +461,9 @@ public class NetworkMulti {
                                     y=0;
                                     for(int i = 0;i<ll;i++) {
 
+                                        randomNumber = (int)(Math.random()*2-1);
                                         y=i;
+                                        x = 56-randomNumber;
                                         float[] ppos = {x,y};
                                         listener.setBPM(90+(int)(Math.random()*10));
                                         listener.setPosition(ppos);
@@ -476,9 +482,12 @@ public class NetworkMulti {
 
                                     x=56;
                                     y=56;
+
                                     for(int i = 56;i>1;i--) {
 
+                                        randomNumber = (int)(Math.random()*2-1);
                                         x=i;
+                                        y=56-randomNumber;
                                         float[] ppos = {x,y};
                                         listener.setBPM(90+(int)(Math.random()*10));
                                         listener.setPosition(ppos);
@@ -498,6 +507,9 @@ public class NetworkMulti {
                                     y=56;
                                     for(int i = 56;i>1;i--) {
 
+
+                                        randomNumber = (int)(Math.random()*2-1);
+                                        x=randomNumber;
                                         y=i;
                                         float[] ppos = {x,y};
                                         listener.setBPM(90+(int)(Math.random()*10));

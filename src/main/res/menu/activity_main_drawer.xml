@@ -33,6 +33,23 @@
                 android:id="@+id/nav_connect"
                 android:icon="@drawable/ic_menu_share"
                 android:title="@string/action_connect" />
+
+            <item
+                android:id="@+id/nav_high_score"
+                android:icon="@drawable/ic_add"
+                android:title="@string/action_high_score" />
+
+            <item
+                android:id="@+id/nav_connect_multi_players"
+                android:icon="@drawable/ic_menu_share"
+                android:title="@string/action_connect_multi" />
+
+            <item
+                android:id="@+id/nav_help"
+                android:icon="@drawable/ic_menu_share"
+                android:title="@string/action_help" />
+
+
         </menu>
     </item>
 
