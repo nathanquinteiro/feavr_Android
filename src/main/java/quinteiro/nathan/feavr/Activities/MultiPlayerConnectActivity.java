@@ -1,5 +1,6 @@
 package quinteiro.nathan.feavr.Activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -42,6 +43,8 @@ public class MultiPlayerConnectActivity extends AppCompatActivity {
     private Button btGenQR;
     private Button btScanQR;
     private Button btResetCo;
+
+    public ProgressDialog progress;
 
     private TextView tvCoState;
 
@@ -114,36 +117,38 @@ public class MultiPlayerConnectActivity extends AppCompatActivity {
                             NetworkMulti.getInstance().setIP(ipRcv);
 
 
-                            //TODO change all bellow by a fonction of the networkMulti (send my ip to the other device)
+                            // wait stuff
+                            progress = new ProgressDialog(this);
+                            progress.setTitle("Wait for response");
+                            progress.setMessage("Please wait ...");
+                            progress.setCancelable(false);
+                            progress.show();
+                            progress.setMax(100);
 
-                            DatagramSocket s = null;
-                            InetAddress local = null;
-                            int server_port = 12345;
-                            try {
-                                s = new DatagramSocket();
-                                local = InetAddress.getByName(ipRcv);
-                            } catch (SocketException | UnknownHostException e) {
-                                e.printStackTrace();
-                            }
+                            boolean connectedSucessfully = NetworkMulti.getInstance().sendMyIp();  // chang sendMyIp and wait for answer ..
 
 
-                            //get my ip
-                            String myIp = NetworkUtils.getIP4();
-
-                            int msg_length=myIp.length();
-                            byte[] message = myIp.getBytes();
-
-                            DatagramPacket p = new DatagramPacket(message, msg_length,local,server_port);
-                            try {
-                                assert s != null;
-                                s.send(p);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-
+                            progress.dismiss();
                             //TODO try to wait some little time to be sure that everything is correct
+                            // unwait stuff
 
-                            tvCoState.setText(R.string.text_current_st_connected);
+
+
+                            if(connectedSucessfully){
+                                tvCoState.setText(R.string.text_current_st_connected);
+                            } else {
+                                tvCoState.setText(R.string.text_current_st_connected_fail);
+                            }
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -174,6 +179,8 @@ public class MultiPlayerConnectActivity extends AppCompatActivity {
                         String ip = data.getStringExtra("ip");
                         if(NetworkUtils.isValidIP4(ip)){
                             NetworkMulti.getInstance().setIP(ip);
+
+                            NetworkMulti.getInstance().sendConfirmation();
 
                             //TODO add send confirmation to the other device to indicate that the connection is ok
 

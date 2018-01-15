@@ -112,6 +112,7 @@ Google Vision
     <string name="text_current_st_connection"> no connected </string>
     <string name="text_current_st_connection_noIP">The QRCode scanned is not a valid address</string>
     <string name="text_current_st_connected">Correctly connected </string>
+    <string name="text_current_st_connected_fail">fail to connect</string>
 
     <string name="text_qr_code_scanner">QR Code Scanner</string>
     <string name="text_reset_co">Reset connection</string>

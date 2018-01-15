@@ -74,7 +74,126 @@ public class NetworkMulti {
         this.connectionTested=true;
     }
 
+    public void sendConfirmation(){
 
+        if(ipSetted) {
+            DatagramSocket s = null;
+            InetAddress local = null;
+            int server_port = 12345;
+            try {
+                s = new DatagramSocket();
+                local = InetAddress.getByName(otherIp);
+            } catch (SocketException | UnknownHostException e) {
+                e.printStackTrace();
+            }
+
+
+            // message
+            String msg = "OK_IP_RECEIVED";
+
+            int msg_length=msg.length();
+            byte[] message = msg.getBytes();
+
+            DatagramPacket p = new DatagramPacket(message, msg_length,local,server_port);
+            try {
+                assert s != null;
+                s.send(p);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+    }
+
+    public boolean sendMyIp(){
+
+        if(ipSetted){
+
+            DatagramSocket s = null;
+            InetAddress local = null;
+            int server_port = 12345;
+            try {
+                s = new DatagramSocket();
+                local = InetAddress.getByName(otherIp);
+            } catch (SocketException | UnknownHostException e) {
+                e.printStackTrace();
+            }
+
+
+            //get my ip
+            String myIp = NetworkUtils.getIP4();
+
+            int msg_length=myIp.length();
+            byte[] messageIP = myIp.getBytes();
+
+            DatagramPacket p = new DatagramPacket(messageIP, msg_length,local,server_port);
+            try {
+                assert s != null;
+                s.send(p);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+            // GET ONE MSG CHECK IF  ici
+
+            s.close();
+
+            byte[] message = new byte[500];
+            //DatagramPacket p = new DatagramPacket(message, message.length);
+            //DatagramSocket s = null;
+
+            p = new DatagramPacket(message, message.length);
+            s = null;
+
+
+
+            int i = 0;
+
+            try {
+                s = new DatagramSocket(server_port);
+                s.setSoTimeout(pingDuration);
+            } catch (SocketException e) {
+                e.printStackTrace();
+            }
+
+
+            try {
+                s.receive(p);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            String text;
+            text = new String(message, 0, p.getLength());
+
+            boolean ok = false;
+            if(text.equals("OK_IP_RECEIVED")){
+                Log.e("TAG_RCV_PING","MSG contains ping");
+                connectionTested=true;
+                ok = true;
+
+            } else {
+                Log.e("TAG_RCV_PING","MSG not contains ping");
+                ok = false;
+            }
+
+
+
+            s.close();
+
+            return  ok;
+
+
+
+        }
+
+
+
+        return false;
+
+    }
 
     public boolean testConnection(){
 
