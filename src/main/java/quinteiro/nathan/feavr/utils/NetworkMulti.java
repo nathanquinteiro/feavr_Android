@@ -26,14 +26,10 @@ public class NetworkMulti {
 
     private boolean connectionTested ;
     private boolean ipSetted ;
-    private boolean headSetMode=false;
-
 
     private DatagramSocket outSocket = null;
     private InetAddress outLocal = null;
 
-
-    //private receiveMsg rcv_T=null;
 
     final private String MSG_POS = "POSITION";
     final private String MSG_BPM = "BPM";
@@ -42,7 +38,8 @@ public class NetworkMulti {
 
 
     //PING setup
-    private int pingDuration =  5000;
+
+    private int waitConfirmation = 1000;
     private int nbPingMsg = 10;
 
     final private String TAG_SEND="NW_SEND_MSG";
@@ -176,7 +173,7 @@ public class NetworkMulti {
 
             try {
                 s = new DatagramSocket(server_port);
-                s.setSoTimeout(pingDuration);
+                s.setSoTimeout(waitConfirmation);
             } catch (SocketException e) {
                 e.printStackTrace();
             }
