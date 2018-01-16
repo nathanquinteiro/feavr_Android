@@ -8,6 +8,18 @@
     <string name="scan_dialog_title">Scanning for Heart Monitor...</string>
     <string name="cancel">Cancel</string>
 
+    <!-- Single Player Activity -->
+    <string name="single_title">Single Player VR Mode</string>
+
+    <!-- Multiplayer VR Activity -->
+    <string name="vr_title">Multiplayer VR Mode</string>
+    <string name="ble_connect">Connect BLE Heart-Rate Monitor</string>
+    <string name="watch_message">If you use the FeavrTracker APP on your Smartwatch, the heart rate will be tracked automatically.</string>
+    <string name="vr_launch">Start Game</string>
+
+    <!-- Multiplayer Control Activity -->
+    <string name="control_title">Controller Mode</string>
+
 
     <!-- Bluetooth permission -->
     <string name="request_permissions_text">Without the location permission, the APP is unable to scan for Bluetooth LE devices, and will not be able to connect to the heartbeat monitor. Are you sure you want to deny this permission? (you will not be able to perform any measure without it)</string>
@@ -79,8 +91,6 @@
     <string name="action_high_score">High scores</string>
     <string name="action_help">Help</string>
     <string name="action_connect_multi">Connect multiplayer</string>
-
-
 
 
     <string name="becare">BLE Handler</string>

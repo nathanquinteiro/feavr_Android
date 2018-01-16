@@ -59,10 +59,6 @@ public class gameTabActivity extends AppCompatActivity {
         //setContentView(R.layout.activity_game_tab);
 
 
-        Boolean testMode = getIntent().getExtras().getBoolean(MainActivity.EXTRA_TEST_MODE);
-
-        Log.e("EXTRA","value : "+testMode);
-
 
         setContentView(R.layout.activity_game_tab);
         ll = (LinearLayout) findViewById(R.id.gameLayout);
@@ -112,7 +108,7 @@ public class gameTabActivity extends AppCompatActivity {
 
 
 
-        dm = new DemoView(this,testMode);
+        dm = new DemoView(this, false);
 
         ll.addView(dm);
 
@@ -135,7 +131,6 @@ public class gameTabActivity extends AppCompatActivity {
         hrGraph.addSeries(hrSerie);
 
 
-        registerReceiver(mHeartRateReceiver, new IntentFilter(WearListenerService.ACTION_SEND_HEART_RATE));
         //setContentView();
     }
 
@@ -153,19 +148,6 @@ public class gameTabActivity extends AppCompatActivity {
         hrData.add(newHR);
         hrSerie.resetData(listToDataPoint(hrData));
     }
-
-    private BroadcastReceiver mHeartRateReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            int bpm = intent.getIntExtra(WearListenerService.INT_HEART_RATE,-1);
-            Log.d("Received form Watch","BPM: " + bpm);
-
-            if(bpm != -1) {
-                Log.e("Received", "BPM: " + bpm);
-                appendNewHR((double) bpm);
-            }
-        }
-    };
 
 
 

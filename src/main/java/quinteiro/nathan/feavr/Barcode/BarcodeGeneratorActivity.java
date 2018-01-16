@@ -256,6 +256,12 @@ public class BarcodeGeneratorActivity extends Activity {
                     timeout = true;
                     i = 3;
                 }
+                catch (NullPointerException e) {
+                    Log.e(TAG_IP, "NullPointer exception");
+                    e.printStackTrace();
+                    timeout = true;
+                    i = 4;
+                }
 
             }
             Log.e(TAG_IP, "" + i);
