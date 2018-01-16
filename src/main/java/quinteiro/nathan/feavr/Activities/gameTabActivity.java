@@ -148,7 +148,7 @@ public class gameTabActivity extends AppCompatActivity {
         return dataPoint;
     }
 
-    public void appendNewRR(double newHR) {
+    public void appendNewHR(double newHR) {
         hrData.remove(0);
         hrData.add(newHR);
         hrSerie.resetData(listToDataPoint(hrData));
@@ -162,7 +162,7 @@ public class gameTabActivity extends AppCompatActivity {
 
             if(bpm != -1) {
                 Log.e("Received", "BPM: " + bpm);
-                appendNewRR((double) bpm);
+                appendNewHR((double) bpm);
             }
         }
     };
@@ -207,6 +207,7 @@ public class gameTabActivity extends AppCompatActivity {
                 public void setBPM(int bpm) {
                     //Log.e("-","aps");
                     lastBPM=bpm;
+                    appendNewHR((double) bpm);
 
 
                 }
