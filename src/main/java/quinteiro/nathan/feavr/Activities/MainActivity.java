@@ -1,97 +1,53 @@
 package quinteiro.nathan.feavr.Activities;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.IntentSender;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Switch;
 import android.widget.TextView;
 
 
 import com.google.android.gms.common.api.CommonStatusCodes;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResult;
-import com.google.android.gms.location.LocationSettingsStates;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.google.android.gms.vision.barcode.Barcode;
-
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.SocketException;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-
-import quinteiro.nathan.feavr.BLE.BLEManager;
-import quinteiro.nathan.feavr.BLE.BluetoothLEService;
-import quinteiro.nathan.feavr.Barcode.BarcodeCaptureActivity;
 import quinteiro.nathan.feavr.Barcode.BarcodeGeneratorActivity;
 import quinteiro.nathan.feavr.R;
-import quinteiro.nathan.feavr.Unity.FeavrReceiver;
 import quinteiro.nathan.feavr.Unity.UnityPlayerActivity;
-import quinteiro.nathan.feavr.utils.NetworkMulti;
-import quinteiro.nathan.feavr.utils.NetworkUtils;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
-
-    private TextView bpmTextView;
 
     private Button btSingle;
     private Button btVR;
     private Button btControl;
 
 
-    private final int BARCODE_READER_REQUEST_CODE = 7;
-    //private logMsg myLogMsg;
-
+    private final int BARCODE_GENERATOR_CODE = 7;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.app_bar_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        bpmTextView = (TextView) findViewById(R.id.tv_bpm);
-
-        BLEManager.startBluetoothService(this);
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
+        if(drawer != null) {
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+            drawer.setDrawerListener(toggle);
+            toggle.syncState();
+
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+            navigationView.setNavigationItemSelectedListener(this);
+        }
 
         btSingle = (Button) findViewById(R.id.btSingle);
         btSingle.setOnClickListener(startSingleListener);
@@ -101,8 +57,6 @@ public class MainActivity extends AppCompatActivity
 
         btControl = (Button) findViewById(R.id.btControl);
         btControl.setOnClickListener(startControlListener);
-
-
 
     }
 
@@ -145,8 +99,8 @@ public class MainActivity extends AppCompatActivity
     private View.OnClickListener startControlListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(MainActivity.this, BarcodeCaptureActivity.class);
-            startActivityForResult(intent, BARCODE_READER_REQUEST_CODE);
+            Intent intent = new Intent(MainActivity.this, BarcodeGeneratorActivity.class);
+            startActivityForResult(intent, BARCODE_GENERATOR_CODE);
         }
     };
 
@@ -171,10 +125,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-          super.onBackPressed();
+        if(drawer != null) {
+            if (drawer.isDrawerOpen(GravityCompat.START)) {
+                drawer.closeDrawer(GravityCompat.START);
+            } else {
+                super.onBackPressed();
+            }
         }
     }
 
@@ -199,13 +155,16 @@ public class MainActivity extends AppCompatActivity
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        if(drawer != null) {
+            drawer.closeDrawer(GravityCompat.START);
+        }
         return true;
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == BARCODE_READER_REQUEST_CODE) {
+        if (requestCode == BARCODE_GENERATOR_CODE) {
             if (resultCode == CommonStatusCodes.SUCCESS) {
                 Intent intent = new Intent(MainActivity.this, gameTabActivity.class);
                 startActivity(intent);

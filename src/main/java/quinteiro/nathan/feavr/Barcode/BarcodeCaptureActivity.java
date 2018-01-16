@@ -480,6 +480,18 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements B
 
     @Override
     public void onBarcodeDetected(Barcode barcode) {
-        //do something with barcode data returned
+        if(barcode != null) {
+            String ipRcv = barcode.displayValue;
+
+            if(NetworkUtils.isValidIP4(ipRcv)) {
+                mysendIPTask = new sendIPAsync();
+                mysendIPTask.execute(ipRcv);
+
+            } else {
+                Intent data = new Intent();
+                setResult(CommonStatusCodes.ERROR);
+                finish();
+            }
+        }
     }
 }

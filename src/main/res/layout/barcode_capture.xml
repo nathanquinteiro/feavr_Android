@@ -8,6 +8,11 @@
     android:layout_height="match_parent"
     android:keepScreenOn="true">
 
+  <TextView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="@string/barcode_capture_hint"/>
+
   <quinteiro.nathan.feavr.UI.camera.CameraSourcePreview
       android:id="@+id/preview"
       android:layout_width="match_parent"

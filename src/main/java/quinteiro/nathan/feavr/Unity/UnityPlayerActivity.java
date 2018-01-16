@@ -2,6 +2,7 @@ package quinteiro.nathan.feavr.Unity;
 
 import com.unity3d.player.*;
 import android.app.Activity;
+import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -10,12 +11,15 @@ import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.Window;
 
 import quinteiro.nathan.feavr.BLE.BluetoothLEService;
+import quinteiro.nathan.feavr.R;
 import quinteiro.nathan.feavr.Wear.WearListenerService;
 
 public class UnityPlayerActivity extends Activity
@@ -66,6 +70,16 @@ public class UnityPlayerActivity extends Activity
 			}
 		}
 	};
+
+
+	@Override
+	public void onBackPressed() {
+		System.out.print("sd");
+		super.onBackPressed();
+	}
+
+
+
 
 	private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
 		@Override
@@ -155,7 +169,12 @@ public class UnityPlayerActivity extends Activity
 
 	// Pass any events not handled by (unfocused) views straight to UnityPlayer
 	@Override public boolean onKeyUp(int keyCode, KeyEvent event)     { return mUnityPlayer.injectEvent(event); }
-	@Override public boolean onKeyDown(int keyCode, KeyEvent event)   { return mUnityPlayer.injectEvent(event); }
+	@Override public boolean onKeyDown(int keyCode, KeyEvent event)   {
+		if(keyCode == 4) {
+			finish();
+		}
+		return mUnityPlayer.injectEvent(event);
+	}
 	@Override public boolean onTouchEvent(MotionEvent event)          { return mUnityPlayer.injectEvent(event); }
 	/*API12*/ public boolean onGenericMotionEvent(MotionEvent event)  { return mUnityPlayer.injectEvent(event); }
 }

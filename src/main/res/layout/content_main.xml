@@ -5,16 +5,14 @@
     android:id="@+id/content_temp_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="quinteiro.nathan.feavr.Activities.MainActivity"
-    tools:showIn="@layout/app_bar_main">
+    tools:showIn="@layout/app_bar_main"
+    android:background="@drawable/hand">
 
     <ImageView
         android:id="@+id/imageView"
+        android:layout_margin="@dimen/activity_vertical_margin"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_centerHorizontal="true"
@@ -24,19 +22,21 @@
     <Button
         android:id="@+id/btSingle"
         style="@style/button_style"
+        android:layout_margin="@dimen/activity_vertical_margin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/imageView"
+        android:layout_above="@+id/btVR"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:text="@string/single_title" />
 
     <Button
         android:id="@+id/btVR"
+        android:layout_margin="@dimen/activity_vertical_margin"
         style="@style/button_style"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/btSingle"
+        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:text="@string/vr_title" />
@@ -44,6 +44,7 @@
 
     <Button
         android:id="@+id/btControl"
+        android:layout_margin="@dimen/activity_vertical_margin"
         style="@style/button_style"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

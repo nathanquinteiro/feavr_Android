@@ -35,7 +35,7 @@ import quinteiro.nathan.feavr.Unity.UnityPlayerActivity;
 
 public class MultiVRPlayerActivity extends AppCompatActivity {
 
-    private static final int BARCODE_GENERATOR_CODE = 5;
+    private static final int BARCODE_READER_REQUEST_CODE = 5;
     private BluetoothLEService mBLEService;
 
     private boolean locationEnabledChecked = false;
@@ -48,6 +48,8 @@ public class MultiVRPlayerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multi_vr_player);
+
+        BLEManager.startBluetoothService(this);
 
 
         btBLE = (Button) findViewById(R.id.btBLE);
@@ -72,8 +74,8 @@ public class MultiVRPlayerActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             //Intent intent = new Intent(MainActivity.this, gameTabActivity.class);
-            Intent intent = new Intent(MultiVRPlayerActivity.this, BarcodeGeneratorActivity.class);
-            startActivityForResult(intent, BARCODE_GENERATOR_CODE);
+            Intent intent = new Intent(MultiVRPlayerActivity.this, BarcodeCaptureActivity.class);
+            startActivityForResult(intent, BARCODE_READER_REQUEST_CODE);
         }
     };
 
@@ -162,7 +164,7 @@ public class MultiVRPlayerActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == BARCODE_GENERATOR_CODE) {
+        if (requestCode == BARCODE_READER_REQUEST_CODE) {
             if (resultCode == CommonStatusCodes.SUCCESS) {
                 Intent intent = new Intent(MultiVRPlayerActivity.this, UnityPlayerActivity.class);
                 startActivity(intent);

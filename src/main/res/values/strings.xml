@@ -63,6 +63,8 @@
     <string name="menu_stop">Stop</string>
     <string name="menu_logout_cloud">Logout</string>
 
+    <!-- BarcodeCaptureActivity -->
+    <string name="barcode_capture_hint">Scan the QR code on the FeaVR Control. </string>
 
     <!-- Technical settings -->
     <string name="technical_settings_text">In order to detect your device, make sure the Bluetooth
