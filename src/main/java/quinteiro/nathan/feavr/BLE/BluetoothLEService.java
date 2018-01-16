@@ -3,6 +3,7 @@ package quinteiro.nathan.feavr.BLE;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -18,18 +19,21 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.provider.Settings;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -94,23 +98,23 @@ public class BluetoothLEService extends Service {
     private boolean canRead = true;
 
     public final static String ACTION_GATT_CONNECTED =
-            "com.example.bluetooth.le.ACTION_GATT_CONNECTED";
+            "be.care.bluetooth.le.ACTION_GATT_CONNECTED";
     public final static String ACTION_GATT_DISCONNECTED =
-            "com.example.bluetooth.le.ACTION_GATT_DISCONNECTED";
+            "be.care.bluetooth.le.ACTION_GATT_DISCONNECTED";
     public final static String ACTION_GATT_SERVICES_DISCOVERED =
-            "com.example.bluetooth.le.ACTION_GATT_SERVICES_DISCOVERED";
+            "be.care.bluetooth.le.ACTION_GATT_SERVICES_DISCOVERED";
     public final static String ACTION_HRM_DATA_AVAILABLE =
-            "com.example.bluetooth.le.ACTION_HRM_DATA_AVAILABLE";
+            "be.care.bluetooth.le.ACTION_HRM_DATA_AVAILABLE";
     public final static String ACTION_BATTERY_LEVEL_AVAILABLE =
-            "com.example.bluetooth.le.ACTION_BATTERY_DATA_AVAILABLE";
-    public final static String BPM_DATA =
-            "com.example.bluetooth.le.BPM_DATA";
+            "be.care.bluetooth.le.ACTION_BATTERY_DATA_AVAILABLE";
+    public final static String HR_DATA =
+            "be.care.bluetooth.le.BPM_DATA";
     public final static String ENERGY_DATA =
-            "com.example.bluetooth.le.RR_DATA";
+            "be.care.bluetooth.le.RR_DATA";
     public final static String RR_DATA =
-            "com.example.bluetooth.le.RR_DATA";
+            "be.care.bluetooth.le.RR_DATA";
     public final static String BATTERY_LEVEL =
-            "com.example.bluetooth.le.BATTERY_LEVEL";
+            "be.care.bluetooth.le.BATTERY_LEVEL";
 
 
     public final static UUID UUID_HEART_RATE_SERVICE =
@@ -321,7 +325,7 @@ public class BluetoothLEService extends Service {
 
         final int heartRate = characteristic.getIntValue(format, 1);
         Log.d(TAG, String.format("Received heart rate: %d", heartRate));
-        intent.putExtra(BPM_DATA, heartRate);
+        intent.putExtra(HR_DATA, heartRate);
 
         //Check if calories info are present
         if ((flag & 0x08) != 0) {
@@ -531,7 +535,7 @@ public class BluetoothLEService extends Service {
     Runnable reconnectRunnable = new Runnable() {
         @Override
         public void run() {
-            if(mConnectionState == STATE_DISCONNECTED && mLastAddress != null && mBluetoothAdapter != null && mBluetoothAdapter.isEnabled()) {
+            if(mConnectionState != STATE_CONNECTED && mLastAddress != null && mBluetoothAdapter != null && mBluetoothAdapter.isEnabled()) {
                 final BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(mLastAddress);
                 connect(device);
             }
@@ -542,12 +546,11 @@ public class BluetoothLEService extends Service {
 
     public boolean connectToLastDevice() {
         mLastAddress = Preferences.getLastDevice(getApplicationContext());
-        if(mLastAddress == null) {
-            return false;
-        }
 
-        reconnectHandler = new Handler();
-        reconnectHandler.post(reconnectRunnable);
+        if(mLastAddress != null) {
+            reconnectHandler = new Handler();
+            reconnectHandler.post(reconnectRunnable);
+        }
 
         return true;
     }
@@ -621,7 +624,10 @@ public class BluetoothLEService extends Service {
             mLastAddress = null;
         }
 
-        reconnectHandler.removeCallbacks(reconnectRunnable);
+        if(reconnectHandler != null) {
+            reconnectHandler.removeCallbacks(reconnectRunnable);
+        }
+
         batteryCharacteristic = null;
     }
 
@@ -630,10 +636,11 @@ public class BluetoothLEService extends Service {
      * released properly.
      */
     public void close() {
+        // CHECK: CAN READ = TRUE BEFORE?
         if (mBluetoothGatt == null) {
             return;
         }
-        mBluetoothGatt.disconnect();
+
         mBluetoothGatt.close();
         mBluetoothGatt = null;
         canRead = true;
@@ -681,11 +688,11 @@ public class BluetoothLEService extends Service {
 
 
         synchronized (waitMutex) {
-        // This is specific to Heart Rate Measurement.
-        if (UUID_HEART_RATE_MEASUREMENT.equals(characteristic.getUuid())) {
-            BluetoothGattDescriptor descriptor = characteristic.getDescriptor(
-                    UUID.fromString(SampleGATTAttributes.CLIENT_CHARACTERISTIC_CONFIG));
-            descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+            // This is specific to Heart Rate Measurement.
+            if (UUID_HEART_RATE_MEASUREMENT.equals(characteristic.getUuid())) {
+                BluetoothGattDescriptor descriptor = characteristic.getDescriptor(
+                        UUID.fromString(SampleGATTAttributes.CLIENT_CHARACTERISTIC_CONFIG));
+                descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
 
                 descriptorWriteQueue.add(descriptor);
                 if (descriptorWriteQueue.size() == 1 && canRead) {

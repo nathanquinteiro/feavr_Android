@@ -1,4 +1,4 @@
-package quinteiro.nathan.feavrwatch;
+package quinteiro.nathan.feavr.Wear;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -30,7 +30,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
+import quinteiro.nathan.feavr.BuildConfig;
+
 public class WearListenerService extends WearableListenerService {
+
+    public static final String ACTION_SEND_HEART_RATE = "ACTION_SEND_HEART_RATE";
+    public static final String INT_HEART_RATE = "INT_HEART_RATE";
 
     // Tag for Logcat
     private static final String TAG = "WearListenerService";
@@ -38,15 +43,9 @@ public class WearListenerService extends WearableListenerService {
     // Constants
     public static final String ACTION_SEND_MESSAGE = "ACTION_SEND_MESSAGE";
     public static final String ACTION_SEND_DATAMAP = "ACTION_SEND_DATAMAP";
-    public static final String ACTION_SEND_LOCATION = "ACTION_SEND_LOCATION";
-    public static final String ACTION_SEND_HEART_RATE = "ACTION_SEND_HEART_RATE";
-
     public static final String MESSAGE = "MESSAGE";
     public static final String DATAMAP_INT = "DATAMAP_INT";
     public static final String DATAMAP_INT_ARRAYLIST = "DATAMAP_INT_ARRAYLIST";
-    public static final String DATAMAP_FLOAT_ARRAY = "DATAMAP_FLOAT_ARRAY";
-    public static final String DATAMAP_INT_HEART_RATE = "DATAMAP_INT_HEART_RATE";
-
 
     public static final String PATH = "PATH";
 
@@ -82,20 +81,6 @@ public class WearListenerService extends WearableListenerService {
                 putDataMapRequest.getDataMap().putIntegerArrayList(BuildConfig.some_other_key, intent.getIntegerArrayListExtra(DATAMAP_INT_ARRAYLIST));
                 sendPutDataMapRequest(putDataMapRequest);
                 break;
-            case ACTION_SEND_LOCATION:
-                Log.d(TAG,"Received location");
-                PutDataMapRequest putDataMapRequestLocation = PutDataMapRequest.create(BuildConfig.location_path);
-                putDataMapRequestLocation.getDataMap().putInt(BuildConfig.a_location_key, intent.getIntExtra(DATAMAP_INT, -1));
-                putDataMapRequestLocation.getDataMap().putFloatArray(BuildConfig.location_key, intent.getFloatArrayExtra(DATAMAP_FLOAT_ARRAY));
-                sendPutDataMapRequest(putDataMapRequestLocation);
-                break;
-
-            case ACTION_SEND_HEART_RATE:
-                Log.d(TAG,"Received heart rate");
-                PutDataMapRequest putDataMapRequestHeartRate = PutDataMapRequest.create(BuildConfig.heart_rate_path);
-                putDataMapRequestHeartRate.getDataMap().putInt(BuildConfig.heart_rate_key, intent.getIntExtra(DATAMAP_INT_HEART_RATE,-1));
-                sendPutDataMapRequest(putDataMapRequestHeartRate);
-                break;
             default:
                 Log.w(TAG, "Unknown action");
                 break;
@@ -126,26 +111,12 @@ public class WearListenerService extends WearableListenerService {
                 Intent intent;
 
                 switch (uri.getPath()) {
-                    case BuildConfig.some_path:
-                        // Extract the data behind the key you know contains data
-                        Asset asset = dataMapItem.getDataMap().getAsset(BuildConfig.a_key);
-                        Bitmap imageDecoded = bitmapFromAsset(asset); // We assume the asset is an image
-                        String a_string = dataMapItem.getDataMap().getString(BuildConfig.some_other_key);
-                        intent = new Intent("STRING_OF_ACTION_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY");
-                        intent.putExtra("STRING_OF_IMAGE_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY", imageDecoded);
-                        intent.putExtra("STRING_OF_STRING_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY", a_string);
-                        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-                        break;
-                    case BuildConfig.another_path:
-                        // Extract the data behind the key you know contains data
-                        int integer = dataMapItem.getDataMap().getInt(BuildConfig.a_key);
-                        ArrayList<Integer> arraylist = dataMapItem.getDataMap().getIntegerArrayList(BuildConfig.some_other_key);
-                        for (Integer i : arraylist)
-                            Log.i(TAG, "Got integer " + i + " from array list");
-                        intent = new Intent("STRING_OF_ANOTHER_ACTION_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY");
-                        intent.putExtra("STRING_OF_INTEGER_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY", integer);
-                        intent.putExtra("STRING_OF_ARRAYLIST_PREFERABLY_DEFINED_AS_A_CONSTANT_IN_TARGET_ACTIVITY", arraylist);
-                        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+                    case BuildConfig.heart_rate_path:
+                        int heartRate = dataMapItem.getDataMap().getInt(BuildConfig.heart_rate_key);
+                        Log.i(TAG, "Got heart rate: " + heartRate);
+                        intent = new Intent(ACTION_SEND_HEART_RATE);
+                        intent.putExtra(INT_HEART_RATE, heartRate);
+                        sendBroadcast(intent);
                         break;
                     default:
                         Log.v(TAG, "Data changed for unrecognized path: " + uri);
@@ -173,9 +144,6 @@ public class WearListenerService extends WearableListenerService {
 
         switch (path) {
             case BuildConfig.start_activity:
-                Intent startIntent = new Intent(this, MainActivity.class);
-                startIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(startIntent);
                 break;
             case BuildConfig.some_path:
                 Log.v(TAG, "Received a message for path " + BuildConfig.some_path + " : " + new String(messageEvent.getData()));

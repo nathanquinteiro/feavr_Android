@@ -425,7 +425,7 @@ public class MainActivity extends AppCompatActivity
             } else if (BluetoothLEService.ACTION_HRM_DATA_AVAILABLE.equals(action)) {
                 int bpm;
                 double rrValues[];
-                bpm = intent.getIntExtra(BluetoothLEService.BPM_DATA, -1);
+                bpm = intent.getIntExtra(BluetoothLEService.HR_DATA, -1);
                 if(bpm != -1) {
                     bpmTextView.setText("BPM: " + bpm);
                 }

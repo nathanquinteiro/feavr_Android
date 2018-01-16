@@ -44,7 +44,7 @@
         -->
 
         <activity
-            android:name="ch.epfl.esl.sporttrackerpolarwatch.MainActivity"
+            android:name="quinteiro.nathan.feavrwatch.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -53,7 +53,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name="ch.epfl.esl.sporttrackerpolarwatch.WearListenerService">
+        <service android:name="quinteiro.nathan.feavrwatch.WearListenerService">
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.DATA_CHANGED" />
                 <!-- Set down there the filters for the listener. Listening now for everything -->
