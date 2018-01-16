@@ -96,6 +96,8 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements B
         super.onCreate(icicle);
         setContentView(R.layout.barcode_capture);
 
+        setResult(CommonStatusCodes.NETWORK_ERROR);
+
         mPreview = (CameraSourcePreview) findViewById(R.id.preview);
         mGraphicOverlay = (GraphicOverlay<BarcodeGraphic>) findViewById(R.id.graphicOverlay);
 
@@ -370,11 +372,6 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements B
 
         if (best != null) {
 
-
-
-
-
-
             String ipRcv = best.displayValue;
 
             if(NetworkUtils.isValidIP4(ipRcv)) {
@@ -404,8 +401,6 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements B
 
         private final String TAG ="ASYNC_sendIP";
 
-
-
         @Override
         protected Boolean doInBackground(String... strings) {
 
@@ -420,21 +415,13 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements B
         @Override
         protected void onPostExecute(Boolean s){
 
-            Intent returnIntent = new Intent();
-
-            returnIntent.putExtra("ip","----");
             if(s){
-                setResult(CommonStatusCodes.SUCCESS,returnIntent);
+                setResult(CommonStatusCodes.SUCCESS);
             } else {
-                setResult(CommonStatusCodes.NETWORK_ERROR,returnIntent);
+                setResult(CommonStatusCodes.NETWORK_ERROR);
             }
             finish();
-
-
         }
-
-
-
     }
 
     private class ScaleListener implements ScaleGestureDetector.OnScaleGestureListener {
