@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -48,6 +49,9 @@ import quinteiro.nathan.feavr.UI.camera.CameraSource;
 import quinteiro.nathan.feavr.UI.camera.CameraSourcePreview;
 
 import quinteiro.nathan.feavr.UI.camera.GraphicOverlay;
+import quinteiro.nathan.feavr.utils.NetworkMulti;
+import quinteiro.nathan.feavr.utils.NetworkUtils;
+
 import com.google.android.gms.vision.MultiProcessor;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
@@ -80,6 +84,9 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements B
     // helper objects for detecting taps and pinches.
     private ScaleGestureDetector scaleGestureDetector;
     private GestureDetector gestureDetector;
+
+
+    private sendIPAsync mysendIPTask;
 
     /**
      * Initializes the UI and creates the detector pipeline.
@@ -362,10 +369,25 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements B
         }
 
         if (best != null) {
-            Intent data = new Intent();
-            data.putExtra(BarcodeObject, best);
-            setResult(CommonStatusCodes.SUCCESS, data);
-            finish();
+
+
+
+
+
+
+            String ipRcv = best.displayValue;
+
+            if(NetworkUtils.isValidIP4(ipRcv)) {
+                mysendIPTask = new sendIPAsync();
+                mysendIPTask.execute(ipRcv);
+
+            } else {
+                Intent data = new Intent();
+                setResult(CommonStatusCodes.ERROR);
+                finish();
+            }
+
+
             return true;
         }
         return false;
@@ -376,6 +398,43 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements B
         public boolean onSingleTapConfirmed(MotionEvent e) {
             return onTap(e.getRawX(), e.getRawY()) || super.onSingleTapConfirmed(e);
         }
+    }
+
+    private class sendIPAsync extends AsyncTask<String, Void, Boolean>{
+
+        private final String TAG ="ASYNC_sendIP";
+
+
+
+        @Override
+        protected Boolean doInBackground(String... strings) {
+
+            NetworkMulti.getInstance().setIP(strings[0]);
+            boolean st  = NetworkMulti.getInstance().sendMyIp();
+            if(st){
+                NetworkMulti.getInstance().initConnection();
+            }
+            return st;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean s){
+
+            Intent returnIntent = new Intent();
+
+            returnIntent.putExtra("ip","----");
+            if(s){
+                setResult(CommonStatusCodes.SUCCESS,returnIntent);
+            } else {
+                setResult(CommonStatusCodes.NETWORK_ERROR,returnIntent);
+            }
+            finish();
+
+
+        }
+
+
+
     }
 
     private class ScaleListener implements ScaleGestureDetector.OnScaleGestureListener {

@@ -168,7 +168,7 @@ public class ConnectActivity extends AppCompatActivity {
 
                     Log.e(TAG_CA,"testCO ");
 
-                    connectionTested = NetworkMulti.getInstance().testConnection();
+                    //connectionTested = NetworkMulti.getInstance().testConnection();
 
                     if(NetworkMulti.getInstance().isCoTested()){
 

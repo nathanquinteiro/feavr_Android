@@ -70,8 +70,30 @@ public class NetworkMulti {
         return this.connectionTested;
     }
 
+    //public void validCoTested() {this.connectionTested=true; }
+
     public void forceSetCoTested(){
         this.connectionTested=true;
+    }
+
+
+    public boolean initConnection(){
+
+        try {
+            outSocket = new DatagramSocket();
+            outLocal = InetAddress.getByName(otherIp);
+        } catch (SocketException e) {
+            e.printStackTrace();
+            return false;
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        this.connectionTested = true;
+        return true;
+
+
     }
 
     public void sendConfirmation(){
@@ -171,7 +193,7 @@ public class NetworkMulti {
             boolean ok = false;
             if(text.equals("OK_IP_RECEIVED")){
                 Log.e("TAG_RCV_PING","MSG contains ping");
-                connectionTested=true;
+                //connectionTested=true;
                 ok = true;
 
             } else {
@@ -195,7 +217,7 @@ public class NetworkMulti {
 
     }
 
-    public boolean testConnection(){
+   /*public boolean testConnection(){
 
         final  String TAG_TESTCO="TestCO";
         if(this.ipSetted){
@@ -255,9 +277,9 @@ public class NetworkMulti {
         this.connectionTested = false;
         return false;
 
-    }
+    }*/
 
-    private class receivePing implements Runnable{
+    /*private class receivePing implements Runnable{
         private final String TAG_RCV_PING ="RECV_PING";
 
         @Override
@@ -309,10 +331,10 @@ public class NetworkMulti {
 
 
         }
-    }
+    }*/
 
 
-    private class sendPing implements Runnable{
+    /*private class sendPing implements Runnable{
         private final String TAG_SD_PING ="SD_PING";
         @Override
         public void run() {
@@ -362,7 +384,7 @@ public class NetworkMulti {
             }
 
         }
-    }
+    }*/
     public void sendEvent(String msg){
 
         if(this.isCoTested()){

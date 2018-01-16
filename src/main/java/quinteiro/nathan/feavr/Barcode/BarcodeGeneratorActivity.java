@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Queue;
 
 import quinteiro.nathan.feavr.R;
+import quinteiro.nathan.feavr.utils.NetworkMulti;
 import quinteiro.nathan.feavr.utils.NetworkUtils;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
@@ -265,6 +266,24 @@ public class BarcodeGeneratorActivity extends Activity {
             if (!timeout && !isCancelled()){
 
                 text = new String(message, 0, p.getLength());
+
+
+                if(NetworkUtils.isValidIP4(text)){
+
+                    NetworkMulti.getInstance().setIP(text);
+                    NetworkMulti.getInstance().sendConfirmation();
+
+                    NetworkMulti.getInstance().initConnection();
+
+                    
+
+
+
+                }
+
+
+
+
         } else {
                 text="-";
             }

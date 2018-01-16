@@ -11,20 +11,13 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
-import com.google.android.gms.vision.barcode.Barcode;
 
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.SocketException;
-import java.net.UnknownHostException;
 
 import quinteiro.nathan.feavr.Barcode.BarcodeCaptureActivity;
 import quinteiro.nathan.feavr.Barcode.BarcodeGeneratorActivity;
 import quinteiro.nathan.feavr.R;
 
-import quinteiro.nathan.feavr.utils.NetworkMulti;
+
 import quinteiro.nathan.feavr.utils.NetworkUtils;
 
 //import static quinteiro.nathan.feavr.utils.NetworkUtils.isValidIP4;
@@ -110,10 +103,19 @@ public class MultiPlayerConnectActivity extends AppCompatActivity {
                     if(data != null){
 
 
-                        Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
-                        String ipRcv = barcode.displayValue;
+                        tvCoState.setText(R.string.text_current_st_connected);
 
-                        if(NetworkUtils.isValidIP4(ipRcv)){
+                        // et c'est tout le reste deletese
+
+
+                        //Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
+                        //String ipRcv = barcode.displayValue;
+
+
+
+
+
+                        /*if(NetworkUtils.isValidIP4(ipRcv)){
                             NetworkMulti.getInstance().setIP(ipRcv);
 
 
@@ -140,25 +142,11 @@ public class MultiPlayerConnectActivity extends AppCompatActivity {
                                 tvCoState.setText(R.string.text_current_st_connected_fail);
                             }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                         } else {
 
                             tvCoState.setText(R.string.text_current_st_connection_noIP);
 
-                        }
+                        }*/
 
 
                     } else {
@@ -167,6 +155,7 @@ public class MultiPlayerConnectActivity extends AppCompatActivity {
 
                 } else {
                     Log.e(TAG,"onActivityResult unsuccess");
+                    tvCoState.setText(R.string.text_current_st_connected_fail);
                 }
 
 
@@ -178,11 +167,12 @@ public class MultiPlayerConnectActivity extends AppCompatActivity {
                     if(data != null){
                         String ip = data.getStringExtra("ip");
                         if(NetworkUtils.isValidIP4(ip)){
-                            NetworkMulti.getInstance().setIP(ip);
 
-                            NetworkMulti.getInstance().sendConfirmation();
 
-                            //TODO add send confirmation to the other device to indicate that the connection is ok
+                            //NetworkMulti.getInstance().setIP(ip);
+                            //NetworkMulti.getInstance().sendConfirmation();
+
+
 
 
                             tvCoState.setText(R.string.text_current_st_connected);
