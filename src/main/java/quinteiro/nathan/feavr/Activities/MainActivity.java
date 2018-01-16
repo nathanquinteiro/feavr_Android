@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity
 
     private BluetoothLEService mBLEService;
 
-
     private TextView bpmTextView;
 
     private Button btStartGame;
@@ -318,8 +317,10 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            mBLEService.disconnect(false);
-            super.onBackPressed();
+            if(mBLEService != null) {
+                mBLEService.disconnect(false);
+                super.onBackPressed();
+            }
         }
     }
 
@@ -359,7 +360,9 @@ public class MainActivity extends AppCompatActivity
 
 
     private void endApp() {
-        mBLEService.disconnect(false);
+        if(mBLEService != null) {
+            mBLEService.disconnect(false);
+        }
         finish();
     }
 

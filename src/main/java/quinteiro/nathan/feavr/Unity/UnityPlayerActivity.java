@@ -37,6 +37,7 @@ public class UnityPlayerActivity extends Activity
 		mUnityPlayer.requestFocus();
 
 
+		//Receive HR from BLE
 		registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
 
 		//Receive HR from watch
