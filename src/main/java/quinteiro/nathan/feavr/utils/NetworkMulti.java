@@ -1,5 +1,6 @@
 package quinteiro.nathan.feavr.utils;
 
+import android.os.AsyncTask;
 import android.util.Log;
 
 import java.io.IOException;
@@ -397,21 +398,7 @@ public class NetworkMulti {
 
     private void sendMsg(String msg){
 
-        int msg_length=msg.length();
-        byte[] message = msg.getBytes();
-
-
-        DatagramPacket p = new DatagramPacket(message, msg_length,outLocal,server_port);
-
-
-        try {
-            outSocket.send(p);
-            Log.d(TAG_SEND,msg);
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e(TAG_SEND,"Unable to send: "+msg);
-
-        }
+        new SendUdpMessage().execute(msg);
 
 
     }
@@ -1140,6 +1127,43 @@ public class NetworkMulti {
     }
 
 
+    class SendUdpMessage extends AsyncTask<String, Void, Boolean> {
 
+        private Exception exception;
+
+        protected Boolean doInBackground(String... params) {
+            try {
+                String msg = params[0];
+
+                int msg_length=msg.length();
+                byte[] message = msg.getBytes();
+
+
+                DatagramPacket p = new DatagramPacket(message, msg_length,outLocal,server_port);
+
+
+                try {
+                    outSocket.send(p);
+                    Log.d(TAG_SEND,msg);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Log.e(TAG_SEND,"Unable to send: "+msg);
+
+                }
+
+                return true;
+            } catch (Exception e) {
+                this.exception = e;
+
+                return null;
+            } finally {
+
+            }
+        }
+
+        protected void onPostExecute(Void done) {
+
+        }
+    }
 
 }

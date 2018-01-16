@@ -9,11 +9,11 @@ import android.content.SharedPreferences;
 
 public class Preferences {
 
-    public static final String preferencesFileKey = "becare.preferences.file";
-    public static final String preferenceLastBLEDeviceKey = "becare.last.ble.device";
-    public static final String preferencesUserEmailKey = "becare.preferences.user.email";
-    public static final String preferencesUserPasswordKey = "becare.preferences.user.password";
-    public static final String preferencesUserTokenKey = "becare.preferences.user.token";
+    public static final String preferencesFileKey = "feavr.preferences.file";
+    public static final String preferenceLastBLEDeviceKey = "feavr.last.ble.device";
+    public static final String preferencesUserEmailKey = "feavr.preferences.user.email";
+    public static final String preferencesUserPasswordKey = "feavr.preferences.user.password";
+    public static final String preferencesUserTokenKey = "feavr.preferences.user.token";
 
 
     public static void saveLastDevice(String address, Context context) {
