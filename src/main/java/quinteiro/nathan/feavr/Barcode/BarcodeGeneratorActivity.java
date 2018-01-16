@@ -275,7 +275,7 @@ public class BarcodeGeneratorActivity extends Activity {
 
                     NetworkMulti.getInstance().initConnection();
 
-                    
+
 
 
 
