@@ -16,6 +16,7 @@ import android.view.MotionEvent;
 import android.view.Window;
 
 import quinteiro.nathan.feavr.BLE.BluetoothLEService;
+import quinteiro.nathan.feavr.Wear.WearListenerService;
 
 public class UnityPlayerActivity extends Activity
 {
@@ -37,6 +38,9 @@ public class UnityPlayerActivity extends Activity
 
 
 		registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+
+		//Receive HR from watch
+		registerReceiver(mHeartRateReceiver, new IntentFilter(WearListenerService.ACTION_SEND_HEART_RATE));
 	}
 
 	private static IntentFilter makeGattUpdateIntentFilter() {
@@ -48,6 +52,19 @@ public class UnityPlayerActivity extends Activity
 		intentFilter.addAction(BluetoothLEService.ACTION_BATTERY_LEVEL_AVAILABLE);
 		return intentFilter;
 	}
+
+	private BroadcastReceiver mHeartRateReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			int bpm = intent.getIntExtra(WearListenerService.INT_HEART_RATE,-1);
+			Log.d("Received form Watch","BPM: " + bpm);
+
+			if(bpm != -1) {
+				Log.e("Received", "BPM: " + bpm);
+				FeavrReceiver.setBPM(bpm);
+			}
+		}
+	};
 
 	private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
 		@Override
@@ -68,7 +85,7 @@ public class UnityPlayerActivity extends Activity
 			} else if (BluetoothLEService.ACTION_HRM_DATA_AVAILABLE.equals(action)) {
 				int bpm;
 				double rrValues[];
-				bpm = intent.getIntExtra(BluetoothLEService.BPM_DATA, -1);
+				bpm = intent.getIntExtra(BluetoothLEService.HR_DATA, -1);
 				if(bpm != -1) {
 					Log.e("Received", "BPM: " + bpm);
 					FeavrReceiver.setBPM(bpm);
@@ -94,6 +111,7 @@ public class UnityPlayerActivity extends Activity
 	{
 		mUnityPlayer.quit();
 		unregisterReceiver(mGattUpdateReceiver);
+		unregisterReceiver(mHeartRateReceiver);
 		super.onDestroy();
 	}
 

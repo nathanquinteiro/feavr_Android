@@ -23,6 +23,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -41,7 +42,7 @@ import quinteiro.nathan.feavr.UI.BatteryProgressView;
 
 public class TechnicalSettingsActivity extends AppCompatActivity {
     private TextView deviceTextView;
-    private TextView bpmTextView;
+    private TextView hrTextView;
     private Button scanButton;
     private BatteryProgressView batteryView;
 
@@ -96,7 +97,7 @@ public class TechnicalSettingsActivity extends AppCompatActivity {
         mBLEService = BluetoothLEService.getBLEService();
         mBLEService.checkPermissions(this);
 
-        bpmTextView = (TextView) findViewById(R.id.tv_bpm);
+        hrTextView = (TextView) findViewById(R.id.tv_bpm);
         deviceTextView = (TextView) findViewById(R.id.tv_device);
 
         batteryView = (BatteryProgressView) findViewById(R.id.batteryView);
@@ -110,7 +111,7 @@ public class TechnicalSettingsActivity extends AppCompatActivity {
             mConnected = true;
             scanButton.setText(getString(R.string.disconnect));
             String deviceName = mBLEService.getConnectedDeviceName();
-            bpmTextView.setText("");
+            hrTextView.setText("");
             if(deviceName != null) {
                 String deviceText = getString(R.string.connected_to) + deviceName;
                 deviceTextView.setText(deviceText);
@@ -124,7 +125,7 @@ public class TechnicalSettingsActivity extends AppCompatActivity {
             scanButton.setText(getString(R.string.scan));
             batteryView.setProgress(0);
             batteryView.setVisibility(View.INVISIBLE);
-            bpmTextView.setText("");
+            hrTextView.setText("");
             deviceTextView.setText(getString(R.string.not_connected));
         }
     }
@@ -192,12 +193,12 @@ public class TechnicalSettingsActivity extends AppCompatActivity {
             if (BluetoothLEService.ACTION_GATT_CONNECTED.equals(action)) {
                 deviceConnection(true);
             } else if (BluetoothLEService.ACTION_GATT_DISCONNECTED.equals(action)) {
-               deviceConnection(false);
+                deviceConnection(false);
             } else if (BluetoothLEService.ACTION_HRM_DATA_AVAILABLE.equals(action)) {
-                int bpm = intent.getIntExtra(BluetoothLEService.BPM_DATA, -1);
-                if(bpm != -1) {
-                    String bpmText = getString(R.string.bpm) + bpm;
-                    bpmTextView.setText(bpmText);
+                int hr = intent.getIntExtra(BluetoothLEService.HR_DATA, -1);
+                if(hr != -1) {
+                    String hrText = getString(R.string.bpm) + hr;
+                    hrTextView.setText(hrText);
                 }
             } else if(BluetoothLEService.ACTION_BATTERY_LEVEL_AVAILABLE.equals(action)) {
                 int batteryLevel = intent.getIntExtra(BluetoothLEService.BATTERY_LEVEL, -1);
@@ -329,9 +330,10 @@ public class TechnicalSettingsActivity extends AppCompatActivity {
                 deviceListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        mBluetoothAdapter.cancelDiscovery();
+                        mBLEScan.stopScan(mScanCallback);
                         BluetoothDevice device = (BluetoothDevice) adapterView.getItemAtPosition(i);
                         connectToDevice(device);
-                        mBLEScan.stopScan(mScanCallback);
                         dialog.dismiss();
                     }
                 });
@@ -363,6 +365,16 @@ public class TechnicalSettingsActivity extends AppCompatActivity {
         intentFilter.addAction(BluetoothLEService.ACTION_HRM_DATA_AVAILABLE);
         intentFilter.addAction(BluetoothLEService.ACTION_BATTERY_LEVEL_AVAILABLE);
         return intentFilter;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

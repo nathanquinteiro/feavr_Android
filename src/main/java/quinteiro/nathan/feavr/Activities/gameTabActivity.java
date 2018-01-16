@@ -1,6 +1,9 @@
 package quinteiro.nathan.feavr.Activities;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -12,12 +15,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Random;
 
+import quinteiro.nathan.feavr.Unity.FeavrReceiver;
+import quinteiro.nathan.feavr.Wear.WearListenerService;
 import quinteiro.nathan.feavr.utils.NetworkMulti;
 
 import quinteiro.nathan.feavr.R;
@@ -32,6 +42,12 @@ public class gameTabActivity extends AppCompatActivity {
 
     Random random ;
 
+
+    private final static int NB_HR_ON_GRAPH = 20;
+
+    private GraphView hrGraph;
+    private LineGraphSeries<DataPoint> hrSerie;
+    private ArrayList<Double> hrData = new ArrayList<>();
 
     boolean lightOn = true;
 
@@ -101,9 +117,56 @@ public class gameTabActivity extends AppCompatActivity {
         ll.addView(dm);
 
 
+        hrGraph = (GraphView) findViewById(R.id.graph);
 
+        // set manual X bounds
+        hrGraph.getViewport().setYAxisBoundsManual(true);
+        hrGraph.getViewport().setMinY(0);
+        hrGraph.getViewport().setMaxY(200);
+
+        hrGraph.getViewport().setXAxisBoundsManual(true);
+        hrGraph.getViewport().setMinX(0);
+        hrGraph.getViewport().setMaxX(20);
+
+        for (int i = 0; i < NB_HR_ON_GRAPH; i++) {
+            hrData.add(0.);
+        }
+        hrSerie = new LineGraphSeries<>(listToDataPoint(hrData));
+        hrGraph.addSeries(hrSerie);
+
+
+        registerReceiver(mHeartRateReceiver, new IntentFilter(WearListenerService.ACTION_SEND_HEART_RATE));
         //setContentView();
     }
+
+
+    public DataPoint[] listToDataPoint(ArrayList<Double> list) {
+        DataPoint dataPoint[] = new DataPoint[list.size()];
+        for(int i = 0; i < dataPoint.length; i++) {
+            dataPoint[i] = new DataPoint(i, list.get(i));
+        }
+        return dataPoint;
+    }
+
+    public void appendNewRR(double newHR) {
+        hrData.remove(0);
+        hrData.add(newHR);
+        hrSerie.resetData(listToDataPoint(hrData));
+    }
+
+    private BroadcastReceiver mHeartRateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int bpm = intent.getIntExtra(WearListenerService.INT_HEART_RATE,-1);
+            Log.d("Received form Watch","BPM: " + bpm);
+
+            if(bpm != -1) {
+                Log.e("Received", "BPM: " + bpm);
+                appendNewRR((double) bpm);
+            }
+        }
+    };
+
 
 
     private class DemoView extends View {
