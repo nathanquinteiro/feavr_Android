@@ -50,7 +50,7 @@ public class UnityPlayerActivity extends Activity
 		setContentView(mUnityPlayer);
 		mUnityPlayer.requestFocus();
 
-		FeavrReceiver.initSaveGame();
+		FeavrReceiver.initSaveGame(getApplicationContext());
 
 
 		//Receive HR from Watch

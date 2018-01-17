@@ -58,13 +58,14 @@ public class DataProvider {
     }
 
 
-    public void startNewGame(){
+    public String startNewGame(){
 
         inGame = true;
 
 
         currentGameKey = ref.child("game").push().getKey();
 
+        return currentGameKey;
 
         /*inGame = true;
         mDatabaseReference = mFirebaseDatabase.getReference();
