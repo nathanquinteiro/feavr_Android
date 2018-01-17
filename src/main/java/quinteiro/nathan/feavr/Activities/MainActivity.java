@@ -20,6 +20,8 @@ import android.widget.Button;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
 
+import java.util.Map;
+
 import quinteiro.nathan.feavr.BLE.BluetoothLEService;
 import quinteiro.nathan.feavr.Barcode.BarcodeGeneratorActivity;
 import quinteiro.nathan.feavr.Database.DataProvider;
@@ -35,9 +37,7 @@ public class MainActivity extends AppCompatActivity
     private Button btVR;
     private Button btControl;
     private Button btTest;
-    private Button btTest2;
-    private Button btTest3;
-    private Button btTest4;
+
 
 
 
@@ -73,6 +73,19 @@ public class MainActivity extends AppCompatActivity
 
         btControl = (Button) findViewById(R.id.btControl);
         btControl.setOnClickListener(startControlListener);
+
+        btTest = (Button) findViewById(R.id.btTest);
+        btTest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DataProvider.getInstance().getBPMOfGame("-L33_ev1sk76386sS7UT", new DataProvider.dataProviderListenerBPM() {
+                    @Override
+                    public void resultBPM(Map<Integer, Integer> a) {
+                        Log.e("-Result","-----");
+                    }
+                });
+            }
+        });
 
     }
 

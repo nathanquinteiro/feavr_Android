@@ -1,10 +1,19 @@
 package quinteiro.nathan.feavr.Database;
 
+import android.util.Log;
+import android.util.SparseIntArray;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 
 /**
@@ -144,6 +153,70 @@ public class DataProvider {
         inGame= false;
         //currentGameKey=null;
     }
+
+
+    public void getBPMOfGame(String gameReference, final dataProviderListenerBPM listener){
+
+
+
+        DatabaseReference dbRef = database.getReference("game/"+gameReference+"/BPM");
+        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                //listener.resultBPM();
+                Map<String, Object> bpmMap = (Map<String, Object>) dataSnapshot.getValue();
+
+                HashMap<Integer,Integer> hmap = new HashMap<>();
+
+                HashMap<String, Integer> current;
+
+
+                Log.e("DP","size"+bpmMap.size());
+
+                //bpmMap.entrySet()
+                for(Map.Entry<String,Object> entry : bpmMap.entrySet()){
+                    //Log.d("dpV","key: "+entry.getKey()+" value: "+entry.getValue().toString()+" type value :"+entry.getValue().getClass().toString());
+
+                    current = (HashMap<String, Integer>) entry.getValue();
+
+
+
+                    hmap.put(current.get("ts"),current.get("value"));
+
+
+
+                }
+
+
+                Map<Integer, Integer> map = new TreeMap<Integer, Integer>(hmap);
+
+                /*for(Map.Entry<Integer,Integer> ent : map.entrySet()){
+                    Log.d("-sorted-",""+ent.getKey()+" "+ent.getValue());
+                }*/
+
+                listener.resultBPM(map);
+
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+
+    public interface dataProviderListenerBPM{
+        void resultBPM(Map<Integer,Integer> a);
+
+
+    }
+
+
 
 
 
