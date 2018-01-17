@@ -11,7 +11,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 
 import com.google.android.gms.common.api.CommonStatusCodes;
@@ -31,7 +30,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //setContentView(R.layout.app_bar_main);
         setContentView(R.layout.app_bar_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -130,8 +131,10 @@ public class MainActivity extends AppCompatActivity
 
         }
         if (id == R.id.nav_connect) {
+            /*
             Intent intent = new Intent(this, ConnectActivity.class);
             startActivity(intent);
+            */
         }
 
         if ( id == R.id.nav_connect_multi_players){
