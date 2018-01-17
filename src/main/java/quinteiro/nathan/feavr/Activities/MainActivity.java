@@ -73,47 +73,7 @@ public class MainActivity extends AppCompatActivity
         btControl = (Button) findViewById(R.id.btControl);
         btControl.setOnClickListener(startControlListener);
 
-        btTest = (Button) findViewById(R.id.btTestDB);
-        btTest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DataProvider.getInstance().pushMessageTest();
-                DataProvider.getInstance().startNewGame();
-                //DataProvider.getInstance().pushBPMGame(100);
-
-            }
-        });
-
-        btTest2 = (Button) findViewById(R.id.btTestDB2);
-        btTest2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                DataProvider.getInstance().pushBPMGame(234);
-
-            }
-        });
-
-        btTest3 = (Button) findViewById(R.id.btTestDB4);
-        btTest3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                DataProvider.getInstance().pushEventGame("EVENTLSLSLSLalalalal");
-
-            }
-        });
-
-        btTest4 = (Button) findViewById(R.id.btTestDB3);
-        btTest4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                DataProvider.getInstance().pushPosGame(3,34.1f);
-
-            }
-        });
-
+       
 
         //Receive HR from Watch
         registerReceiver(mHeartRateReceiver, new IntentFilter(WearListenerService.ACTION_SEND_HEART_RATE));
