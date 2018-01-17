@@ -14,7 +14,23 @@ public class Preferences {
     public static final String preferencesUserEmailKey = "feavr.preferences.user.email";
     public static final String preferencesUserPasswordKey = "feavr.preferences.user.password";
     public static final String preferencesUserTokenKey = "feavr.preferences.user.token";
+    public static final String preferencesLastGameReference ="feavr.preferences.last.game.ref";
 
+
+    public static void saveLastGameReference(String refGame, Context context){
+        SharedPreferences sharedPref = context.getSharedPreferences(preferencesFileKey, Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(preferencesLastGameReference, refGame);
+        editor.commit();
+    }
+
+    public static String getLastGameReference(Context context) {
+        SharedPreferences sharedPref = context.getSharedPreferences(preferencesFileKey, Context.MODE_PRIVATE);
+
+        return sharedPref.getString(preferencesLastGameReference, null);
+
+    }
 
     public static void saveLastDevice(String address, Context context) {
         SharedPreferences sharedPref = context.getSharedPreferences(preferencesFileKey, Context.MODE_PRIVATE);
