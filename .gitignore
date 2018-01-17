@@ -10,3 +10,4 @@ src/main/jniLibs
 /captures
 .externalNativeBuild
 .*/
+google-services.json
