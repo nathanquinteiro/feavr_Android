@@ -121,9 +121,7 @@ public class NetworkMulti {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
-
     }
 
     public boolean sendMyIp(){
@@ -409,6 +407,8 @@ public class NetworkMulti {
                 msg+="/"+Float.toString(pos);
             }
 
+            Log.e("COMM","send pos: " + msg);
+
             this.sendMsg(msg);
         }
     }
@@ -419,6 +419,9 @@ public class NetworkMulti {
 
             String msg = MSG_BPM;
             msg+="/"+Integer.toString(bpm);
+
+
+            Log.e("COMM","send bpm: " + msg);
 
             this.sendMsg(msg);
 

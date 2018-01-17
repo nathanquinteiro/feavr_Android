@@ -21,6 +21,8 @@ import android.view.Window;
 import quinteiro.nathan.feavr.BLE.BluetoothLEService;
 import quinteiro.nathan.feavr.R;
 import quinteiro.nathan.feavr.Wear.WearListenerService;
+import quinteiro.nathan.feavr.utils.NetworkMulti;
+import quinteiro.nathan.feavr.utils.NetworkUtils;
 
 public class UnityPlayerActivity extends Activity
 {
@@ -31,6 +33,14 @@ public class UnityPlayerActivity extends Activity
 	// Setup activity layout
 	@Override protected void onCreate (Bundle savedInstanceState)
 	{
+		//Receive events from controler and transmit to Unity
+		NetworkMulti.getInstance().startRcvEventThread(new NetworkMulti.networkEventListener() {
+			@Override
+			public void setEvent(String msg) {
+				FeavrReceiver.setEvent(msg);
+			}
+		});
+
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 
@@ -40,93 +50,13 @@ public class UnityPlayerActivity extends Activity
 		setContentView(mUnityPlayer);
 		mUnityPlayer.requestFocus();
 
-
-		//Receive HR from BLE
-		registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
-
-		//Receive HR from watch
-		registerReceiver(mHeartRateReceiver, new IntentFilter(WearListenerService.ACTION_SEND_HEART_RATE));
 	}
 
-	private static IntentFilter makeGattUpdateIntentFilter() {
-		final IntentFilter intentFilter = new IntentFilter();
-		intentFilter.addAction(BluetoothLEService.ACTION_GATT_CONNECTED);
-		intentFilter.addAction(BluetoothLEService.ACTION_GATT_DISCONNECTED);
-		intentFilter.addAction(BluetoothLEService.ACTION_GATT_SERVICES_DISCOVERED);
-		intentFilter.addAction(BluetoothLEService.ACTION_HRM_DATA_AVAILABLE);
-		intentFilter.addAction(BluetoothLEService.ACTION_BATTERY_LEVEL_AVAILABLE);
-		return intentFilter;
-	}
-
-	private BroadcastReceiver mHeartRateReceiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			int bpm = intent.getIntExtra(WearListenerService.INT_HEART_RATE,-1);
-			Log.d("Received form Watch","BPM: " + bpm);
-
-			if(bpm != -1) {
-				Log.e("Received", "BPM: " + bpm);
-				FeavrReceiver.setBPM(bpm);
-			}
-		}
-	};
-
-
-	@Override
-	public void onBackPressed() {
-		System.out.print("sd");
-		super.onBackPressed();
-	}
-
-
-
-
-	private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			final String action = intent.getAction();
-			if (BluetoothLEService.ACTION_GATT_CONNECTED.equals(action)) {
-				//updateConnectionState(R.string.connected);
-				invalidateOptionsMenu();
-			} else if (BluetoothLEService.ACTION_GATT_DISCONNECTED.equals(action)) {
-				//updateConnectionState(R.string.disconnected);
-				invalidateOptionsMenu();
-			} else if (BluetoothLEService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
-
-
-				//
-				// Show all the supported services and characteristics on the user interface.
-				//displayGattServices(mBluetoothLeService.getSupportedGattServices());
-			} else if (BluetoothLEService.ACTION_HRM_DATA_AVAILABLE.equals(action)) {
-				int bpm;
-				double rrValues[];
-				bpm = intent.getIntExtra(BluetoothLEService.HR_DATA, -1);
-				if(bpm != -1) {
-					Log.e("Received", "BPM: " + bpm);
-					FeavrReceiver.setBPM(bpm);
-				}
-
-				rrValues = intent.getDoubleArrayExtra(BluetoothLEService.RR_DATA);
-				if(rrValues != null) {
-					for(int i = 0; i < rrValues.length; i++) {
-						Log.e("Received", "RR: " + rrValues[i]);
-					}
-				}
-
-			} else if (BluetoothLEService.ACTION_BATTERY_LEVEL_AVAILABLE.equals(action)) {
-
-
-
-			}
-		}
-	};
 
 	// Quit Unity
 	@Override protected void onDestroy ()
 	{
 		mUnityPlayer.quit();
-		unregisterReceiver(mGattUpdateReceiver);
-		unregisterReceiver(mHeartRateReceiver);
 		super.onDestroy();
 	}
 
@@ -171,7 +101,9 @@ public class UnityPlayerActivity extends Activity
 	@Override public boolean onKeyUp(int keyCode, KeyEvent event)     { return mUnityPlayer.injectEvent(event); }
 	@Override public boolean onKeyDown(int keyCode, KeyEvent event)   {
 		if(keyCode == 4) {
-			finish();
+			//Quit the Unity Player in a clean way
+			onDestroy();
+			//mUnityPlayer.quit();
 		}
 		return mUnityPlayer.injectEvent(event);
 	}

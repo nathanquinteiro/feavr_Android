@@ -274,8 +274,6 @@ public class BarcodeGeneratorActivity extends Activity {
 
             return text;
 
-
-
         }
 
         @Override
