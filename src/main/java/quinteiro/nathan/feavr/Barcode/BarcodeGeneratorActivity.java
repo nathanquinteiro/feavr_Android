@@ -206,6 +206,8 @@ public class BarcodeGeneratorActivity extends Activity {
             int server_port = 12345;
             byte[] message = new byte[500];
             DatagramPacket p = new DatagramPacket(message, message.length);
+
+
             DatagramSocket s = null;
 
             Log.e(TAG_IP, "Listen task");
@@ -216,6 +218,7 @@ public class BarcodeGeneratorActivity extends Activity {
                 s.setSoTimeout(1000);
             } catch (SocketException e) {
                 e.printStackTrace();
+                Log.e(TAG_IP,"Fail to newDatagramSocket");
             }
 
             while (timeout && !isCancelled()) {
@@ -264,6 +267,7 @@ public class BarcodeGeneratorActivity extends Activity {
                 text = new String(message, 0, p.getLength());
 
                 if(NetworkUtils.isValidIP4(text)){
+                    NetworkMulti.getInstance().reset();
                     NetworkMulti.getInstance().setIP(text);
                     NetworkMulti.getInstance().sendConfirmation();
                     NetworkMulti.getInstance().initConnection();
