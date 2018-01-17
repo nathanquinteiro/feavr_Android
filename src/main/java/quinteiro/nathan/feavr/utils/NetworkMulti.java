@@ -755,7 +755,7 @@ public class NetworkMulti {
 
 
                     boolean validMsg ;
-                    while (rcvThreadActive) {
+                    while (rcvEventThreadActive) {
 
                         try {
 
