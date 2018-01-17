@@ -34,12 +34,6 @@ public class MainActivity extends AppCompatActivity
     private Button btSingle;
     private Button btVR;
     private Button btControl;
-    private Button btTest;
-    private Button btTest2;
-    private Button btTest3;
-    private Button btTest4;
-
-
 
 
     private final int BARCODE_GENERATOR_CODE = 7;
@@ -106,23 +100,6 @@ public class MainActivity extends AppCompatActivity
 
 
     @Override
-    protected void onResume() {
-        super.onResume();
-
-
-        //registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
-    }
-
-
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        //unregisterReceiver(mGattUpdateReceiver);
-    }
-
-    @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if(drawer != null) {
@@ -137,7 +114,6 @@ public class MainActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
-
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
