@@ -168,79 +168,34 @@ public class DataProvider {
                 //listener.resultBPM();
                 Map<String, Object> bpmMap = (Map<String, Object>) dataSnapshot.getValue();
 
-                HashMap<Integer,Integer> hmap = new HashMap<>();
+                HashMap<Long,Long> hmap = new HashMap<>();
 
-                HashMap<String, Integer> current;
-
+                HashMap<String, Long> current;
 
                 Log.e("DP","size"+bpmMap.size());
 
                 //bpmMap.entrySet()
                 for(Map.Entry<String,Object> entry : bpmMap.entrySet()){
-                    //Log.d("dpV","key: "+entry.getKey()+" value: "+entry.getValue().toString()+" type value :"+entry.getValue().getClass().toString());
 
-                    current = (HashMap<String, Integer>) entry.getValue();
-
-
+                    current = (HashMap<String, Long>) entry.getValue();
 
                     hmap.put(current.get("ts"),current.get("value"));
-
-
-
                 }
 
-
-                Map<Integer, Integer> map = new TreeMap<Integer, Integer>(hmap);
-
-                /*for(Map.Entry<Integer,Integer> ent : map.entrySet()){
-                    Log.d("-sorted-",""+ent.getKey()+" "+ent.getValue());
-                }*/
+                Map<Long, Long> map = new TreeMap<Long, Long>(hmap);
 
                 listener.resultBPM(map);
-
-
-
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                listener.resultCancelled();
             }
         });
-
     }
-
 
     public interface dataProviderListenerBPM{
-        void resultBPM(Map<Integer,Integer> a);
-
-
+        void resultBPM(Map<Long,Long> a);
+        void resultCancelled();
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
-
-
-/*
-
-
-// Write a message to the database
-FirebaseDatabase database = FirebaseDatabase.getInstance();
-DatabaseReference myRef = database.getReference("message");
-
-myRef.setValue("Hello, World!");
- */

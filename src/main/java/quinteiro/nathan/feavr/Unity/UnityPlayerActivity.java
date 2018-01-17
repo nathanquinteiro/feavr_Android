@@ -52,7 +52,6 @@ public class UnityPlayerActivity extends Activity
 
 		FeavrReceiver.initSaveGame(getApplicationContext());
 
-
 		//Receive HR from Watch
 		registerReceiver(mHeartRateReceiver, new IntentFilter(WearListenerService.ACTION_SEND_HEART_RATE));
 

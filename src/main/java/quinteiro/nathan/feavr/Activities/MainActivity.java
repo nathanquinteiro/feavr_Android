@@ -20,6 +20,7 @@ import android.widget.Button;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import quinteiro.nathan.feavr.BLE.BluetoothLEService;
@@ -36,10 +37,8 @@ public class MainActivity extends AppCompatActivity
     private Button btSingle;
     private Button btVR;
     private Button btControl;
+
     private Button btTest;
-
-
-
 
 
     private final int BARCODE_GENERATOR_CODE = 7;
@@ -78,22 +77,21 @@ public class MainActivity extends AppCompatActivity
         btTest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
-
-
-
-
-                /*
                 DataProvider.getInstance().getBPMOfGame("-L33_ev1sk76386sS7UT", new DataProvider.dataProviderListenerBPM() {
                     @Override
-                    public void resultBPM(Map<Integer, Integer> a) {
+                    public void resultBPM(Map<Long, Long> a) {
+
                         Log.e("-Result","-----");
                     }
-                });*/
+
+                    @Override
+                    public void resultCancelled() {
+
+                    }
+
+                });
             }
         });
-
     }
 
 
@@ -126,23 +124,6 @@ public class MainActivity extends AppCompatActivity
 
 
     @Override
-    protected void onResume() {
-        super.onResume();
-
-
-        //registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
-    }
-
-
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        //unregisterReceiver(mGattUpdateReceiver);
-    }
-
-    @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if(drawer != null) {
@@ -158,7 +139,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -169,10 +149,13 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(MainActivity.this, AboutActivity.class);
             startActivity(intent);
         }
-
         if (id == R.id.nav_github) {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/nathanquinteiro/feavr_Android"));
             startActivity(browserIntent);
+        }
+        if (id == R.id.nav_stats) {
+            Intent intent = new Intent(MainActivity.this, StatsActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
