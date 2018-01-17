@@ -1,59 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!--
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
-        <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="@string/action_settings" />
-    </group>
--->
-
-    <item android:title="@string/action_settings">
+    <item android:title="@string/app_name">
         <menu>
-            <item
-                android:id="@+id/nav_technical_settings"
-                android:icon="@drawable/ic_menu_manage"
-                android:title="@string/action_technical_settings" />
 
             <item
-                android:id="@+id/nav_connect"
-                android:icon="@drawable/ic_menu_share"
-                android:title="@string/action_connect" />
+                android:id="@+id/nav_about"
+                android:icon="@drawable/ic_about"
+                android:title="@string/action_about" />
 
             <item
-                android:id="@+id/nav_high_score"
-                android:icon="@drawable/ic_add"
-                android:title="@string/action_high_score" />
-
-            <item
-                android:id="@+id/nav_connect_multi_players"
-                android:icon="@drawable/ic_menu_share"
-                android:title="@string/action_connect_multi" />
-
-            <item
-                android:id="@+id/nav_help"
-                android:icon="@drawable/ic_menu_share"
-                android:title="@string/action_help" />
-
+                android:id="@+id/nav_github"
+                android:icon="@drawable/ic_github"
+                android:title="@string/action_github" />
 
         </menu>
     </item>
-
-
-
 
 </menu>

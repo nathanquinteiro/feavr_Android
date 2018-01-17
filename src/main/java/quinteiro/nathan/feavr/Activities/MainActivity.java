@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -223,19 +224,14 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         //Launch technical settings if Bluetooth is enabled
-        if (id == R.id.nav_technical_settings) {
-
-        }
-        if (id == R.id.nav_connect) {
-            /*
-            Intent intent = new Intent(this, ConnectActivity.class);
+        if (id == R.id.nav_about) {
+            Intent intent = new Intent(MainActivity.this, AboutActivity.class);
             startActivity(intent);
-            */
         }
 
-        if ( id == R.id.nav_connect_multi_players){
-            /*Intent intent = new Intent(this, MultiPlayerConnectActivity.class);
-            startActivity(intent);*/
+        if (id == R.id.nav_github) {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/nathanquinteiro/feavr_Android"));
+            startActivity(browserIntent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
