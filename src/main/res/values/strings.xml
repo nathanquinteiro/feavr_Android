@@ -64,19 +64,21 @@
     <string name="menu_logout_cloud">Logout</string>
 
     <!-- BarcodeCaptureActivity -->
-    <string name="barcode_capture_hint">Scan the QR code on the FeaVR Control. </string>
+    <string name="barcode_capture_hint">Scan the QR code on the FeaVR Control to establish connection</string>
+
+    <!-- BarcodeGeneratorActivity -->
+    <string name="barcode_generator_hint">Scan this QR code with the VR Player to establish connection</string>
 
     <!-- Technical settings -->
     <string name="technical_settings_text">In order to detect your device, make sure the Bluetooth
     is turned on and select your device from the list. If your device comply with Bluetooth
     Low-Energy norm, the APP will detect it automatically, you won\'t have any pairing to do. \nAll devices reachable are displayed on the list, select yours and the setting is done.</string>
-    <string name="technical_settings_close">Close</string>
+    <string name="technical_settings_close">Back</string>
     <string name="scan">Connect to a device</string>
     <string name="disconnect">Disconnect</string>
     <string name="connected_to">Connected to \ </string>
     <string name="not_connected">No device connected</string>
     <string name="bpm">BPM: \ </string>
-
 
     <!-- Technical settings -->
     <string name="user_settings_text">User Settings</string>

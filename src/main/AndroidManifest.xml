@@ -72,7 +72,8 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Barcode.BarcodeCaptureActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
             >
         </activity>
         <activity

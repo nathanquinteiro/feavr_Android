@@ -26,12 +26,11 @@ public class MainActivity extends AppCompatActivity
     private Button btSingle;
     private Button btVR;
     private Button btControl;
-
     private Button btTest;
 
 
-    private final int BARCODE_GENERATOR_CODE = 7;
 
+    private final int BARCODE_GENERATOR_CODE = 7;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,22 +79,6 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
         }
     };
-
-    /*
-    private View.OnClickListener startVRListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            NetworkMulti.getInstance().startRcvEventThread(new NetworkMulti.networkEventListener() {
-                @Override
-                public void setEvent(String msg) {
-                    FeavrReceiver.setEvent(msg);
-                }
-            });
-            Intent intent = new Intent(MainActivity.this, UnityPlayerActivity.class);
-            startActivity(intent);
-        }
-    };
-    */
 
 
     private View.OnClickListener startVRListener = new View.OnClickListener() {

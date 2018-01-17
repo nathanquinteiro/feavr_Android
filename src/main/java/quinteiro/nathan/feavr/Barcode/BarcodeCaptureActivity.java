@@ -38,6 +38,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -88,6 +89,8 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements B
 
     private sendIPAsync mysendIPTask;
 
+    private Button btClose;
+
     /**
      * Initializes the UI and creates the detector pipeline.
      */
@@ -118,9 +121,13 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements B
         gestureDetector = new GestureDetector(this, new CaptureGestureListener());
         scaleGestureDetector = new ScaleGestureDetector(this, new ScaleListener());
 
-        Snackbar.make(mGraphicOverlay, "Tap to capture. Pinch/Stretch to zoom",
-                Snackbar.LENGTH_LONG)
-                .show();
+        btClose = (Button) findViewById(R.id.btClose);
+        btClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
     }
 
     /**
@@ -488,9 +495,11 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements B
                 mysendIPTask.execute(ipRcv);
 
             } else {
+                /*
                 Intent data = new Intent();
                 setResult(CommonStatusCodes.ERROR);
                 finish();
+                */
             }
         }
     }
