@@ -445,6 +445,16 @@ public class NetworkMulti {
         return _m;
     }
 
+    public void reset(){
+        if(outSocket!=null){
+            outSocket.close();
+        }
+
+        rcvEventThreadActive = false;
+        rcvThreadActive = false;
+
+    }
+
     /*public void initHeadSetMode(){
 
         this.headSetMode=true;

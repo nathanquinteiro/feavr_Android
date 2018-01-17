@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -45,6 +46,15 @@ public class gameTabActivity extends AppCompatActivity {
     boolean lightOn = true;
 
     Button btLight;
+
+    @Override
+    protected void onDestroy() {
+        Log.e("----","onDestroyCalled");
+        super.onDestroy();
+        NetworkMulti.getInstance().reset();
+
+        //unregisterReceiver(mGattUpdateReceiver);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -228,6 +238,8 @@ public class gameTabActivity extends AppCompatActivity {
             setMeasuredDimension(widthMeasureSpec,heightMeasureSpec);
 
         }
+
+
 
         @Override protected void onDraw(Canvas canvas) {
             super.onDraw(canvas);
