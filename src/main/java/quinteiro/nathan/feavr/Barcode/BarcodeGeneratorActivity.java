@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -47,18 +48,15 @@ public class BarcodeGeneratorActivity extends Activity {
 
     public Bitmap bitmap;
     public ImageView imageViewBarcode;
-    public TextView twBarcode;
-    public TextView twIPRec;
+    public TextView tvBarcode;
 
     public ProgressBar pBar;
-
-
 
     public ProgressDialog progress;
 
     private  getIpAsync myGetIpTaks;
 
-
+    private Button btClose;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,17 +66,13 @@ public class BarcodeGeneratorActivity extends Activity {
         setResult(CommonStatusCodes.ERROR);
 
         //imageViewBarcode  = (ImageView) findViewById(R.id.ivBarCode);
-        twBarcode = (TextView) findViewById(R.id.twBarCode);
-
-        twIPRec = (TextView) findViewById(R.id.twIPRec);
-
+        tvBarcode = (TextView) findViewById(R.id.tvBarCode);
 
         //String ipAddress = getIPAddress(true);
         String ipAddress = NetworkUtils.getIP4();
 
         //pBar = (ProgressBar) findViewById(R.id.progressBarQRCode);
         //pBar.setIndeterminate(true);
-
 
         if(ipAddress.isEmpty()){
             Log.e("e","empytx");
@@ -88,22 +82,9 @@ public class BarcodeGeneratorActivity extends Activity {
 
         Log.e("IP :",ipAddress);
 
-
-        twBarcode.setText("My IP : "+ipAddress);
-
-
-
-        //TODO Save state
-
-        /*try {
-            bitmap = TextToImageEncode(ipAddress);
-            //imageViewBarcode.setImageBitmap(bitmap);
-        } catch (WriterException e) {
-            e.printStackTrace();
-        }*/
+        //tvBarcode.setText("My IP : "+ipAddress);
 
         progress = new ProgressDialog(this);
-
 
         progress.setTitle("Generating QRCode");
         progress.setMessage("Please Wait ......");
@@ -114,14 +95,19 @@ public class BarcodeGeneratorActivity extends Activity {
 
         Log.e("-","-onCreate-");
 
-
         new generateQRCode().execute(ipAddress);
 
         myGetIpTaks = new getIpAsync();
         myGetIpTaks.execute();
         //new getIpAsync().execute();
 
-
+        btClose = (Button) findViewById(R.id.btClose);
+        btClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
     }
 
     @Override
@@ -272,27 +258,16 @@ public class BarcodeGeneratorActivity extends Activity {
             s.close();
 
             if (!timeout && !isCancelled()){
-
                 text = new String(message, 0, p.getLength());
 
-
                 if(NetworkUtils.isValidIP4(text)){
-
                     NetworkMulti.getInstance().setIP(text);
                     NetworkMulti.getInstance().sendConfirmation();
-
                     NetworkMulti.getInstance().initConnection();
 
-
-
-
-
                 }
-
-
-
-
-        } else {
+            }
+            else {
                 text="-";
             }
 
@@ -318,8 +293,7 @@ public class BarcodeGeneratorActivity extends Activity {
 
                 Log.e(TAG_IP,"Wrong IP received :"+s);
 
-                TextView tw = (TextView) findViewById(R.id.twIPRec);
-                tw.setText("Invalid ip received  : "+s);
+                tvBarcode.setText("Impossible to obtain Network settings. Verify your connection.");
 
             }
         }

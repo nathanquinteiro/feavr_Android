@@ -1,28 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/topLayout"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     android:keepScreenOn="true">
 
-  <TextView
+    <TextView
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:text="@string/barcode_capture_hint"/>
+      android:layout_gravity="center"
+      android:layout_margin="@dimen/activity_vertical_margin"
+      android:text="@string/barcode_capture_hint"
+      android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:id="@+id/textView2" />
 
-  <quinteiro.nathan.feavr.UI.camera.CameraSourcePreview
-      android:id="@+id/preview"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent">
-
-    <quinteiro.nathan.feavr.UI.camera.GraphicOverlay
-        android:id="@+id/graphicOverlay"
+    <quinteiro.nathan.feavr.UI.camera.CameraSourcePreview
+        android:id="@+id/preview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btClose"
+        android:layout_alignStart="@+id/btClose"
+        android:layout_below="@+id/textView2"
+        android:layout_gravity="center"
+        android:gravity="center">
 
-  </quinteiro.nathan.feavr.UI.camera.CameraSourcePreview>
+        <quinteiro.nathan.feavr.UI.camera.GraphicOverlay
+            android:id="@+id/graphicOverlay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/preview" />
 
-</LinearLayout>
+    </quinteiro.nathan.feavr.UI.camera.CameraSourcePreview>
+
+    <Button
+        android:id="@+id/btClose"
+        style="@style/button_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="@dimen/activity_vertical_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="@string/technical_settings_close" />
+
+</RelativeLayout>
