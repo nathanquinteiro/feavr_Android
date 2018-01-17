@@ -63,6 +63,9 @@ public class BarcodeGeneratorActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.barcode_generator);
 
+        // test
+
+
         setResult(CommonStatusCodes.ERROR);
 
         //imageViewBarcode  = (ImageView) findViewById(R.id.ivBarCode);
