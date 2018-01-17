@@ -62,7 +62,41 @@
         android:layout_below="@+id/btControl"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:text="Test ME !! GO ->" />
+        android:text="start" />
+
+    <Button
+        android:id="@+id/btTestDB2"
+        android:layout_margin="@dimen/activity_vertical_margin"
+        style="@style/button_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btTestDB"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="send bpm" />
+
+    <Button
+        android:id="@+id/btTestDB3"
+        android:layout_margin="@dimen/activity_vertical_margin"
+        style="@style/button_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btTestDB2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="send event" />
+
+    <Button
+        android:id="@+id/btTestDB4"
+        android:layout_margin="@dimen/activity_vertical_margin"
+        style="@style/button_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btTestDB3"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="send pos" />
+
 
 
 </RelativeLayout>

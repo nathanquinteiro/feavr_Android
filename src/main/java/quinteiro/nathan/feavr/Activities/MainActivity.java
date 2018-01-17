@@ -27,6 +27,11 @@ public class MainActivity extends AppCompatActivity
     private Button btVR;
     private Button btControl;
     private Button btTest;
+    private Button btTest2;
+    private Button btTest3;
+    private Button btTest4;
+
+
 
 
 
@@ -65,6 +70,39 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 DataProvider.getInstance().pushMessageTest();
+                DataProvider.getInstance().startNewGame();
+                //DataProvider.getInstance().pushBPMGame(100);
+
+            }
+        });
+
+        btTest2 = (Button) findViewById(R.id.btTestDB2);
+        btTest2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                DataProvider.getInstance().pushBPMGame(234);
+
+            }
+        });
+
+        btTest3 = (Button) findViewById(R.id.btTestDB4);
+        btTest3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                DataProvider.getInstance().pushEventGame("EVENTLSLSLSLalalalal");
+
+            }
+        });
+
+        btTest4 = (Button) findViewById(R.id.btTestDB3);
+        btTest4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                DataProvider.getInstance().pushPosGame(3,34.1f);
+
             }
         });
 
@@ -126,6 +164,7 @@ public class MainActivity extends AppCompatActivity
                 super.onBackPressed();
             }
         }
+
         else {
             super.onBackPressed();
         }
