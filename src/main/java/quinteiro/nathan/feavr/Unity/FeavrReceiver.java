@@ -1,10 +1,12 @@
 package quinteiro.nathan.feavr.Unity;
 
+import android.content.Context;
 import android.util.Log;
 
 
 import quinteiro.nathan.feavr.Database.DataProvider;
 import quinteiro.nathan.feavr.utils.NetworkMulti;
+import quinteiro.nathan.feavr.utils.Preferences;
 
 /**
  * Created by nathan on 20.09.17.
@@ -17,11 +19,13 @@ public class FeavrReceiver {
 
     private static boolean saveGameInit = false;
 
+
     private static int posCounter = 0;
 
     public static String getEvent() {
         return event;
     }
+
 
     public static void setEvent(String event) {
 
@@ -86,8 +90,9 @@ public class FeavrReceiver {
         }
     }
 
-    public static void initSaveGame() {
-        DataProvider.getInstance().startNewGame();
+    public static void initSaveGame(Context c) {
+        String refGame = DataProvider.getInstance().startNewGame();
         saveGameInit = true;
+        Preferences.saveLastGameReference(refGame,c);
     }
 }

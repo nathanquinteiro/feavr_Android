@@ -1,10 +1,19 @@
 package quinteiro.nathan.feavr.Database;
 
+import android.util.Log;
+import android.util.SparseIntArray;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 
 /**
@@ -49,13 +58,14 @@ public class DataProvider {
     }
 
 
-    public void startNewGame(){
+    public String startNewGame(){
 
         inGame = true;
 
 
         currentGameKey = ref.child("game").push().getKey();
 
+        return currentGameKey;
 
         /*inGame = true;
         mDatabaseReference = mFirebaseDatabase.getReference();
@@ -146,27 +156,46 @@ public class DataProvider {
     }
 
 
+    public void getBPMOfGame(String gameReference, final dataProviderListenerBPM listener){
 
 
 
+        DatabaseReference dbRef = database.getReference("game/"+gameReference+"/BPM");
+        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
 
+                //listener.resultBPM();
+                Map<String, Object> bpmMap = (Map<String, Object>) dataSnapshot.getValue();
 
+                HashMap<Long,Long> hmap = new HashMap<>();
 
+                HashMap<String, Long> current;
 
+                Log.e("DP","size"+bpmMap.size());
 
+                //bpmMap.entrySet()
+                for(Map.Entry<String,Object> entry : bpmMap.entrySet()){
 
+                    current = (HashMap<String, Long>) entry.getValue();
 
+                    hmap.put(current.get("ts"),current.get("value"));
+                }
 
+                Map<Long, Long> map = new TreeMap<Long, Long>(hmap);
 
+                listener.resultBPM(map);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                listener.resultCancelled();
+            }
+        });
+    }
+
+    public interface dataProviderListenerBPM{
+        void resultBPM(Map<Long,Long> a);
+        void resultCancelled();
+    }
 }
-
-
-/*
-
-
-// Write a message to the database
-FirebaseDatabase database = FirebaseDatabase.getInstance();
-DatabaseReference myRef = database.getReference("message");
-
-myRef.setValue("Hello, World!");
- */

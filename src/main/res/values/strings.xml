@@ -4,6 +4,9 @@
     <string name="app_name">Feavr</string>
     <string name="app_version">v1.0.0</string>
 
+    <!-- Stats -->
+    <string name="stats_text">HeartBeat over the last game played</string>
+
     <!-- Scan Dialog -->
     <string name="scan_dialog_title">Scanning for Heart Monitor...</string>
     <string name="cancel">Cancel</string>

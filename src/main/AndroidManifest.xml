@@ -63,6 +63,10 @@
             android:label="@string/vr_title"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".Activities.StatsActivity"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".Activities.TechnicalSettingsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />

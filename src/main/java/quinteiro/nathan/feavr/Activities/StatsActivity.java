@@ -10,7 +10,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
@@ -18,19 +20,19 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Random;
 
+import quinteiro.nathan.feavr.Database.DataProvider;
 import quinteiro.nathan.feavr.R;
 import quinteiro.nathan.feavr.utils.NetworkMulti;
 import quinteiro.nathan.feavr.utils.Preferences;
 
 public class StatsActivity extends AppCompatActivity {
-
-    NetworkMulti.networkMultiListener listener;
-
-    LinearLayout ll;
 
     private final static int NB_HR_ON_GRAPH = 20;
 
@@ -38,44 +40,59 @@ public class StatsActivity extends AppCompatActivity {
     private LineGraphSeries<DataPoint> hrSerie;
     private ArrayList<Double> hrData = new ArrayList<>();
 
+    TextView tvText;
+    Button btClose;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_game_tab);
-        ll = (LinearLayout) findViewById(R.id.gameLayout);
+        setContentView(R.layout.activity_stats);
 
         hrGraph = (GraphView) findViewById(R.id.graph);
 
-        // set manual X bounds
-        hrGraph.getViewport().setYAxisBoundsManual(true);
-        hrGraph.getViewport().setMinY(0);
-        hrGraph.getViewport().setMaxY(200);
-
-        hrGraph.getViewport().setXAxisBoundsManual(true);
-        hrGraph.getViewport().setMinX(0);
-        hrGraph.getViewport().setMaxX(20);
+        tvText = (TextView) findViewById(R.id.tvStatText);
+        btClose = (Button) findViewById(R.id.btClose);
+        btClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
         for (int i = 0; i < NB_HR_ON_GRAPH; i++) {
             hrData.add(0.);
         }
-        hrSerie = new LineGraphSeries<>(listToDataPoint(hrData));
-        hrGraph.addSeries(hrSerie);
 
-        //setContentView();
-    }
+        String lastGameRef = Preferences.getLastGameReference(getApplicationContext());
+        if(lastGameRef != null) {
+            DataProvider.getInstance().getBPMOfGame(lastGameRef, new DataProvider.dataProviderListenerBPM() {
+                @Override
+                public void resultBPM(Map<Long, Long> a) {
 
-    public DataPoint[] listToDataPoint(ArrayList<Double> list) {
-        DataPoint dataPoint[] = new DataPoint[list.size()];
-        for(int i = 0; i < dataPoint.length; i++) {
-            dataPoint[i] = new DataPoint(i, list.get(i));
+                    DataPoint dataPoint[] = new DataPoint[a.size()];
+                    int i = 0;
+                    long first = (long) a.keySet().toArray()[0];
+                    for(Long timestamp: a.keySet()){
+                        dataPoint[i] = new DataPoint((timestamp - first)/1000.0, a.get(timestamp));
+                        i++;
+                    }
+
+                    hrSerie = new LineGraphSeries<>(dataPoint);
+                    hrGraph.addSeries(hrSerie);
+                    hrGraph.setVisibility(View.VISIBLE);
+
+                }
+
+                @Override
+                public void resultCancelled() {
+                    tvText.setText("Impossible to access Database");
+                }
+            });
+            //setContentView();
         }
-        return dataPoint;
-    }
-
-    public void appendNewHR(double newHR) {
-        hrData.remove(0);
-        hrData.add(newHR);
-        hrSerie.resetData(listToDataPoint(hrData));
+        else {
+            tvText.setText("No previous game saved.");
+        }
     }
 }
