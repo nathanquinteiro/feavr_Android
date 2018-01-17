@@ -1,13 +1,10 @@
-package quinteiro.nathan.feavr.Barcode;
-
-import android.nfc.cardemulation.HostApduService;
+package quinteiro.nathan.feavr.Database;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Map;
 
 
 /**
