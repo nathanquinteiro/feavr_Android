@@ -78,12 +78,19 @@ public class MainActivity extends AppCompatActivity
         btTest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
+
+
+
+
+                /*
                 DataProvider.getInstance().getBPMOfGame("-L33_ev1sk76386sS7UT", new DataProvider.dataProviderListenerBPM() {
                     @Override
                     public void resultBPM(Map<Integer, Integer> a) {
                         Log.e("-Result","-----");
                     }
-                });
+                });*/
             }
         });
 

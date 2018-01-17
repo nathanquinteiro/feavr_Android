@@ -181,7 +181,7 @@ public class gameTabActivity extends AppCompatActivity {
                         maxY=p[1];
 
                     lastPosition[0] = p[0]+decInit;
-                    lastPosition[1] = p[1]+decInit;
+                    lastPosition[1] = 50-p[1]+decInit; //t
 
                     postInvalidate();
 
@@ -208,7 +208,7 @@ public class gameTabActivity extends AppCompatActivity {
         private int lastBPM = 1;
         private float[] lastPosition = new float[]{0,0};
         private int offsetPositionX = 50;
-        private int offsetPositionY = 50;
+        private int offsetPositionY = 50; // avant 50
 
         private float minX = 10;
         private float minY = 10;
