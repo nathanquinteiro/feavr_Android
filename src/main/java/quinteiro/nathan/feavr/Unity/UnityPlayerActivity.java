@@ -21,6 +21,8 @@ import android.view.Window;
 import quinteiro.nathan.feavr.BLE.BluetoothLEService;
 import quinteiro.nathan.feavr.R;
 import quinteiro.nathan.feavr.Wear.WearListenerService;
+import quinteiro.nathan.feavr.utils.NetworkMulti;
+import quinteiro.nathan.feavr.utils.NetworkUtils;
 
 public class UnityPlayerActivity extends Activity
 {
@@ -31,6 +33,19 @@ public class UnityPlayerActivity extends Activity
 	// Setup activity layout
 	@Override protected void onCreate (Bundle savedInstanceState)
 	{
+		//Receive HR from BLE
+		registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+
+		//Receive HR from watch
+		registerReceiver(mHeartRateReceiver, new IntentFilter(WearListenerService.ACTION_SEND_HEART_RATE));
+
+		NetworkMulti.getInstance().startRcvEventThread(new NetworkMulti.networkEventListener() {
+			@Override
+			public void setEvent(String msg) {
+				FeavrReceiver.setEvent(msg);
+			}
+		});
+
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
 
@@ -39,13 +54,6 @@ public class UnityPlayerActivity extends Activity
 		mUnityPlayer = new UnityPlayer(this);
 		setContentView(mUnityPlayer);
 		mUnityPlayer.requestFocus();
-
-
-		//Receive HR from BLE
-		registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
-
-		//Receive HR from watch
-		registerReceiver(mHeartRateReceiver, new IntentFilter(WearListenerService.ACTION_SEND_HEART_RATE));
 	}
 
 	private static IntentFilter makeGattUpdateIntentFilter() {
@@ -62,24 +70,14 @@ public class UnityPlayerActivity extends Activity
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			int bpm = intent.getIntExtra(WearListenerService.INT_HEART_RATE,-1);
-			Log.d("Received form Watch","BPM: " + bpm);
+			Log.d("Received from Watch","BPM: " + bpm);
 
 			if(bpm != -1) {
-				Log.e("Received", "BPM: " + bpm);
+				Log.d("Received from Watch","BPM: " + bpm);
 				FeavrReceiver.setBPM(bpm);
 			}
 		}
 	};
-
-
-	@Override
-	public void onBackPressed() {
-		System.out.print("sd");
-		super.onBackPressed();
-	}
-
-
-
 
 	private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
 		@Override

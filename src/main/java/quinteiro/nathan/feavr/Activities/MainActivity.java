@@ -1,6 +1,9 @@
 package quinteiro.nathan.feavr.Activities;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -8,6 +11,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -17,7 +21,9 @@ import com.google.android.gms.common.api.CommonStatusCodes;
 import quinteiro.nathan.feavr.Barcode.BarcodeGeneratorActivity;
 import quinteiro.nathan.feavr.Barcode.DataProvider;
 import quinteiro.nathan.feavr.R;
+import quinteiro.nathan.feavr.Unity.FeavrReceiver;
 import quinteiro.nathan.feavr.Unity.UnityPlayerActivity;
+import quinteiro.nathan.feavr.Wear.WearListenerService;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -26,7 +32,6 @@ public class MainActivity extends AppCompatActivity
     private Button btVR;
     private Button btControl;
     private Button btTest;
-
 
 
     private final int BARCODE_GENERATOR_CODE = 7;
@@ -69,7 +74,23 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+
+        registerReceiver(mHeartRateReceiver, new IntentFilter(WearListenerService.ACTION_SEND_HEART_RATE));
+
     }
+
+    private BroadcastReceiver mHeartRateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int bpm = intent.getIntExtra(WearListenerService.INT_HEART_RATE,-1);
+            Log.d("Received from Watch","BPM: " + bpm);
+
+            if(bpm != -1) {
+                Log.d("Received from Watch","BPM: " + bpm);
+                FeavrReceiver.setBPM(bpm);
+            }
+        }
+    };
 
 
     private View.OnClickListener startSingleListener = new View.OnClickListener() {

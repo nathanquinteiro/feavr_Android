@@ -34,7 +34,7 @@ public class FeavrReceiver {
     // Call by UnityPlayerActivity to set the new BPM value
     public static void setBPM(int newBPM) {
         bpm = newBPM;
-        Log.e("Android", "setVal called with value: " + newBPM);
+        Log.e("Android", "setBPM called with value: " + newBPM);
         // Send BPM through network
         if(NetworkMulti.getInstance().isCoTested()){
             NetworkMulti.getInstance().sendBpm(newBPM);
@@ -50,7 +50,7 @@ public class FeavrReceiver {
 
     // Call by unity to give the position ...
     public static void setPosition(float x, float z) {
-        Log.e("UNITY","setVal called with values: " + x + " " + z);
+        Log.e("UNITY","setPosition called with values: " + x + " " + z);
         position[0] = x;
         position[1] = z;
         // Send position through network
