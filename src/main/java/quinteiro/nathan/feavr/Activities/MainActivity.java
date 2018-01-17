@@ -21,7 +21,7 @@ import com.google.android.gms.common.api.CommonStatusCodes;
 
 import quinteiro.nathan.feavr.BLE.BluetoothLEService;
 import quinteiro.nathan.feavr.Barcode.BarcodeGeneratorActivity;
-import quinteiro.nathan.feavr.Barcode.DataProvider;
+import quinteiro.nathan.feavr.Database.DataProvider;
 import quinteiro.nathan.feavr.R;
 import quinteiro.nathan.feavr.Unity.FeavrReceiver;
 import quinteiro.nathan.feavr.Unity.UnityPlayerActivity;
