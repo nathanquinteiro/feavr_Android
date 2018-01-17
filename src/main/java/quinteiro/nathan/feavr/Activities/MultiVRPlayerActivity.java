@@ -31,6 +31,7 @@ import quinteiro.nathan.feavr.BLE.BluetoothLEService;
 import quinteiro.nathan.feavr.Barcode.BarcodeCaptureActivity;
 import quinteiro.nathan.feavr.Barcode.BarcodeGeneratorActivity;
 import quinteiro.nathan.feavr.R;
+import quinteiro.nathan.feavr.Unity.FeavrReceiver;
 import quinteiro.nathan.feavr.Unity.UnityPlayerActivity;
 
 public class MultiVRPlayerActivity extends AppCompatActivity {
@@ -60,6 +61,7 @@ public class MultiVRPlayerActivity extends AppCompatActivity {
         btClose.setOnClickListener(closeListener);
 
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+
     }
 
     private View.OnClickListener BLESettingsListener = new View.OnClickListener() {

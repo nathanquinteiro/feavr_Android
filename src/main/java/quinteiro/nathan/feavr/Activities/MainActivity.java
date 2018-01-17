@@ -18,6 +18,8 @@ import android.widget.Button;
 
 
 import com.google.android.gms.common.api.CommonStatusCodes;
+
+import quinteiro.nathan.feavr.BLE.BluetoothLEService;
 import quinteiro.nathan.feavr.Barcode.BarcodeGeneratorActivity;
 import quinteiro.nathan.feavr.Barcode.DataProvider;
 import quinteiro.nathan.feavr.R;
@@ -75,8 +77,23 @@ public class MainActivity extends AppCompatActivity
         });
 
 
+        //Receive HR from Watch
         registerReceiver(mHeartRateReceiver, new IntentFilter(WearListenerService.ACTION_SEND_HEART_RATE));
 
+        //Receive HR from BLE
+        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+
+
+    }
+
+    private static IntentFilter makeGattUpdateIntentFilter() {
+        final IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(BluetoothLEService.ACTION_GATT_CONNECTED);
+        intentFilter.addAction(BluetoothLEService.ACTION_GATT_DISCONNECTED);
+        intentFilter.addAction(BluetoothLEService.ACTION_GATT_SERVICES_DISCOVERED);
+        intentFilter.addAction(BluetoothLEService.ACTION_HRM_DATA_AVAILABLE);
+        intentFilter.addAction(BluetoothLEService.ACTION_BATTERY_LEVEL_AVAILABLE);
+        return intentFilter;
     }
 
     private BroadcastReceiver mHeartRateReceiver = new BroadcastReceiver() {
@@ -88,6 +105,53 @@ public class MainActivity extends AppCompatActivity
             if(bpm != -1) {
                 Log.d("Received from Watch","BPM: " + bpm);
                 FeavrReceiver.setBPM(bpm);
+            }
+        }
+    };
+
+    @Override protected void onDestroy ()
+    {
+        unregisterReceiver(mGattUpdateReceiver);
+        unregisterReceiver(mHeartRateReceiver);
+        super.onDestroy();
+    }
+
+    private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if (BluetoothLEService.ACTION_GATT_CONNECTED.equals(action)) {
+                //updateConnectionState(R.string.connected);
+                invalidateOptionsMenu();
+            } else if (BluetoothLEService.ACTION_GATT_DISCONNECTED.equals(action)) {
+                //updateConnectionState(R.string.disconnected);
+                invalidateOptionsMenu();
+            } else if (BluetoothLEService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
+
+
+                //
+                // Show all the supported services and characteristics on the user interface.
+                //displayGattServices(mBluetoothLeService.getSupportedGattServices());
+            } else if (BluetoothLEService.ACTION_HRM_DATA_AVAILABLE.equals(action)) {
+                int bpm;
+                double rrValues[];
+                bpm = intent.getIntExtra(BluetoothLEService.HR_DATA, -1);
+                if(bpm != -1) {
+                    Log.e("Received", "BPM: " + bpm);
+                    FeavrReceiver.setBPM(bpm);
+                }
+
+                rrValues = intent.getDoubleArrayExtra(BluetoothLEService.RR_DATA);
+                if(rrValues != null) {
+                    for(int i = 0; i < rrValues.length; i++) {
+                        Log.e("Received", "RR: " + rrValues[i]);
+                    }
+                }
+
+            } else if (BluetoothLEService.ACTION_BATTERY_LEVEL_AVAILABLE.equals(action)) {
+
+
+
             }
         }
     };
