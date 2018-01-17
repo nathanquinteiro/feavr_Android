@@ -6,7 +6,7 @@ import android.util.Log;
 
 import java.util.Vector;
 
-import quinteiro.nathan.feavr.Barcode.DataProvider;
+import quinteiro.nathan.feavr.Database.DataProvider;
 import quinteiro.nathan.feavr.utils.NetworkMulti;
 
 /**
