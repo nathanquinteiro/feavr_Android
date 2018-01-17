@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
 import quinteiro.nathan.feavr.Barcode.BarcodeGeneratorActivity;
+import quinteiro.nathan.feavr.Barcode.DataProvider;
 import quinteiro.nathan.feavr.R;
 import quinteiro.nathan.feavr.Unity.UnityPlayerActivity;
 
@@ -25,6 +26,8 @@ public class MainActivity extends AppCompatActivity
     private Button btSingle;
     private Button btVR;
     private Button btControl;
+
+    private Button btTest;
 
 
     private final int BARCODE_GENERATOR_CODE = 7;
@@ -57,6 +60,14 @@ public class MainActivity extends AppCompatActivity
 
         btControl = (Button) findViewById(R.id.btControl);
         btControl.setOnClickListener(startControlListener);
+
+        btTest = (Button) findViewById(R.id.btTestDB);
+        btTest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DataProvider.getInstance().pushMessageTest();
+            }
+        });
 
     }
 
