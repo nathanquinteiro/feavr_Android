@@ -1,10 +1,7 @@
 package quinteiro.nathan.feavr.Unity;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 
-import java.util.Vector;
 
 import quinteiro.nathan.feavr.Database.DataProvider;
 import quinteiro.nathan.feavr.utils.NetworkMulti;

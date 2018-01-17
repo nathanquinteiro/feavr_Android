@@ -161,7 +161,6 @@ public class gameTabActivity extends AppCompatActivity {
         private  float decInit = 3.5f;
 
 
-
         public DemoView(Context context,Boolean testMode){
             super(context);
 
@@ -194,12 +193,9 @@ public class gameTabActivity extends AppCompatActivity {
                     lastBPM=bpm;
                     appendNewHR((double) bpm);
 
-
+                    postInvalidate();
                 }
-
-
             };
-
 
             if(testMode){
                 NetworkMulti.getInstance().startTestThread(listener);

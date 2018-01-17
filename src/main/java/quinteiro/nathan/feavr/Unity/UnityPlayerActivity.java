@@ -52,15 +52,88 @@ public class UnityPlayerActivity extends Activity
 
 		FeavrReceiver.initSaveGame();
 
+
+		//Receive HR from Watch
+		registerReceiver(mHeartRateReceiver, new IntentFilter(WearListenerService.ACTION_SEND_HEART_RATE));
+
+		//Receive HR from BLE
+		registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+
+
 	}
 
+	private static IntentFilter makeGattUpdateIntentFilter() {
+		final IntentFilter intentFilter = new IntentFilter();
+		intentFilter.addAction(BluetoothLEService.ACTION_GATT_CONNECTED);
+		intentFilter.addAction(BluetoothLEService.ACTION_GATT_DISCONNECTED);
+		intentFilter.addAction(BluetoothLEService.ACTION_GATT_SERVICES_DISCOVERED);
+		intentFilter.addAction(BluetoothLEService.ACTION_HRM_DATA_AVAILABLE);
+		intentFilter.addAction(BluetoothLEService.ACTION_BATTERY_LEVEL_AVAILABLE);
+		return intentFilter;
+	}
 
-	// Quit Unity
+	private BroadcastReceiver mHeartRateReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			int bpm = intent.getIntExtra(WearListenerService.INT_HEART_RATE,-1);
+			Log.d("Received from Watch","BPM: " + bpm);
+
+			if(bpm != -1) {
+				Log.d("Received from Watch","BPM: " + bpm);
+				FeavrReceiver.setBPM(bpm);
+			}
+		}
+	};
+
 	@Override protected void onDestroy ()
 	{
 		mUnityPlayer.quit();
+		unregisterReceiver(mGattUpdateReceiver);
+		unregisterReceiver(mHeartRateReceiver);
 		super.onDestroy();
 	}
+
+	private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			final String action = intent.getAction();
+			if (BluetoothLEService.ACTION_GATT_CONNECTED.equals(action)) {
+				//updateConnectionState(R.string.connected);
+				invalidateOptionsMenu();
+			} else if (BluetoothLEService.ACTION_GATT_DISCONNECTED.equals(action)) {
+				//updateConnectionState(R.string.disconnected);
+				invalidateOptionsMenu();
+			} else if (BluetoothLEService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
+
+
+				//
+				// Show all the supported services and characteristics on the user interface.
+				//displayGattServices(mBluetoothLeService.getSupportedGattServices());
+			} else if (BluetoothLEService.ACTION_HRM_DATA_AVAILABLE.equals(action)) {
+				int bpm;
+				double rrValues[];
+				bpm = intent.getIntExtra(BluetoothLEService.HR_DATA, -1);
+				if(bpm != -1) {
+					Log.e("Received", "BPM: " + bpm);
+					FeavrReceiver.setBPM(bpm);
+				}
+
+				rrValues = intent.getDoubleArrayExtra(BluetoothLEService.RR_DATA);
+				if(rrValues != null) {
+					for(int i = 0; i < rrValues.length; i++) {
+						Log.e("Received", "RR: " + rrValues[i]);
+					}
+				}
+
+			} else if (BluetoothLEService.ACTION_BATTERY_LEVEL_AVAILABLE.equals(action)) {
+
+
+
+			}
+		}
+	};
+
+
 
 	// Pause Unity
 	@Override protected void onPause()

@@ -78,11 +78,20 @@
     <string name="disconnect">Disconnect</string>
     <string name="connected_to">Connected to \ </string>
     <string name="not_connected">No device connected</string>
-    <string name="bpm">BPM: \ </string>
+    <string name="bpm">HR: \ </string>
 
     <!-- Technical settings -->
     <string name="user_settings_text">User Settings</string>
     <string name="title_activity_user_settings">User Settings</string>
+
+
+    <!-- About -->
+    <string name="about_text">FeaVR is an Horror Game in Virtual Reality, based on Unity and Native Android.</string>
+    <string name="about_author">Developed at EPFL, CH by Jérémie Mayor and Nathan Quinteiro</string>
+    <string name="action_about">About</string>
+
+    <!-- About -->
+    <string name="action_github">Github</string>
 
     <!-- menu -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -98,7 +107,6 @@
 
 
     <string name="becare">BLE Handler</string>
-
 
     <!--
 Google Vision
