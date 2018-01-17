@@ -453,6 +453,27 @@ public class NetworkMulti {
         rcvEventThreadActive = false;
         rcvThreadActive = false;
 
+        if(rcvEventThread!=null) {
+
+            try {
+                rcvEventThread.join();
+            } catch (InterruptedException e) {
+                Log.e("NWMul", "fail join thread rcvEvent");
+                e.printStackTrace();
+            }
+            rcvEventThread=null;
+        }
+
+        if(rcvMsgThread!=null) {
+            try {
+                rcvMsgThread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                Log.e("NWMul", "fail join thread rcvMsg");
+            }
+            Log.e("NWMul", "join both thread");
+            rcvMsgThread=null;
+        }
     }
 
     /*public void initHeadSetMode(){
@@ -825,88 +846,91 @@ public class NetworkMulti {
 
         final String TAG_RCV_MSG = "RCV-T";
 
-        if(rcvMsgThread==null) {
+        if(rcvMsgThread != null) {
+            stopRcvMsgThread();
+        }
 
-            rcvMsgThread = new Thread(new Runnable() {
-                @Override
-                public void run() {
 
-                    rcvThreadActive = true;
+        rcvMsgThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
 
-                    byte[] message = new byte[500];
-                    DatagramPacket p = new DatagramPacket(message, message.length);
-                    DatagramSocket s = null;
+                rcvThreadActive = true;
 
+                byte[] message = new byte[500];
+                DatagramPacket p = new DatagramPacket(message, message.length);
+                DatagramSocket s = null;
+
+
+                try {
+                    s = new DatagramSocket(server_port);
+                    s.setSoTimeout(500);
+                } catch (SocketException e) {
+                    e.printStackTrace();
+                    rcvThreadActive=false;
+                    Log.e(TAG_RCV_MSG,"-fails init socket or fail set timeout");
+                    return;
+                }
+
+
+                boolean validMsg ;
+                while (rcvThreadActive) {
 
                     try {
-                        s = new DatagramSocket(server_port);
-                        s.setSoTimeout(500);
-                    } catch (SocketException e) {
-                        e.printStackTrace();
-                        rcvThreadActive=false;
-                        Log.e(TAG_RCV_MSG,"-fails init socket or fail set timeout");
-                        return;
+
+                        s.receive(p);
+                        validMsg = true;
+                    } catch (IOException e) {
+                        //e.printStackTrace();
+                        //Log.e(TAG_RCV_MSG,"-IOException receive msg");
+
+                        validMsg = false;
+
                     }
 
+                    if(validMsg){
 
-                    boolean validMsg ;
-                    while (rcvThreadActive) {
-
-                        try {
-
-                            s.receive(p);
-                            validMsg = true;
-                        } catch (IOException e) {
-                            //e.printStackTrace();
-                            //Log.e(TAG_RCV_MSG,"-IOException receive msg");
-
-                            validMsg = false;
-
-                        }
-
-                        if(validMsg){
-
-                            String text;
-                            text = new String(message, 0, p.getLength());
+                        String text;
+                        text = new String(message, 0, p.getLength());
 
 
-                            String[] splitted = text.split("/");
+                        String[] splitted = text.split("/");
 
-                            if (splitted.length != 0) {
+                        if (splitted.length != 0) {
 
-                                if (splitted[0].equals(MSG_POS)) {
+                            if (splitted[0].equals(MSG_POS)) {
 
-                                    if (splitted.length == 3) {
+                                if (splitted.length == 3) {
 
-                                        float[] ppos = {Float.parseFloat(splitted[1]), Float.parseFloat(splitted[2])};
-                                        listener.setPosition(ppos);
+                                    float[] ppos = {Float.parseFloat(splitted[1]), Float.parseFloat(splitted[2])};
+                                    listener.setPosition(ppos);
 
-                                    } else {
-                                        Log.e(TAG_RCV_MSG, "Wrong size msg pos :" + splitted.length);
-                                    }
+                                } else {
+                                    Log.e(TAG_RCV_MSG, "Wrong size msg pos :" + splitted.length);
+                                }
 
 
-                                } else if (splitted[0].equals(MSG_BPM)) {
+                            } else if (splitted[0].equals(MSG_BPM)) {
 
-                                    if (splitted.length == 2) {
-                                        int b = Integer.parseInt(splitted[1]);
-                                        listener.setBPM(b);
+                                if (splitted.length == 2) {
+                                    int b = Integer.parseInt(splitted[1]);
+                                    listener.setBPM(b);
 
-                                    } else {
-                                        Log.e(TAG_RCV_MSG, "Wrong size msg bmp :" + splitted.length);
-                                    }
+                                } else {
+                                    Log.e(TAG_RCV_MSG, "Wrong size msg bmp :" + splitted.length);
                                 }
                             }
                         }
                     }
-
-                    if (s != null) {
-                        s.close();
-                    }
                 }
-            });
-            rcvMsgThread.start();
-        }
+
+                if (s != null) {
+                    s.close();
+                }
+            }
+        });
+        rcvMsgThread.start();
+
     }
 
     /*
