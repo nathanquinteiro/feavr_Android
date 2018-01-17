@@ -50,6 +50,8 @@ public class UnityPlayerActivity extends Activity
 		setContentView(mUnityPlayer);
 		mUnityPlayer.requestFocus();
 
+		FeavrReceiver.initSaveGame();
+
 	}
 
 

@@ -6,6 +6,7 @@ import android.util.Log;
 
 import java.util.Vector;
 
+import quinteiro.nathan.feavr.Barcode.DataProvider;
 import quinteiro.nathan.feavr.utils.NetworkMulti;
 
 /**
@@ -17,6 +18,10 @@ public class FeavrReceiver {
     public static float[] position = {0,0};
     public static String event = null;
 
+    private static boolean saveGameInit = false;
+
+    private static int posCounter = 0;
+
     public static String getEvent() {
         return event;
     }
@@ -25,6 +30,10 @@ public class FeavrReceiver {
 
         Log.e("FVRRECEIVER","New event : "+event);
         FeavrReceiver.event = event;
+
+        if(saveGameInit) {
+            DataProvider.getInstance().pushEventGame(event);
+        }
     }
 
     //Call by unity to get the BPM
@@ -37,6 +46,11 @@ public class FeavrReceiver {
     public static void setBPM(int newBPM) {
         bpm = newBPM;
         Log.e("Android", "setBPM called with value: " + newBPM);
+
+        if(saveGameInit) {
+            DataProvider.getInstance().pushBPMGame(newBPM);
+        }
+
         // Send BPM through network
         if(NetworkMulti.getInstance().isCoTested()){
             NetworkMulti.getInstance().sendBpm(newBPM);
@@ -52,18 +66,31 @@ public class FeavrReceiver {
 
     // Call by unity to give the position ...
     public static void setPosition(float x, float z) {
-        Log.e("UNITY","setPosition called with values: " + x + " " + z);
-        position[0] = x;
-        position[1] = z;
-        // Send position through network
+        //Reduce the network transmission by discarding some position update
+        posCounter++;
+        if(posCounter % 5 == 0) {
+            Log.e("UNITY","setPosition called with values: " + x + " " + z);
+            position[0] = x;
+            position[1] = z;
+            // Send position through network
 
-        if(NetworkMulti.getInstance().isCoTested()){
+            if(posCounter % 50 == 0) {
+                if (saveGameInit) {
+                    DataProvider.getInstance().pushPosGame(x, z);
+                }
+                posCounter = 0;
+            }
 
-            NetworkMulti.getInstance().sendPositions(position);
+            if(NetworkMulti.getInstance().isCoTested()){
 
+                NetworkMulti.getInstance().sendPositions(position);
+
+            }
         }
-
     }
 
-
+    public static void initSaveGame() {
+        DataProvider.getInstance().startNewGame();
+        saveGameInit = true;
+    }
 }
