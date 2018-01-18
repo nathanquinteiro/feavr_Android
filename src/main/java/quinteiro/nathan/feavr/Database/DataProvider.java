@@ -35,7 +35,7 @@ public class DataProvider {
 
 
     private Boolean inGame = false;
-    private String currentGameKey;
+    private String currentGameKey = null;
     private Calendar date ;
 
 
@@ -53,6 +53,9 @@ public class DataProvider {
     }
 
 
+    public String getCurrentGameKey(){
+        return currentGameKey;
+    }
 
     public String startNewGame(){
 
@@ -63,6 +66,8 @@ public class DataProvider {
         return currentGameKey;
 
     }
+
+
 
 
     public void pushPosGame(float x, float z){

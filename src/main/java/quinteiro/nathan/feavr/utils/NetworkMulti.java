@@ -1,6 +1,7 @@
 package quinteiro.nathan.feavr.utils;
 
 import android.os.AsyncTask;
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import java.io.IOException;
@@ -12,6 +13,7 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 
 import quinteiro.nathan.feavr.Activities.MainActivity;
+import quinteiro.nathan.feavr.Database.DataProvider;
 
 /**
  * Created by jeremie on 04.12.17.
@@ -34,13 +36,15 @@ public class NetworkMulti {
     final private String MSG_POS = "POSITION";
     final private String MSG_BPM = "BPM";
     final private String MSG_EVENT = "EVENT";
+    final private String MSG_END_GAME ="ENDGAME";
+    final private String MSG_NO_REF_GAME="NOREFGAME";
     final private int server_port = 12345;
 
 
     //PING setup
 
     private int waitConfirmation = 1000;
-    private int nbPingMsg = 10;
+
 
     final private String TAG_SEND="NW_SEND_MSG";
 
@@ -68,7 +72,7 @@ public class NetworkMulti {
         return this.connectionTested;
     }
 
-    //public void validCoTested() {this.connectionTested=true; }
+
 
     public void forceSetCoTested(){
         this.connectionTested=true;
@@ -236,7 +240,7 @@ public class NetworkMulti {
                 msg+="/"+Float.toString(pos);
             }
 
-            Log.e("COMM","send pos: " + msg);
+            Log.d("COM","send pos: " + msg);
 
             this.sendMsg(msg);
         }
@@ -250,12 +254,30 @@ public class NetworkMulti {
             msg+="/"+Integer.toString(bpm);
 
 
-            Log.e("COMM","send bpm: " + msg);
+            Log.d("COM","send bpm: " + msg);
 
             this.sendMsg(msg);
 
         }
 
+    }
+
+    public void sendEndGame(){
+        if(this.isCoTested()){
+
+            String msg = MSG_END_GAME;
+            String gk = DataProvider.getInstance().getCurrentGameKey();
+
+            if(gk!=null){
+                msg+="/"+gk;
+            } else {
+                msg+="/"+MSG_NO_REF_GAME;
+            }
+
+            Log.d("COM","send endGamemsg :"+msg);
+            this.sendMsg(msg);
+            
+        }
     }
 
     public void setIP(String oIp){
@@ -659,6 +681,20 @@ public class NetworkMulti {
                                 } else {
                                     Log.e(TAG_RCV_MSG, "Wrong size msg bmp :" + splitted.length);
                                 }
+                            } else if (splitted[0].equals(MSG_END_GAME)) {
+                                if (splitted.length == 2){
+                                    if(splitted[1].equals(MSG_NO_REF_GAME)){
+                                        listener.setEndGame(null);
+
+                                    } else {
+                                        listener.setEndGame(splitted[1]);
+
+                                    }
+
+                                } else {
+                                    Log.e(TAG_RCV_MSG, "Wrong size msg endGame :" + splitted.length);
+
+                                }
                             }
                         }
                     }
@@ -678,6 +714,7 @@ public class NetworkMulti {
     public interface networkMultiListener{
         void setPosition(float[] p);
         void setBPM(int bpm);
+        void setEndGame(String gameReference);
         //void setEvent(String msg);
     }
 

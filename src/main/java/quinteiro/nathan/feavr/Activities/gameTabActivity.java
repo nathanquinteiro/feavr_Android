@@ -29,6 +29,7 @@ import quinteiro.nathan.feavr.Barcode.BarcodeGeneratorActivity;
 import quinteiro.nathan.feavr.utils.NetworkMulti;
 
 import quinteiro.nathan.feavr.R;
+import quinteiro.nathan.feavr.utils.Preferences;
 
 public class gameTabActivity extends AppCompatActivity {
 
@@ -70,9 +71,7 @@ public class gameTabActivity extends AppCompatActivity {
     }
 
 
-    //aaaaa
 
-    //private View
 
     private CompoundButton.OnCheckedChangeListener lampsControlListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
@@ -281,7 +280,7 @@ public class gameTabActivity extends AppCompatActivity {
         private float initOffsetY = -51.5f;
 
 
-        public DemoView(Context context,Boolean testMode){
+        public DemoView(final Context context, Boolean testMode){
             super(context);
 
             listener = new NetworkMulti.networkMultiListener() {
@@ -318,6 +317,23 @@ public class gameTabActivity extends AppCompatActivity {
                     appendNewHR((double) bpm);
 
                     postInvalidate();
+                }
+
+                @Override
+                public void setEndGame(String gameReference) {
+
+
+                    if(gameReference!=null){
+                        Preferences.saveLastGameReference(gameReference,context);
+                        Log.d("gameTab","end game msg rcv, refgame:"+gameReference);
+                    } else {
+                        Log.d("gameTab","end game msg rcv, no gameref");
+                    }
+
+
+
+                    // todo end the game
+
                 }
             };
 
