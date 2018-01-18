@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 
 import com.jjoe64.graphview.GraphView;
@@ -37,7 +38,7 @@ public class gameTabActivity extends AppCompatActivity {
 
     NetworkMulti.networkMultiListener listener;
 
-    LinearLayout ll;
+    RelativeLayout ll;
 
     Random random ;
 
@@ -170,7 +171,7 @@ public class gameTabActivity extends AppCompatActivity {
             lampsState[i]=true;
         }
 
-        ll = (LinearLayout) findViewById(R.id.gameLayout);
+        ll = (RelativeLayout) findViewById(R.id.gameLayout);
 
 
         swLamps  = new Switch[nbLamps];
