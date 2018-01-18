@@ -60,8 +60,8 @@ public class MultiVRPlayerActivity extends AppCompatActivity {
         btClose = (Button) findViewById(R.id.btClose);
         btClose.setOnClickListener(closeListener);
 
+        //Register to BLE service updates
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
-
     }
 
     private View.OnClickListener BLESettingsListener = new View.OnClickListener() {
@@ -91,12 +91,14 @@ public class MultiVRPlayerActivity extends AppCompatActivity {
         }
     };
 
+    //Launch BLE Technical settings menu. Ask for user's permissions if required
     private void launchTechnicalSettings() {
+        //If all permissions are satisfied, launch the BLE technical setting menu
         if(BLEManager.bluetoothEnabled() && locationEnabledChecked) {
             Intent intent = new Intent(this, TechnicalSettingsActivity.class);
             startActivity(intent);
         }
-        //If not, request Bluetooth permission
+        //If not, request Bluetooth permission or Location permission
         else {
             if(!BLEManager.bluetoothEnabled()) {
                 BLEManager.startBluetoothService(this, BLEManager.REQUEST_ENABLE_BT_FOR_TECHNICAL);
@@ -106,7 +108,6 @@ public class MultiVRPlayerActivity extends AppCompatActivity {
             }
         }
     }
-
 
     //Location must be activated for BLE to work on Android > 6.0
     protected void createLocationRequest() {
@@ -163,9 +164,10 @@ public class MultiVRPlayerActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //Once the Controller QR code has been successfuly scanned and connection with the
+        //Controller is established, launch the game
         if (requestCode == BARCODE_READER_REQUEST_CODE) {
             if (resultCode == CommonStatusCodes.SUCCESS) {
                 Intent intent = new Intent(MultiVRPlayerActivity.this, UnityPlayerActivity.class);
@@ -200,6 +202,7 @@ public class MultiVRPlayerActivity extends AppCompatActivity {
                         }).show();
             }
         }
+        //If user was prompted to allow Location, and accepted, launch the technical settings
         if (requestCode == BLEManager.REQUEST_LOCATION) {
             switch (resultCode) {
                 case RESULT_OK: {
