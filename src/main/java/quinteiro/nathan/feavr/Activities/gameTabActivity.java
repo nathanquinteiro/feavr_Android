@@ -384,7 +384,7 @@ public class gameTabActivity extends AppCompatActivity {
                 {xOffset+corridorSize,yOffset+heightMap-corridorSize,xOffset+corridorSize,yOffset+corridorSize}};
 
 
-        float [][] lampsPosition = {
+        /*float [][] lampsPosition = {
                 //{corridorSize/2,heightMap-corridorSize-corridorSize/2},
                 {corridorSize/2,heightMap-corridorSize-corridorSize/2-8},
                 {corridorSize/2,heightMap-corridorSize-corridorSize/2-16},
@@ -405,14 +405,45 @@ public class gameTabActivity extends AppCompatActivity {
 
                 {59.5f-17.5f,51.5f},
                 {59.5f-(17.5f*2),51.5f},
-                {59.5f-(17.5f*3),51.5f}};
+                {59.5f-(17.5f*3),51.5f}};*/
+
+
+        int posXBetweenLamps = 14;
+        int posYBetweenLamps = 12;
+
+
+        float [][] lampsPosition = {
+
+
+                //{corridorSize/2,heightMap-corridorSize-corridorSize/2},
+                {corridorSize/2,heightMap-corridorSize/2-posYBetweenLamps},
+                {corridorSize/2,heightMap-corridorSize/2-posYBetweenLamps*2},
+                {corridorSize/2,heightMap-corridorSize/2-posYBetweenLamps*3},
+                {corridorSize/2,heightMap-corridorSize/2-posYBetweenLamps*4},
+
+                {corridorSize/2+posXBetweenLamps,corridorSize/2},
+                {corridorSize/2+posXBetweenLamps*2,corridorSize/2},
+                {corridorSize/2+posXBetweenLamps*3,corridorSize/2},
+                {corridorSize/2+posXBetweenLamps*4,corridorSize/2},
+
+                //{59.5f,corridorSize/2},
+                {widthMap-corridorSize/2,corridorSize/2+posYBetweenLamps},
+                {widthMap-corridorSize/2,corridorSize/2+posYBetweenLamps*2},
+                {widthMap-corridorSize/2,corridorSize/2+posYBetweenLamps*3},
+                {widthMap-corridorSize/2,corridorSize/2+posYBetweenLamps*4},
+
+
+                {widthMap-corridorSize/2-posYBetweenLamps,heightMap-corridorSize/2},
+                {widthMap-corridorSize/2-posYBetweenLamps*2,heightMap-corridorSize/2},
+                {widthMap-corridorSize/2-posYBetweenLamps*3,heightMap-corridorSize/2}};
+
 
         float [][] extLimitsScaled = null;
         float [][] intLimitsScaled = null;
         float [][] lampsPosScaled = null;
 
 
-        int offsetTextLamps = 1;
+        int offsetTextLamps = 2;
         float offsetTextLampsScaled;
 
 
@@ -545,13 +576,6 @@ public class gameTabActivity extends AppCompatActivity {
                 }
 
 
-                for(float[] p : lampsPosScaled){
-
-
-
-                    //canvas.drawCircle(p[0],p[1],5,paint);
-                }
-
 
                 for(int i = 0; i< nbLamps;i++){
 
@@ -567,8 +591,8 @@ public class gameTabActivity extends AppCompatActivity {
                     }
 
                     paint.setColor(Color.BLACK);
-                    paint.setTextSize(1*scale);
-                    canvas.drawText("L"+(i+1),lampsPosScaled[i][0]+offsetTextLampsScaled,lampsPosScaled[i][1],paint);
+                    paint.setTextSize(2*scale);
+                    canvas.drawText("L"+(i+1),lampsPosScaled[i][0]-offsetTextLampsScaled,lampsPosScaled[i][1]+offsetTextLampsScaled*1.5f,paint);
 
                 }
 
@@ -586,7 +610,7 @@ public class gameTabActivity extends AppCompatActivity {
                 paint.setColor(Color.RED);
                 paint.setStyle(Paint.Style.FILL);
 
-                canvas.drawText("Game is loading ...",this.getWidth()/2,this.getHeight()/2,paint);
+                canvas.drawText("Game is loading ...",this.getWidth()/4,this.getHeight()/2,paint);
                 paint.setAntiAlias(false);
 
             }
