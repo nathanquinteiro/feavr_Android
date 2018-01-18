@@ -338,6 +338,8 @@ public class gameTabActivity extends AppCompatActivity {
         private float maxX = 10;
         private float maxY = 10;
 
+        private float scale;
+
         private float scaleX = 10;
         private float scaleY = 10;
 
@@ -411,9 +413,21 @@ public class gameTabActivity extends AppCompatActivity {
             Log.e("DRAW","onDraw : width : "+this.getWidth()+" height : "+this.getHeight());
             Log.d("DRAW","p1: "+lastPosition[0]+" p2: "+lastPosition[1]);
 
-            float scale = this.getWidth() /63;
-            scaleX = scale;
-            scaleY = scale;
+
+
+            if(extLimitsScaled == null) {
+                //scale = ((float)this.getWidth()) / 63;
+                scale = this.getWidth() / widthMap;
+
+                xOffset = (this.getWidth() % widthMap)/2;
+                yOffset = xOffset;
+
+                Log.d("Scale :", " " + scale);
+                scaleX = scale;
+                scaleY = scale;
+            }
+
+
 
 
             if(extLimitsScaled == null){
@@ -422,7 +436,7 @@ public class gameTabActivity extends AppCompatActivity {
 
                 for(int i = 0 ; i< extLimits.length;i++){
                     for(int j = 0 ; j < extLimits[i].length;j++){
-                        extLimitsScaled[i][j]= extLimits[i][j]*scale;
+                        extLimitsScaled[i][j]= extLimits[i][j]*scale+xOffset;
                     }
                 }
 
@@ -434,7 +448,7 @@ public class gameTabActivity extends AppCompatActivity {
 
                 for(int i = 0 ; i< intLimits.length;i++){
                     for(int j = 0 ; j < intLimits[i].length;j++){
-                        intLimitsScaled[i][j]= intLimits[i][j]*scale;
+                        intLimitsScaled[i][j]= intLimits[i][j]*scale+xOffset;
                     }
                 }
 
@@ -464,6 +478,8 @@ public class gameTabActivity extends AppCompatActivity {
                 canvas.drawLines(p,paint);
             }
 
+            Log.e("-","x: "+extLimitsScaled[0][2]+" y: "+extLimitsScaled[0][3]);
+
             for (float[] p :intLimitsScaled){
                 canvas.drawLines(p,paint);
             }
@@ -473,7 +489,8 @@ public class gameTabActivity extends AppCompatActivity {
             // draw gamer position
             paint.setAntiAlias(true);
             paint.setColor(Color.RED);
-            canvas.drawCircle(offsetPositionX+lastPosition[0]*scaleX,offsetPositionY+lastPosition[1]*scaleY,8,paint);
+            //canvas.drawCircle(offsetPositionX+lastPosition[0]*scaleX,offsetPositionY+lastPosition[1]*scaleY,8,paint);
+            canvas.drawCircle(xOffset+lastPosition[0]*scaleX,yOffset+lastPosition[1]*scaleY,8,paint);
 
 
 
