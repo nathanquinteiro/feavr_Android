@@ -275,9 +275,10 @@ public class gameTabActivity extends AppCompatActivity {
 
     private class DemoView extends View {
 
-        private int i = 10;
+        //private int i = 10;
 
-        private  float decInit = 3.5f;
+        private  float initOffsetX = 3.5f;
+        private float initOffsetY = -51.5f;
 
 
         public DemoView(Context context,Boolean testMode){
@@ -299,8 +300,11 @@ public class gameTabActivity extends AppCompatActivity {
                     if(p[1]>maxY)
                         maxY=p[1];
 
-                    lastPosition[0] = p[0]+decInit;
-                    lastPosition[1] = 50-p[1]+decInit; //t
+                    lastPosition[0] = p[0]+initOffsetX;
+                    lastPosition[1] = -(p[1]+initOffsetY);
+
+                    //lastPosition[1] = 63-p[1]+offsetPosition; // (before 50
+
 
                     postInvalidate();
 
@@ -326,8 +330,8 @@ public class gameTabActivity extends AppCompatActivity {
 
         private int lastBPM = 1;
         private float[] lastPosition = new float[]{0,0};
-        private int offsetPositionX = 50;
-        private int offsetPositionY = 50; // avant 50
+        private int offsetPositionX = 0;   //start Draw offset
+        private int offsetPositionY = 0;   //start Draw offset
 
         private float minX = 10;
         private float minY = 10;
@@ -341,20 +345,56 @@ public class gameTabActivity extends AppCompatActivity {
 
         private int corridorLen = 70;
 
+
+        // external map limits
         float [][] p1 = {{offsetPositionX,offsetPositionY,offsetPositionX,offsetPositionY+sizeExt},
                 {offsetPositionX,offsetPositionY,offsetPositionX+sizeExt,offsetPositionY},
                 {offsetPositionX+sizeExt,offsetPositionY,offsetPositionX+sizeExt,offsetPositionY+sizeExt},
                 {offsetPositionX,offsetPositionY+sizeExt,offsetPositionX+sizeExt,offsetPositionY+sizeExt}};
 
+        // internal map limits
         float [][] p2 = {{offsetPositionX+corridorLen,offsetPositionY+corridorLen,offsetPositionX+corridorLen,offsetPositionY+sizeExt-corridorLen},//1
                 {offsetPositionX+corridorLen,offsetPositionY+corridorLen,offsetPositionX+sizeExt-corridorLen,offsetPositionY+corridorLen},//2
                 {offsetPositionX+sizeExt-corridorLen,offsetPositionY+corridorLen,offsetPositionX+sizeExt-corridorLen,offsetPositionY+sizeExt-corridorLen},//3
                 {offsetPositionX+corridorLen,offsetPositionY+sizeExt-corridorLen,offsetPositionX+sizeExt-corridorLen,offsetPositionY+sizeExt-corridorLen}};
 
+
+        private int xOffset = 0;
+        private int yOffset = 0;
+
+        private int widthMap = 63;
+        private int heightMap = 55;
+        private float corridorSize = 7.5f;
+
+        float [][] extLimits ={{xOffset,yOffset,xOffset+widthMap,yOffset},
+                {xOffset+widthMap,yOffset,xOffset+widthMap,yOffset+heightMap},
+                {xOffset+widthMap,yOffset+heightMap,xOffset,yOffset+heightMap},
+                {xOffset,yOffset+heightMap,xOffset,yOffset}};
+
+
+        float [][] intLimits ={{xOffset+corridorSize,yOffset+corridorSize,xOffset+widthMap-corridorSize,yOffset+corridorSize},
+                {xOffset+widthMap-corridorSize,yOffset+corridorSize,xOffset+widthMap-corridorSize,yOffset+heightMap-corridorSize},
+                {xOffset+widthMap-corridorSize,yOffset+heightMap-corridorSize,xOffset+corridorSize,yOffset+heightMap-corridorSize},
+                {xOffset+corridorSize,yOffset+heightMap-corridorSize,xOffset+corridorSize,yOffset+corridorSize}};
+
+
+
+        float [][] extLimitsScaled = null;
+        float [][] intLimitsScaled = null;
+
+
         @Override
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
 
-            setMeasuredDimension(widthMeasureSpec,heightMeasureSpec);
+            Log.e("DRAW","onMeasure : widthMeasureSpec: "+widthMeasureSpec+" highMeasureSpec : "+heightMeasureSpec);
+
+
+            int size = heightMeasureSpec;
+            if(widthMeasureSpec<heightMeasureSpec) {
+                size = widthMeasureSpec;
+            }
+            setMeasuredDimension(size,size);
+            //setMeasuredDimension(widthMeasureSpec,heightMeasureSpec);
 
         }
 
@@ -368,8 +408,40 @@ public class gameTabActivity extends AppCompatActivity {
 
             //this.getWidth();
             //this.getHeight();
+            Log.e("DRAW","onDraw : width : "+this.getWidth()+" height : "+this.getHeight());
+            Log.d("DRAW","p1: "+lastPosition[0]+" p2: "+lastPosition[1]);
 
-            i+=5;
+            float scale = this.getWidth() /63;
+            scaleX = scale;
+            scaleY = scale;
+
+
+            if(extLimitsScaled == null){
+
+                extLimitsScaled = new float[4][4];
+
+                for(int i = 0 ; i< extLimits.length;i++){
+                    for(int j = 0 ; j < extLimits[i].length;j++){
+                        extLimitsScaled[i][j]= extLimits[i][j]*scale;
+                    }
+                }
+
+            }
+
+            if(intLimitsScaled == null){
+
+                intLimitsScaled = new float[4][4];
+
+                for(int i = 0 ; i< intLimits.length;i++){
+                    for(int j = 0 ; j < intLimits[i].length;j++){
+                        intLimitsScaled[i][j]= intLimits[i][j]*scale;
+                    }
+                }
+
+            }
+
+
+            //i+=5;
             // custom drawing code here
             Paint paint = new Paint();
             paint.setStyle(Paint.Style.FILL);
@@ -383,32 +455,24 @@ public class gameTabActivity extends AppCompatActivity {
             canvas.drawPaint(paint);
 
 
-            //stouf
 
-            paint.setColor(Color.BLACK);
-            paint.setTextSize(48);
-            canvas.drawText("BPM :"+lastBPM,100,750,paint);
 
 
 
-            //{offsetPositionX,offsetPositionY,offsetPositionX,offsetPositionY}
-
-
-            for (float[] p :p1){
+            paint.setColor(Color.BLACK);
+            for (float[] p :extLimitsScaled){
                 canvas.drawLines(p,paint);
             }
 
-            paint.setColor(Color.GREEN);
-
-            for (float[] p :p2){
+            for (float[] p :intLimitsScaled){
                 canvas.drawLines(p,paint);
             }
 
 
 
+            // draw gamer position
             paint.setAntiAlias(true);
             paint.setColor(Color.RED);
-
             canvas.drawCircle(offsetPositionX+lastPosition[0]*scaleX,offsetPositionY+lastPosition[1]*scaleY,8,paint);
 
 
@@ -416,12 +480,12 @@ public class gameTabActivity extends AppCompatActivity {
             paint.setAntiAlias(false);
 
 
-            paint.setColor(Color.BLUE);
+            /*paint.setColor(Color.BLUE);
             paint.setTextSize(18);
 
             canvas.drawText("(X:Y) = ("+lastPosition[0]+" : "+lastPosition[1]+")",100,800,paint);
 
-            paint.setColor(Color.BLACK);
+            paint.setColor(Color.BLACK);*/
             /*canvas.drawText("minX :"+minX,100,900,paint);
             canvas.drawText("maxX :"+maxX,100,1000,paint);
             canvas.drawText("minY :"+minY,100,1100,paint);
