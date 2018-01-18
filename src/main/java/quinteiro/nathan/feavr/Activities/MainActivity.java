@@ -1,9 +1,6 @@
 package quinteiro.nathan.feavr.Activities;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.net.Uri;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,7 +9,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -20,16 +16,8 @@ import android.widget.Button;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
 
-import java.util.ArrayList;
-import java.util.Map;
-
-import quinteiro.nathan.feavr.BLE.BluetoothLEService;
 import quinteiro.nathan.feavr.Barcode.BarcodeGeneratorActivity;
-import quinteiro.nathan.feavr.Database.DataProvider;
 import quinteiro.nathan.feavr.R;
-import quinteiro.nathan.feavr.Unity.FeavrReceiver;
-import quinteiro.nathan.feavr.Unity.UnityPlayerActivity;
-import quinteiro.nathan.feavr.Wear.WearListenerService;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -77,7 +65,7 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void onClick(View view) {
 
-            Intent intent = new Intent(MainActivity.this, UnityPlayerActivity.class);
+            Intent intent = new Intent(MainActivity.this, SingleVRPlayerActivity.class);
             startActivity(intent);
         }
     };

@@ -58,6 +58,11 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".Activities.SingleVRPlayerActivity"
+            android:theme="@style/AppTheme"
+            android:label="@string/single_title"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".Activities.MultiVRPlayerActivity"
             android:theme="@style/AppTheme"
             android:label="@string/vr_title"
