@@ -276,7 +276,7 @@ public class NetworkMulti {
 
             Log.d("COM","send endGamemsg :"+msg);
             this.sendMsg(msg);
-            
+
         }
     }
 
