@@ -424,10 +424,8 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements B
 
             if(s){
                 setResult(CommonStatusCodes.SUCCESS);
-            } else {
-                setResult(CommonStatusCodes.NETWORK_ERROR);
+                finish();
             }
-            finish();
         }
     }
 

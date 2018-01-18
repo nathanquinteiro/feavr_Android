@@ -86,9 +86,10 @@ public class UnityPlayerActivity extends Activity
 
 	@Override protected void onDestroy ()
 	{
-		mUnityPlayer.quit();
 		unregisterReceiver(mGattUpdateReceiver);
 		unregisterReceiver(mHeartRateReceiver);
+		NetworkMulti.getInstance().sendEndGame();
+		mUnityPlayer.quit();
 		super.onDestroy();
 	}
 

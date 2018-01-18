@@ -226,9 +226,6 @@ public class gameTabActivity extends AppCompatActivity {
         });
 
 
-
-
-
         dm = new DemoView(this, false);
 
         ll.addView(dm);
@@ -239,7 +236,7 @@ public class gameTabActivity extends AppCompatActivity {
         // set manual X bounds
         hrGraph.getViewport().setYAxisBoundsManual(true);
         hrGraph.getViewport().setMinY(0);
-        hrGraph.getViewport().setMaxY(200);
+        hrGraph.getViewport().setMaxY(160);
 
         hrGraph.getViewport().setXAxisBoundsManual(true);
         hrGraph.getViewport().setMinX(0);
@@ -331,10 +328,7 @@ public class gameTabActivity extends AppCompatActivity {
                         Log.d("gameTab","end game msg rcv, no gameref");
                     }
 
-
-
-                    // todo end the game
-
+                    finish();
                 }
             };
 

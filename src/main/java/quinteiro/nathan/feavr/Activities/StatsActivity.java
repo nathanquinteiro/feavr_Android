@@ -34,8 +34,6 @@ import quinteiro.nathan.feavr.utils.Preferences;
 
 public class StatsActivity extends AppCompatActivity {
 
-    private final static int NB_HR_ON_GRAPH = 20;
-
     private GraphView hrGraph;
     private LineGraphSeries<DataPoint> hrSerie;
     private ArrayList<Double> hrData = new ArrayList<>();
@@ -60,23 +58,20 @@ public class StatsActivity extends AppCompatActivity {
             }
         });
 
-        for (int i = 0; i < NB_HR_ON_GRAPH; i++) {
-            hrData.add(0.);
-        }
-
+        //Get reference of last game run on the phone
         String lastGameRef = Preferences.getLastGameReference(getApplicationContext());
+        //Get the data from the Firebase DataBase and display the graph of the heartbeat
         if(lastGameRef != null) {
             DataProvider.getInstance().getBPMOfGame(lastGameRef, new DataProvider.dataProviderListenerBPM() {
                 @Override
-                public void resultBPM(Map<Long, Long> a) {
+                public void resultBPM(Map<Long, Long> data) {
+                    if(data!=null) {
 
-                    if(a!=null) {
-
-                        DataPoint dataPoint[] = new DataPoint[a.size()];
+                        DataPoint dataPoint[] = new DataPoint[data.size()];
                         int i = 0;
-                        long first = (long) a.keySet().toArray()[0];
-                        for (Long timestamp : a.keySet()) {
-                            dataPoint[i] = new DataPoint((timestamp - first) / 1000.0, a.get(timestamp));
+                        long first = (long) data.keySet().toArray()[0];
+                        for (Long timestamp : data.keySet()) {
+                            dataPoint[i] = new DataPoint((timestamp - first) / 1000.0, data.get(timestamp));
                             i++;
                         }
 
@@ -86,15 +81,12 @@ public class StatsActivity extends AppCompatActivity {
                     } else {
                         tvText.setText(R.string.text_noBPMRecorded);
                     }
-
                 }
-
                 @Override
                 public void resultCancelled() {
                     tvText.setText(R.string.text_unableReacheDB);
                 }
             });
-            //setContentView();
         }
         else {
             tvText.setText(R.string.text_no_previous_game);

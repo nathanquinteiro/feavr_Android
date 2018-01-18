@@ -67,10 +67,10 @@
     <string name="menu_logout_cloud">Logout</string>
 
     <!-- BarcodeCaptureActivity -->
-    <string name="barcode_capture_hint">Scan the QR code on the FeaVR Control to establish connection</string>
+    <string name="barcode_capture_hint">Scan the QR code on the FeaVR Control to establish connection.\nMake sure both devices are connected to the same network.</string>
 
     <!-- BarcodeGeneratorActivity -->
-    <string name="barcode_generator_hint">Scan this QR code with the VR Player to establish connection</string>
+    <string name="barcode_generator_hint">Scan this QR code with the VR Player to establish connection.\nMake sure both devices are connected to the same network.</string>
 
     <!-- Technical settings -->
     <string name="technical_settings_text">In order to detect your device, make sure the Bluetooth
@@ -92,9 +92,8 @@
     <string name="about_text">FeaVR is an Horror Game in Virtual Reality, based on Unity and Native Android.</string>
     <string name="about_author">Developed at EPFL, CH by Jérémie Mayor and Nathan Quinteiro</string>
     <string name="action_about">About</string>
-
-    <!-- About -->
     <string name="action_github">Github</string>
+    <string name="action_stats">Last Game Stats</string>
 
     <!-- menu -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -110,6 +109,10 @@
 
 
     <string name="becare">BLE Handler</string>
+
+    <!-- GameTabe -->
+    <string name="text_lamps">Lamps:</string>
+    <string name="hr_graph_text">HeartRate [p/m]</string>
 
     <!--
 Google Vision
@@ -146,7 +149,6 @@ Google Vision
     <string name="tvConnectionState">No Connected</string>
     <string name="tvConnectionStateCO">Successfully connected</string>
 
-    <string name="text_lamps">Lamps:</string>
 
     <string name="sw1">1</string>
     <string name="sw2">2</string>

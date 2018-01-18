@@ -38,9 +38,6 @@ public class MainActivity extends AppCompatActivity
     private Button btVR;
     private Button btControl;
 
-
-
-
     private final int BARCODE_GENERATOR_CODE = 7;
 
     @Override
@@ -64,6 +61,7 @@ public class MainActivity extends AppCompatActivity
             navigationView.setNavigationItemSelectedListener(this);
         }
 
+        //Game launchers buttons
         btSingle = (Button) findViewById(R.id.btSingle);
         btSingle.setOnClickListener(startSingleListener);
 
@@ -72,11 +70,9 @@ public class MainActivity extends AppCompatActivity
 
         btControl = (Button) findViewById(R.id.btControl);
         btControl.setOnClickListener(startControlListener);
-
-
     }
 
-
+    //Launch game in single user mode
     private View.OnClickListener startSingleListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -86,7 +82,7 @@ public class MainActivity extends AppCompatActivity
         }
     };
 
-
+    //Launch multiplayer menu in Player mode
     private View.OnClickListener startVRListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -95,7 +91,7 @@ public class MainActivity extends AppCompatActivity
         }
     };
 
-
+    //Launch Barcode generator, that will launch Multiplayer Controller mode once returned successfully
     private View.OnClickListener startControlListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -104,11 +100,11 @@ public class MainActivity extends AppCompatActivity
         }
     };
 
-
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if(drawer != null) {
+            //If drawer is opened, close it instead of quitting the APP when user press back button
             if (drawer.isDrawerOpen(GravityCompat.START)) {
                 drawer.closeDrawer(GravityCompat.START);
             } else {
@@ -126,7 +122,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        //Launch technical settings if Bluetooth is enabled
+
         if (id == R.id.nav_about) {
             Intent intent = new Intent(MainActivity.this, AboutActivity.class);
             startActivity(intent);
@@ -151,6 +147,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == BARCODE_GENERATOR_CODE) {
+            //When Barcode has been successfully scanned by player, launch Controler mode
             if (resultCode == CommonStatusCodes.SUCCESS) {
                 Intent intent = new Intent(MainActivity.this, gameTabActivity.class);
                 startActivity(intent);

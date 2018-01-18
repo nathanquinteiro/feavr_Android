@@ -16,23 +16,22 @@
       android:layout_margin="@dimen/activity_vertical_margin"
       android:text="@string/barcode_capture_hint"
       android:textAppearance="@style/TextAppearance.AppCompat.Title"
-        android:id="@+id/textView2" />
+      android:id="@+id/textView" />
 
     <quinteiro.nathan.feavr.UI.camera.CameraSourcePreview
         android:id="@+id/preview"
+        android:layout_margin="@dimen/activity_vertical_margin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/textView"
         android:layout_above="@+id/btClose"
-        android:layout_alignStart="@+id/btClose"
-        android:layout_below="@+id/textView2"
-        android:layout_gravity="center"
-        android:gravity="center">
+        android:layout_centerHorizontal="true">
 
         <quinteiro.nathan.feavr.UI.camera.GraphicOverlay
             android:id="@+id/graphicOverlay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/preview" />
+            android:layout_centerHorizontal="true" />
 
     </quinteiro.nathan.feavr.UI.camera.CameraSourcePreview>
 
