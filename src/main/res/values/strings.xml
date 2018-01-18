@@ -172,4 +172,7 @@ Google Vision
     <string name="text_no_previous_game">No previous game saved.</string>
     <string name="text_noBPMRecorded">Sorry the last game played did not use a heart rate sensor. Stats can not be displayed.</string>
 
+
+    <string name="text_no_found_network">Impossible to obtain network settings. Verify your connection.</string>
+
 </resources>

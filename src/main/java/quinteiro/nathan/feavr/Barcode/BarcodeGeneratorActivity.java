@@ -258,9 +258,8 @@ public class BarcodeGeneratorActivity extends Activity {
                 }
 
             }
-            Log.e(TAG_IP, "" + i);
-            String text;
 
+            String text;
             s.close();
 
             if (!timeout && !isCancelled()){
@@ -298,7 +297,7 @@ public class BarcodeGeneratorActivity extends Activity {
 
                 Log.e(TAG_IP,"Wrong IP received :"+s);
 
-                tvBarcode.setText("Impossible to obtain Network settings. Verify your connection.");
+                tvBarcode.setText(R.string.text_no_found_network);
 
             }
         }

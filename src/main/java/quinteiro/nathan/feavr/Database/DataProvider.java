@@ -23,6 +23,9 @@ import java.util.TreeMap;
  *  use singleton pattern for convenience
  *
  *
+ *  Information (BPM, Position, Event (lamps status) are send to the firebase database in realtime
+ *  For now only BPM are retrieve to display information about last game.
+ *
  */
 
 public class DataProvider {
@@ -31,7 +34,7 @@ public class DataProvider {
 
     private FirebaseDatabase database;
     private DatabaseReference ref;
-    //private DatabaseReference currentGameReference;
+
 
 
     private Boolean inGame = false;
@@ -57,6 +60,8 @@ public class DataProvider {
         return currentGameKey;
     }
 
+
+
     public String startNewGame(){
 
         inGame = true;
@@ -66,7 +71,6 @@ public class DataProvider {
         return currentGameKey;
 
     }
-
 
 
 
@@ -142,12 +146,6 @@ public class DataProvider {
         } else {
 
         }
-    }
-
-
-    public void endCurrentGame(){
-        inGame= false;
-        //currentGameKey=null;
     }
 
 

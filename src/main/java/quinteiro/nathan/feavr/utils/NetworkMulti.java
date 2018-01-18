@@ -330,177 +330,7 @@ public class NetworkMulti {
 
 
 
-    Thread testThread;
 
-    private boolean testThreadActive = true;
-
-    public void stopTestThread(){
-        testThreadActive=false;
-        if(testThread!= null){
-            try {
-                Log.e("testT","before join");
-                testThread.join();
-                Log.e("testT","after join");
-                testThread=null;
-            } catch (InterruptedException e) {
-
-                e.printStackTrace();
-            }
-        } else {
-            Log.e("testT","call stop but thread is null");
-        }
-    }
-
-
-
-
-
-
-    public void startTestThread(final networkMultiListener l){
-        //final networkMultiListenerNewBPM list_BPM = lb;
-        //final networkMultiListenerNewPosition list_Pos = lp;
-        final networkMultiListener listener = l;
-
-        testThreadActive=true;
-
-        final int minX = -4;
-        final int minY = -4;
-
-        final int maxX = 59;
-        final int maxY = 59;
-
-
-        if(testThread==null){
-            testThread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-
-
-                    int xMax = 63;
-                    int yMax = 63;
-
-                    int b = 0;
-
-
-                    //int i = 1;
-                    Log.e("TestT","run, active : "+testThreadActive);
-
-                    while (testThreadActive){
-
-
-
-                        int x =0;
-                        int y =0;
-                        int ll = 56;
-
-                        int randomNumber =0;
-
-                        for(int sector =0; sector<4;sector++){
-                            switch (sector) {
-                                case 0:
-                                    x=0;
-                                    y=0;
-                                    for(int i = 0;i<ll;i++) {
-
-                                        randomNumber = (int)(Math.random()*2-1);
-                                        x=i;
-                                        y=randomNumber;
-                                        float[] ppos = {x,y};
-                                        listener.setBPM(80+(int)(Math.random()*10));
-                                        listener.setPosition(ppos);
-                                        try {
-                                            Thread.sleep(250);
-                                        } catch (InterruptedException e) {
-                                            //
-                                        }
-
-
-                                    }
-
-                                        break;
-                                case 1:
-
-                                    x=56;
-                                    y=0;
-                                    for(int i = 0;i<ll;i++) {
-
-                                        randomNumber = (int)(Math.random()*2-1);
-                                        y=i;
-                                        x = 56-randomNumber;
-                                        float[] ppos = {x,y};
-                                        listener.setBPM(90+(int)(Math.random()*10));
-                                        listener.setPosition(ppos);
-                                        try {
-                                            Thread.sleep(250);
-                                        } catch (InterruptedException e) {
-                                            //
-                                        }
-
-
-                                    }
-
-                                    break;
-
-                                case 2:
-
-                                    x=56;
-                                    y=56;
-
-                                    for(int i = 56;i>1;i--) {
-
-                                        randomNumber = (int)(Math.random()*2-1);
-                                        x=i;
-                                        y=56-randomNumber;
-                                        float[] ppos = {x,y};
-                                        listener.setBPM(90+(int)(Math.random()*10));
-                                        listener.setPosition(ppos);
-                                        try {
-                                            Thread.sleep(250);
-                                        } catch (InterruptedException e) {
-                                            //
-                                        }
-
-
-                                    }
-
-                                    break;
-                                case 3:
-
-                                    x=0;
-                                    y=56;
-                                    for(int i = 56;i>1;i--) {
-
-
-                                        randomNumber = (int)(Math.random()*2-1);
-                                        x=randomNumber;
-                                        y=i;
-                                        float[] ppos = {x,y};
-                                        listener.setBPM(90+(int)(Math.random()*10));
-                                        listener.setPosition(ppos);
-                                        try {
-                                            Thread.sleep(250);
-                                        } catch (InterruptedException e) {
-                                            //
-                                        }
-
-
-                                    }
-
-                                    break;
-
-
-                            }
-                        }
-
-                    }
-
-                }
-            });
-            testThread.start();
-        } else {
-            Log.e("TestT","call start but probably already started");
-        }
-    }
 
 
 
@@ -760,6 +590,181 @@ public class NetworkMulti {
 
         protected void onPostExecute(Void done) {
 
+        }
+    }
+
+
+    /**
+     *  Bellow code in comments was used to emulate the network during the development.
+     *
+     *  It is not used in the current version the application.
+     *
+     */
+
+        Thread testThread;
+
+    private boolean testThreadActive = true;
+
+    public void stopTestThread(){
+        testThreadActive=false;
+        if(testThread!= null){
+            try {
+                Log.e("testT","before join");
+                testThread.join();
+                Log.e("testT","after join");
+                testThread=null;
+            } catch (InterruptedException e) {
+
+                e.printStackTrace();
+            }
+        } else {
+            Log.e("testT","call stop but thread is null");
+        }
+    }
+
+
+
+
+
+
+    public void startTestThread(final networkMultiListener l){
+        //final networkMultiListenerNewBPM list_BPM = lb;
+        //final networkMultiListenerNewPosition list_Pos = lp;
+        final networkMultiListener listener = l;
+
+        testThreadActive=true;
+
+        final int minX = -4;
+        final int minY = -4;
+
+        final int maxX = 59;
+        final int maxY = 59;
+
+
+        if(testThread==null){
+            testThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+
+
+                    int xMax = 63;
+                    int yMax = 63;
+
+                    int b = 0;
+
+
+                    //int i = 1;
+                    Log.e("TestT","run, active : "+testThreadActive);
+
+                    while (testThreadActive){
+
+
+
+                        int x =0;
+                        int y =0;
+                        int ll = 56;
+
+                        int randomNumber =0;
+
+                        for(int sector =0; sector<4;sector++){
+                            switch (sector) {
+                                case 0:
+                                    x=0;
+                                    y=0;
+                                    for(int i = 0;i<ll;i++) {
+
+                                        randomNumber = (int)(Math.random()*2-1);
+                                        x=i;
+                                        y=randomNumber;
+                                        float[] ppos = {x,y};
+                                        listener.setBPM(80+(int)(Math.random()*10));
+                                        listener.setPosition(ppos);
+                                        try {
+                                            Thread.sleep(250);
+                                        } catch (InterruptedException e) {
+                                            //
+                                        }
+
+                                    }
+
+                                        break;
+                                case 1:
+
+                                    x=56;
+                                    y=0;
+                                    for(int i = 0;i<ll;i++) {
+
+                                        randomNumber = (int)(Math.random()*2-1);
+                                        y=i;
+                                        x = 56-randomNumber;
+                                        float[] ppos = {x,y};
+                                        listener.setBPM(90+(int)(Math.random()*10));
+                                        listener.setPosition(ppos);
+                                        try {
+                                            Thread.sleep(250);
+                                        } catch (InterruptedException e) {
+                                            //
+                                        }
+
+                                    }
+
+                                    break;
+
+                                case 2:
+
+                                    x=56;
+                                    y=56;
+
+                                    for(int i = 56;i>1;i--) {
+
+                                        randomNumber = (int)(Math.random()*2-1);
+                                        x=i;
+                                        y=56-randomNumber;
+                                        float[] ppos = {x,y};
+                                        listener.setBPM(90+(int)(Math.random()*10));
+                                        listener.setPosition(ppos);
+                                        try {
+                                            Thread.sleep(250);
+                                        } catch (InterruptedException e) {
+                                            //
+                                        }
+
+                                    }
+
+                                    break;
+                                case 3:
+
+                                    x=0;
+                                    y=56;
+                                    for(int i = 56;i>1;i--) {
+
+
+                                        randomNumber = (int)(Math.random()*2-1);
+                                        x=randomNumber;
+                                        y=i;
+                                        float[] ppos = {x,y};
+                                        listener.setBPM(90+(int)(Math.random()*10));
+                                        listener.setPosition(ppos);
+                                        try {
+                                            Thread.sleep(250);
+                                        } catch (InterruptedException e) {
+                                            //
+                                        }
+
+                                    }
+
+                                    break;
+
+                            }
+                        }
+
+                    }
+
+                }
+            });
+            testThread.start();
+        } else {
+            Log.e("TestT","call start but probably already started");
         }
     }
 

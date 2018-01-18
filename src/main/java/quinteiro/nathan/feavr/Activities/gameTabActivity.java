@@ -384,38 +384,12 @@ public class gameTabActivity extends AppCompatActivity {
                 {xOffset+corridorSize,yOffset+heightMap-corridorSize,xOffset+corridorSize,yOffset+corridorSize}};
 
 
-        /*float [][] lampsPosition = {
-                //{corridorSize/2,heightMap-corridorSize-corridorSize/2},
-                {corridorSize/2,heightMap-corridorSize-corridorSize/2-8},
-                {corridorSize/2,heightMap-corridorSize-corridorSize/2-16},
-                {corridorSize/2,heightMap-corridorSize-corridorSize/2-24},
-                {corridorSize/2,heightMap-corridorSize-corridorSize/2-32},
-
-                {corridorSize/2,corridorSize/2},
-                {corridorSize/2+19,corridorSize/2},
-                {corridorSize/2+19*2,corridorSize/2},
-                {corridorSize/2+19*3-1,corridorSize/2},
-
-                //{59.5f,corridorSize/2},
-                {59.5f,corridorSize/2+12},
-                {59.5f,corridorSize/2+12*2},
-                {59.5f,corridorSize/2+12*3},
-                {59.5f,corridorSize/2+12*4},
-
-
-                {59.5f-17.5f,51.5f},
-                {59.5f-(17.5f*2),51.5f},
-                {59.5f-(17.5f*3),51.5f}};*/
-
-
         int posXBetweenLamps = 14;
         int posYBetweenLamps = 12;
 
 
         float [][] lampsPosition = {
 
-
-                //{corridorSize/2,heightMap-corridorSize-corridorSize/2},
                 {corridorSize/2,heightMap-corridorSize/2-posYBetweenLamps},
                 {corridorSize/2,heightMap-corridorSize/2-posYBetweenLamps*2},
                 {corridorSize/2,heightMap-corridorSize/2-posYBetweenLamps*3},
@@ -426,12 +400,10 @@ public class gameTabActivity extends AppCompatActivity {
                 {corridorSize/2+posXBetweenLamps*3,corridorSize/2},
                 {corridorSize/2+posXBetweenLamps*4,corridorSize/2},
 
-                //{59.5f,corridorSize/2},
                 {widthMap-corridorSize/2,corridorSize/2+posYBetweenLamps},
                 {widthMap-corridorSize/2,corridorSize/2+posYBetweenLamps*2},
                 {widthMap-corridorSize/2,corridorSize/2+posYBetweenLamps*3},
                 {widthMap-corridorSize/2,corridorSize/2+posYBetweenLamps*4},
-
 
                 {widthMap-corridorSize/2-posYBetweenLamps,heightMap-corridorSize/2},
                 {widthMap-corridorSize/2-posYBetweenLamps*2,heightMap-corridorSize/2},
@@ -449,9 +421,6 @@ public class gameTabActivity extends AppCompatActivity {
 
         @Override
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
-
-            //Log.e("DRAW","onMeasure : widthMeasureSpec: "+widthMeasureSpec+" highMeasureSpec : "+heightMeasureSpec);
-
 
             // map almost square so force the used space to be a square
             int size = heightMeasureSpec;
@@ -471,13 +440,6 @@ public class gameTabActivity extends AppCompatActivity {
             super.onDraw(canvas);
 
 
-
-
-            //Log.d("DRAW","onDraw : width : "+this.getWidth()+" height : "+this.getHeight());
-            //Log.d("DRAW","p1: "+lastPosition[0]+" p2: "+lastPosition[1]);
-
-
-
             if(extLimitsScaled == null) {
 
                 scale = this.getWidth() / widthMap;
@@ -491,7 +453,6 @@ public class gameTabActivity extends AppCompatActivity {
                 scaleY = scale;
 
                 offsetTextLampsScaled = offsetTextLamps*scale;
-
 
                 radiusGamerScaled = (int)  (radiusGamer*scale);
                 radiusLampsScaled = (int) (radiusLamps*scale);
@@ -514,6 +475,7 @@ public class gameTabActivity extends AppCompatActivity {
 
             }
 
+            // compute real position of lamps only once (the first time)
             if(lampsPosScaled == null){
                 lampsPosScaled = new float[nbLamps][];
 
@@ -545,12 +507,9 @@ public class gameTabActivity extends AppCompatActivity {
 
 
 
-
-
             // custom drawing code here
             Paint paint = new Paint();
             paint.setStyle(Paint.Style.FILL);
-
 
 
             // make the entire canvas white
@@ -559,24 +518,23 @@ public class gameTabActivity extends AppCompatActivity {
 
 
 
-
-            // draw gamer position
             if(validPosition) {
 
-
+                // draw external game map
                 paint.setColor(Color.BLACK);
                 for (float[] p :extLimitsScaled){
                     canvas.drawLines(p,paint);
                 }
 
-                //Log.e("-","x: "+extLimitsScaled[0][2]+" y: "+extLimitsScaled[0][3]);
 
+
+                // draw internal game map
                 for (float[] p :intLimitsScaled){
                     canvas.drawLines(p,paint);
                 }
 
 
-
+                // draw lamps
                 for(int i = 0; i< nbLamps;i++){
 
                     if(lampsState[i]){
@@ -597,14 +555,16 @@ public class gameTabActivity extends AppCompatActivity {
                 }
 
 
+                // draw gamer
                 paint.setAntiAlias(true);
                 paint.setColor(Color.RED);
-                //canvas.drawCircle(offsetPositionX+lastPosition[0]*scaleX,offsetPositionY+lastPosition[1]*scaleY,8,paint);
                 canvas.drawCircle(xOffset + lastPosition[0] * scaleX, yOffset + lastPosition[1] * scaleY, radiusGamerScaled, paint);
 
 
                 paint.setAntiAlias(false);
             } else {
+
+                // if unity part not started on smartphone draw loading message
                 paint.setAntiAlias(true);
                 paint.setTextSize(4*scale);
                 paint.setColor(Color.RED);
@@ -614,7 +574,6 @@ public class gameTabActivity extends AppCompatActivity {
                 paint.setAntiAlias(false);
 
             }
-
 
         }
     }
