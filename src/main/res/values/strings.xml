@@ -164,4 +164,9 @@ Google Vision
     <string name="sw14">14</string>
     <string name="sw15">15</string>
 
+
+    <string name="text_unableReacheDB">Impossible to access Database</string>
+    <string name="text_no_previous_game">No previous game saved.</string>
+    <string name="text_noBPMRecorded">Sorry the last game played did not use a heart rate sensor. Stats can not be displayed.</string>
+
 </resources>

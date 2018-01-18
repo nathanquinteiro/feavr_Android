@@ -161,6 +161,7 @@ public class DataProvider {
 
 
         DatabaseReference dbRef = database.getReference("game/"+gameReference+"/BPM");
+        Log.e("DataProvider","ask bpm for gameReference:"+gameReference);
         dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -168,23 +169,28 @@ public class DataProvider {
                 //listener.resultBPM();
                 Map<String, Object> bpmMap = (Map<String, Object>) dataSnapshot.getValue();
 
-                HashMap<Long,Long> hmap = new HashMap<>();
+                if(bpmMap!= null) {
 
-                HashMap<String, Long> current;
+                    HashMap<Long, Long> hmap = new HashMap<>();
 
-                Log.e("DP","size"+bpmMap.size());
+                    HashMap<String, Long> current;
 
-                //bpmMap.entrySet()
-                for(Map.Entry<String,Object> entry : bpmMap.entrySet()){
+                    Log.e("DP", "size" + bpmMap.size());
 
-                    current = (HashMap<String, Long>) entry.getValue();
+                    //bpmMap.entrySet()
+                    for (Map.Entry<String, Object> entry : bpmMap.entrySet()) {
 
-                    hmap.put(current.get("ts"),current.get("value"));
+                        current = (HashMap<String, Long>) entry.getValue();
+
+                        hmap.put(current.get("ts"), current.get("value"));
+                    }
+
+                    Map<Long, Long> map = new TreeMap<Long, Long>(hmap);
+
+                    listener.resultBPM(map);
+                } else {
+                    listener.resultBPM(null);
                 }
-
-                Map<Long, Long> map = new TreeMap<Long, Long>(hmap);
-
-                listener.resultBPM(map);
             }
 
             @Override

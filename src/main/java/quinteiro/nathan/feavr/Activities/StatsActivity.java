@@ -70,29 +70,34 @@ public class StatsActivity extends AppCompatActivity {
                 @Override
                 public void resultBPM(Map<Long, Long> a) {
 
-                    DataPoint dataPoint[] = new DataPoint[a.size()];
-                    int i = 0;
-                    long first = (long) a.keySet().toArray()[0];
-                    for(Long timestamp: a.keySet()){
-                        dataPoint[i] = new DataPoint((timestamp - first)/1000.0, a.get(timestamp));
-                        i++;
-                    }
+                    if(a!=null) {
 
-                    hrSerie = new LineGraphSeries<>(dataPoint);
-                    hrGraph.addSeries(hrSerie);
-                    hrGraph.setVisibility(View.VISIBLE);
+                        DataPoint dataPoint[] = new DataPoint[a.size()];
+                        int i = 0;
+                        long first = (long) a.keySet().toArray()[0];
+                        for (Long timestamp : a.keySet()) {
+                            dataPoint[i] = new DataPoint((timestamp - first) / 1000.0, a.get(timestamp));
+                            i++;
+                        }
+
+                        hrSerie = new LineGraphSeries<>(dataPoint);
+                        hrGraph.addSeries(hrSerie);
+                        hrGraph.setVisibility(View.VISIBLE);
+                    } else {
+                        tvText.setText(R.string.text_noBPMRecorded);
+                    }
 
                 }
 
                 @Override
                 public void resultCancelled() {
-                    tvText.setText("Impossible to access Database");
+                    tvText.setText(R.string.text_unableReacheDB);
                 }
             });
             //setContentView();
         }
         else {
-            tvText.setText("No previous game saved.");
+            tvText.setText(R.string.text_no_previous_game);
         }
     }
 }
