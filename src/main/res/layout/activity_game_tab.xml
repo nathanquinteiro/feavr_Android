@@ -28,21 +28,146 @@
 
             <Button
                 android:id="@+id/btLight"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Lamps" />
+                android:text="Random Lamps" />
 
-            <TextView
+
+
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="hello_world"
-                tools:layout_editor_absoluteX="27dp"
-                tools:layout_editor_absoluteY="115dp" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_lamps" />
+
+                <Switch
+                    android:id="@+id/SwLamp1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sw1" />
+                <Switch
+                    android:id="@+id/SwLamp2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:text="@string/sw2" />
+                <Switch
+                    android:id="@+id/SwLamp3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:text="@string/sw3" />
+                <Switch
+                    android:id="@+id/SwLamp4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sw4" />
+                <Switch
+                    android:id="@+id/SwLamp5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:text="@string/sw5" />
+
+
+                <Switch
+                    android:id="@+id/SwLamp6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sw6" />
+                <Switch
+                    android:id="@+id/SwLamp7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:text="@string/sw7" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+
+
+                <Switch
+                    android:id="@+id/SwLamp8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:text="@string/sw8" />
+                <Switch
+                    android:id="@+id/SwLamp9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sw9" />
+                <Switch
+                    android:id="@+id/SwLamp10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:text="@string/sw10" />
+
+
+                <Switch
+                    android:id="@+id/SwLamp11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sw11" />
+                <Switch
+                    android:id="@+id/SwLamp12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:text="@string/sw12" />
+                <Switch
+                    android:id="@+id/SwLamp13"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:text="@string/sw13" />
+                <Switch
+                    android:id="@+id/SwLamp14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sw14" />
+                <Switch
+                    android:id="@+id/SwLamp15"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:text="@string/sw15" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+
+
+
+
+            </LinearLayout>
+
+
+
 
             <com.jjoe64.graphview.GraphView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/graph"/>
+                android:id="@+id/graph"
+                />
 
         </LinearLayout>
 

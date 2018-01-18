@@ -146,4 +146,22 @@ Google Vision
     <string name="tvConnectionState">No Connected</string>
     <string name="tvConnectionStateCO">Successfully connected</string>
 
+    <string name="text_lamps">Lamps:</string>
+
+    <string name="sw1">1</string>
+    <string name="sw2">2</string>
+    <string name="sw3">3</string>
+    <string name="sw4">4</string>
+    <string name="sw5">5</string>
+    <string name="sw6">6</string>
+    <string name="sw7">7</string>
+    <string name="sw8">8</string>
+    <string name="sw9">9</string>
+    <string name="sw10">10</string>
+    <string name="sw11">11</string>
+    <string name="sw12">12</string>
+    <string name="sw13">13</string>
+    <string name="sw14">14</string>
+    <string name="sw15">15</string>
+
 </resources>

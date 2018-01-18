@@ -1,6 +1,7 @@
 package quinteiro.nathan.feavr.Activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -9,7 +10,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
@@ -22,6 +25,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Random;
 
+import quinteiro.nathan.feavr.Barcode.BarcodeGeneratorActivity;
 import quinteiro.nathan.feavr.utils.NetworkMulti;
 
 import quinteiro.nathan.feavr.R;
@@ -45,7 +49,16 @@ public class gameTabActivity extends AppCompatActivity {
 
     boolean lightOn = true;
 
+    private final int nbLamps = 15;
+
+    private Switch  swLamps[];
+    private boolean lampsState [] ;//= new boolean[nbLamps];
+
+
     Button btLight;
+
+    public gameTabActivity() {
+    }
 
     @Override
     protected void onDestroy() {
@@ -56,6 +69,91 @@ public class gameTabActivity extends AppCompatActivity {
         //unregisterReceiver(mGattUpdateReceiver);
     }
 
+
+    //aaaaa
+
+    //private View
+
+    private CompoundButton.OnCheckedChangeListener lampsControlListener = new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+            Log.e("---","id : "+buttonView.getId());
+            int lampsID = 0;
+            switch (buttonView.getId()){
+                case  R.id.SwLamp1:
+                    lampsID = 0;
+                    break;
+                case  R.id.SwLamp2:
+                    lampsID = 1;
+                    break;
+                case  R.id.SwLamp3:
+                    lampsID = 2;
+                    break;
+                case  R.id.SwLamp4:
+                    lampsID = 3;
+                    break;
+                case  R.id.SwLamp5:
+                    lampsID = 4;
+                    break;
+                case  R.id.SwLamp6:
+                    lampsID = 5;
+                    break;
+                case  R.id.SwLamp7:
+                    lampsID = 6;
+                    break;
+                case  R.id.SwLamp8:
+                    lampsID = 7;
+                    break;
+                case  R.id.SwLamp9:
+                    lampsID = 8;
+                    break;
+                case  R.id.SwLamp10:
+                    lampsID = 9;
+                    break;
+                case  R.id.SwLamp11:
+                    lampsID = 10;
+                    break;
+                case  R.id.SwLamp12:
+                    lampsID = 11;
+                    break;
+                case  R.id.SwLamp13:
+                    lampsID = 12;
+                    break;
+                case  R.id.SwLamp14:
+                    lampsID = 13;
+                    break;
+                case  R.id.SwLamp15:
+                    lampsID = 14;
+                    break;
+
+            }
+
+            lampsState[lampsID]=isChecked;
+
+            if(NetworkMulti.getInstance().isCoTested()){
+
+                JSONObject a = new JSONObject();
+                JSONArray b = null;
+
+                try {
+                    b = new JSONArray(lampsState);
+                } catch (JSONException e) {
+                    //e.printStackTrace();
+                }
+                try {
+                    a.put("lamps",b);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                NetworkMulti.getInstance().sendEvent(a.toString());
+
+            }
+        }
+    };
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,8 +161,30 @@ public class gameTabActivity extends AppCompatActivity {
 
 
 
+
+
         setContentView(R.layout.activity_game_tab);
+
+
+        lampsState = new boolean[nbLamps];
+        for(int i = 0; i< lampsState.length;i++){
+            lampsState[i]=true;
+        }
+
         ll = (LinearLayout) findViewById(R.id.gameLayout);
+
+
+        swLamps  = new Switch[nbLamps];
+
+
+        for(int i = 0; i<swLamps.length;i++){
+
+
+            swLamps[i] = (Switch)  findViewById(getResources().getIdentifier("SwLamp"+(i+1),"id",this.getPackageName()));
+            swLamps[i].setOnCheckedChangeListener(lampsControlListener);
+
+        }
+
 
 
 
@@ -77,17 +197,18 @@ public class gameTabActivity extends AppCompatActivity {
 
                     JSONObject a = new JSONObject();
 
-                    boolean[] li = new boolean[15];
+                    //boolean[] li = new boolean[nbLamps];
 
 
                     JSONArray b = null;
 
-                    for(int i = 0 ; i<li.length;i++){
-                        li[i] = random.nextBoolean();
+                    for(int i = 0 ; i<lampsState.length;i++){
+                        lampsState[i] = random.nextBoolean();
+                        swLamps[i].setChecked(lampsState[i]);
                     }
 
                     try {
-                        b = new JSONArray(li);
+                        b = new JSONArray(lampsState);
                     } catch (JSONException e) {
                         //e.printStackTrace();
                     }
@@ -98,12 +219,10 @@ public class gameTabActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-
                     NetworkMulti.getInstance().sendEvent(a.toString());
 
-
                 }
-                //NetworkMulti.getInstance().
+
             }
         });
 
@@ -238,6 +357,8 @@ public class gameTabActivity extends AppCompatActivity {
             setMeasuredDimension(widthMeasureSpec,heightMeasureSpec);
 
         }
+
+
 
 
 
