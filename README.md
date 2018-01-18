@@ -7,6 +7,7 @@ _TODO_
 
 - [ ] Clean code
 - [ ] Change layout of mutliplayertab
+- [ ] Change icons and text in menu (for stats activity)
 - [ ] Generate message for tablet when unity activity is leaving (with lastGameReference :-D)
 - [ ] Handle that message to leave controller activity (and save lastGameReference to replay game also on tab)
 - [ ] Start to display map on tablette right after recieve the first position message (when game hase actually started)

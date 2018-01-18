@@ -52,25 +52,15 @@ public class DataProvider {
         return _dp;
     }
 
-    public void pushMessageTest(){
-        //mDatabaseReference = database.getReference();
-        //mDatabaseReference.setValue("Test-msg","Hello,World!");
-    }
 
 
     public String startNewGame(){
 
         inGame = true;
 
-
         currentGameKey = ref.child("game").push().getKey();
 
         return currentGameKey;
-
-        /*inGame = true;
-        mDatabaseReference = mFirebaseDatabase.getReference();
-        currentGameKey = mDatabaseReference.child("std_game").push().getKey();
-        currentGameReference = mDatabaseReference.child("std_game").child(currentGameKey).getRef();*/
 
     }
 

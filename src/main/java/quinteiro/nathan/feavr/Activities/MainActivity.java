@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity
     private Button btVR;
     private Button btControl;
 
-    private Button btTest;
+
 
 
     private final int BARCODE_GENERATOR_CODE = 7;
@@ -73,25 +73,7 @@ public class MainActivity extends AppCompatActivity
         btControl = (Button) findViewById(R.id.btControl);
         btControl.setOnClickListener(startControlListener);
 
-        btTest = (Button) findViewById(R.id.btTest);
-        btTest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DataProvider.getInstance().getBPMOfGame("-L33_ev1sk76386sS7UT", new DataProvider.dataProviderListenerBPM() {
-                    @Override
-                    public void resultBPM(Map<Long, Long> a) {
 
-                        Log.e("-Result","-----");
-                    }
-
-                    @Override
-                    public void resultCancelled() {
-
-                    }
-
-                });
-            }
-        });
     }
 
 
