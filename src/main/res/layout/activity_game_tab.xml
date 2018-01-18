@@ -50,29 +50,31 @@
                     android:id="@+id/SwLamp1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/sw1" />
+                    android:text="@string/sw1"
+                    android:checked="true"/>
                 <Switch
                     android:id="@+id/SwLamp2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
+                    android:checked="true"
                     android:text="@string/sw2" />
                 <Switch
                     android:id="@+id/SwLamp3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
+                    android:checked="true"
                     android:text="@string/sw3" />
                 <Switch
                     android:id="@+id/SwLamp4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:checked="true"
                     android:text="@string/sw4" />
                 <Switch
                     android:id="@+id/SwLamp5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
+                    android:checked="true"
                     android:text="@string/sw5" />
 
 
@@ -80,12 +82,13 @@
                     android:id="@+id/SwLamp6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:checked="true"
                     android:text="@string/sw6" />
                 <Switch
                     android:id="@+id/SwLamp7"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
+                    android:checked="true"
                     android:text="@string/sw7" />
 
 
@@ -102,18 +105,19 @@
                     android:id="@+id/SwLamp8"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
+                    android:checked="true"
                     android:text="@string/sw8" />
                 <Switch
                     android:id="@+id/SwLamp9"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:checked="true"
                     android:text="@string/sw9" />
                 <Switch
                     android:id="@+id/SwLamp10"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
+                    android:checked="true"
                     android:text="@string/sw10" />
 
 
@@ -121,29 +125,31 @@
                     android:id="@+id/SwLamp11"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:checked="true"
                     android:text="@string/sw11" />
                 <Switch
                     android:id="@+id/SwLamp12"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
+                    android:checked="true"
                     android:text="@string/sw12" />
                 <Switch
                     android:id="@+id/SwLamp13"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
+                    android:checked="true"
                     android:text="@string/sw13" />
                 <Switch
                     android:id="@+id/SwLamp14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:checked="true"
                     android:text="@string/sw14" />
                 <Switch
                     android:id="@+id/SwLamp15"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
+                    android:checked="true"
                     android:text="@string/sw15" />
 
 

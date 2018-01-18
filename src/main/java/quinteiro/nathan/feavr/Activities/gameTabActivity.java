@@ -304,6 +304,7 @@ public class gameTabActivity extends AppCompatActivity {
                     // in android part the 0,0 is the left upper part
                     lastPosition[0] = p[0]+initOffsetX;
                     lastPosition[1] = -(p[1]+initOffsetY);
+                    validPosition = true;
 
                     // tell that the view need to be redraw !
                     postInvalidate();
@@ -347,6 +348,7 @@ public class gameTabActivity extends AppCompatActivity {
 
         private int lastBPM = 1;
         private float[] lastPosition = new float[]{0,0};
+        private boolean validPosition = false;
 
 
         private float minX = 10;
@@ -473,27 +475,39 @@ public class gameTabActivity extends AppCompatActivity {
 
 
 
-            paint.setColor(Color.BLACK);
-            for (float[] p :extLimitsScaled){
-                canvas.drawLines(p,paint);
-            }
-
-            //Log.e("-","x: "+extLimitsScaled[0][2]+" y: "+extLimitsScaled[0][3]);
-
-            for (float[] p :intLimitsScaled){
-                canvas.drawLines(p,paint);
-            }
-
-
 
             // draw gamer position
-            paint.setAntiAlias(true);
-            paint.setColor(Color.RED);
-            //canvas.drawCircle(offsetPositionX+lastPosition[0]*scaleX,offsetPositionY+lastPosition[1]*scaleY,8,paint);
-            canvas.drawCircle(xOffset+lastPosition[0]*scaleX,yOffset+lastPosition[1]*scaleY,8,paint);
+            if(validPosition) {
 
 
-            paint.setAntiAlias(false);
+                paint.setColor(Color.BLACK);
+                for (float[] p :extLimitsScaled){
+                    canvas.drawLines(p,paint);
+                }
+
+                //Log.e("-","x: "+extLimitsScaled[0][2]+" y: "+extLimitsScaled[0][3]);
+
+                for (float[] p :intLimitsScaled){
+                    canvas.drawLines(p,paint);
+                }
+
+                paint.setAntiAlias(true);
+                paint.setColor(Color.RED);
+                //canvas.drawCircle(offsetPositionX+lastPosition[0]*scaleX,offsetPositionY+lastPosition[1]*scaleY,8,paint);
+                canvas.drawCircle(xOffset + lastPosition[0] * scaleX, yOffset + lastPosition[1] * scaleY, 8, paint);
+
+
+                paint.setAntiAlias(false);
+            } else {
+                paint.setAntiAlias(true);
+                paint.setTextSize(18);
+                paint.setColor(Color.RED);
+                paint.setStyle(Paint.Style.FILL);
+
+                canvas.drawText("Game is loading ...",this.getWidth()/2,this.getHeight()/2,paint);
+                paint.setAntiAlias(false);
+
+            }
 
 
         }
