@@ -275,7 +275,7 @@ public class gameTabActivity extends AppCompatActivity {
 
     private class DemoView extends View {
 
-        //private int i = 10;
+
 
         private  float initOffsetX = 3.5f;
         private float initOffsetY = -51.5f;
@@ -300,12 +300,13 @@ public class gameTabActivity extends AppCompatActivity {
                     if(p[1]>maxY)
                         maxY=p[1];
 
+
+                    // unity and android have not the same reference for the point 0,0
+                    // in android part the 0,0 is the left upper part
                     lastPosition[0] = p[0]+initOffsetX;
                     lastPosition[1] = -(p[1]+initOffsetY);
 
-                    //lastPosition[1] = 63-p[1]+offsetPosition; // (before 50
-
-
+                    // tell that the view need to be redraw !
                     postInvalidate();
 
                 }
@@ -330,8 +331,7 @@ public class gameTabActivity extends AppCompatActivity {
 
         private int lastBPM = 1;
         private float[] lastPosition = new float[]{0,0};
-        private int offsetPositionX = 0;   //start Draw offset
-        private int offsetPositionY = 0;   //start Draw offset
+
 
         private float minX = 10;
         private float minY = 10;
@@ -343,22 +343,8 @@ public class gameTabActivity extends AppCompatActivity {
         private float scaleX = 10;
         private float scaleY = 10;
 
-        private int sizeExt = 630;
-
-        private int corridorLen = 70;
 
 
-        // external map limits
-        float [][] p1 = {{offsetPositionX,offsetPositionY,offsetPositionX,offsetPositionY+sizeExt},
-                {offsetPositionX,offsetPositionY,offsetPositionX+sizeExt,offsetPositionY},
-                {offsetPositionX+sizeExt,offsetPositionY,offsetPositionX+sizeExt,offsetPositionY+sizeExt},
-                {offsetPositionX,offsetPositionY+sizeExt,offsetPositionX+sizeExt,offsetPositionY+sizeExt}};
-
-        // internal map limits
-        float [][] p2 = {{offsetPositionX+corridorLen,offsetPositionY+corridorLen,offsetPositionX+corridorLen,offsetPositionY+sizeExt-corridorLen},//1
-                {offsetPositionX+corridorLen,offsetPositionY+corridorLen,offsetPositionX+sizeExt-corridorLen,offsetPositionY+corridorLen},//2
-                {offsetPositionX+sizeExt-corridorLen,offsetPositionY+corridorLen,offsetPositionX+sizeExt-corridorLen,offsetPositionY+sizeExt-corridorLen},//3
-                {offsetPositionX+corridorLen,offsetPositionY+sizeExt-corridorLen,offsetPositionX+sizeExt-corridorLen,offsetPositionY+sizeExt-corridorLen}};
 
 
         private int xOffset = 0;
@@ -388,9 +374,10 @@ public class gameTabActivity extends AppCompatActivity {
         @Override
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
 
-            Log.e("DRAW","onMeasure : widthMeasureSpec: "+widthMeasureSpec+" highMeasureSpec : "+heightMeasureSpec);
+            //Log.e("DRAW","onMeasure : widthMeasureSpec: "+widthMeasureSpec+" highMeasureSpec : "+heightMeasureSpec);
 
 
+            // map almost square so force the used space to be a square
             int size = heightMeasureSpec;
             if(widthMeasureSpec<heightMeasureSpec) {
                 size = widthMeasureSpec;
@@ -408,17 +395,18 @@ public class gameTabActivity extends AppCompatActivity {
             super.onDraw(canvas);
 
 
-            //this.getWidth();
-            //this.getHeight();
-            Log.e("DRAW","onDraw : width : "+this.getWidth()+" height : "+this.getHeight());
-            Log.d("DRAW","p1: "+lastPosition[0]+" p2: "+lastPosition[1]);
+
+
+            //Log.d("DRAW","onDraw : width : "+this.getWidth()+" height : "+this.getHeight());
+            //Log.d("DRAW","p1: "+lastPosition[0]+" p2: "+lastPosition[1]);
 
 
 
             if(extLimitsScaled == null) {
-                //scale = ((float)this.getWidth()) / 63;
+
                 scale = this.getWidth() / widthMap;
 
+                // the map is almost a square so use the same offset and scale for x and y
                 xOffset = (this.getWidth() % widthMap)/2;
                 yOffset = xOffset;
 
@@ -430,6 +418,7 @@ public class gameTabActivity extends AppCompatActivity {
 
 
 
+            // compute real position of map only once (the first time)
             if(extLimitsScaled == null){
 
                 extLimitsScaled = new float[4][4];
@@ -442,6 +431,7 @@ public class gameTabActivity extends AppCompatActivity {
 
             }
 
+            // compute real position of map only once (the first time)
             if(intLimitsScaled == null){
 
                 intLimitsScaled = new float[4][4];
@@ -455,12 +445,9 @@ public class gameTabActivity extends AppCompatActivity {
             }
 
 
-            //i+=5;
             // custom drawing code here
             Paint paint = new Paint();
             paint.setStyle(Paint.Style.FILL);
-
-
 
 
 
@@ -470,15 +457,12 @@ public class gameTabActivity extends AppCompatActivity {
 
 
 
-
-
-
             paint.setColor(Color.BLACK);
             for (float[] p :extLimitsScaled){
                 canvas.drawLines(p,paint);
             }
 
-            Log.e("-","x: "+extLimitsScaled[0][2]+" y: "+extLimitsScaled[0][3]);
+            //Log.e("-","x: "+extLimitsScaled[0][2]+" y: "+extLimitsScaled[0][3]);
 
             for (float[] p :intLimitsScaled){
                 canvas.drawLines(p,paint);
@@ -493,47 +477,9 @@ public class gameTabActivity extends AppCompatActivity {
             canvas.drawCircle(xOffset+lastPosition[0]*scaleX,yOffset+lastPosition[1]*scaleY,8,paint);
 
 
-
             paint.setAntiAlias(false);
 
 
-            /*paint.setColor(Color.BLUE);
-            paint.setTextSize(18);
-
-            canvas.drawText("(X:Y) = ("+lastPosition[0]+" : "+lastPosition[1]+")",100,800,paint);
-
-            paint.setColor(Color.BLACK);*/
-            /*canvas.drawText("minX :"+minX,100,900,paint);
-            canvas.drawText("maxX :"+maxX,100,1000,paint);
-            canvas.drawText("minY :"+minY,100,1100,paint);
-            canvas.drawText("maxY :"+maxY,100,1200,paint);*/
-
-
-
-            /*
-            // draw blue circle with anti aliasing turned off
-            paint.setAntiAlias(false);
-            paint.setColor(Color.BLUE);
-            canvas.drawCircle(20, 20, 15, paint);
-
-            // draw green circle with anti aliasing turned on
-            paint.setAntiAlias(true);
-            paint.setColor(Color.GREEN);
-            canvas.drawCircle(60, 20, 15, paint);
-
-            // draw red rectangle with anti aliasing turned off
-            paint.setAntiAlias(false);
-            paint.setColor(Color.RED);
-            canvas.drawRect(i, 5, 200, 30, paint);
-
-            // draw the rotated text
-            canvas.rotate(-45);
-
-            paint.setStyle(Paint.Style.FILL);
-            canvas.drawText("Graphics Rotation", 40, 180, paint);
-*/
-            //undo the rotate
-            //canvas.restore();
         }
     }
 }

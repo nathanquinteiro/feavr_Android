@@ -203,184 +203,13 @@ public class NetworkMulti {
 
             return  ok;
 
-
-
         }
-
-
 
         return false;
 
     }
 
-   /*public boolean testConnection(){
 
-        final  String TAG_TESTCO="TestCO";
-        if(this.ipSetted){
-
-            Thread rc = new Thread(new receivePing(),"T_rc");
-            Thread sd = new Thread(new sendPing(),"T_sd");
-
-            this.connectionTested=false;
-
-
-            rc.start();
-            sd.start();
-
-            Log.e(TAG_TESTCO,"bothStarted");
-
-            try {
-                Log.e(TAG_TESTCO,"JOIN RC thread");
-                rc.join();
-            } catch (InterruptedException e) {
-                Log.e(TAG_TESTCO,"fail join RC thread");
-                e.printStackTrace();
-            }
-
-
-            try {
-                Log.e(TAG_TESTCO,"JOIN SD thread");
-                sd.join();
-            } catch (InterruptedException e) {
-                Log.e(TAG_TESTCO,"fail join SD thread");
-                e.printStackTrace();
-            }
-
-            Log.e(TAG_TESTCO,"both joined return");
-
-
-
-            if(this.connectionTested){
-
-                try {
-                    outSocket = new DatagramSocket();
-                    outLocal = InetAddress.getByName(otherIp);
-                } catch (SocketException | UnknownHostException e) {
-                    this.connectionTested=false;
-                    e.printStackTrace();
-                }
-
-            }
-
-
-
-
-            return this.connectionTested;
-
-
-        }
-
-        this.connectionTested = false;
-        return false;
-
-    }*/
-
-    /*private class receivePing implements Runnable{
-        private final String TAG_RCV_PING ="RECV_PING";
-
-        @Override
-        public void run() {
-
-
-            byte[] message = new byte[500];
-            DatagramPacket p = new DatagramPacket(message, message.length);
-            DatagramSocket s = null;
-
-
-            int i = 0;
-
-            try {
-                s = new DatagramSocket(server_port);
-                s.setSoTimeout(pingDuration);
-            } catch (SocketException e) {
-                e.printStackTrace();
-            }
-
-
-            try {
-                s.receive(p);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            String text;
-
-
-            text = new String(message, 0, p.getLength());
-
-            if(text.equals("pingMsg")){
-                Log.e("TAG_RCV_PING","MSG contains ping");
-                connectionTested=true;
-
-            } else {
-                Log.e("TAG_RCV_PING","MSG not contains ping");
-            }
-
-
-
-            s.close();
-
-
-
-
-
-
-
-        }
-    }*/
-
-
-    /*private class sendPing implements Runnable{
-        private final String TAG_SD_PING ="SD_PING";
-        @Override
-        public void run() {
-
-
-            //ici
-            DatagramSocket s = null;
-            InetAddress local = null;
-
-            try {
-                s = new DatagramSocket();
-                //local = InetAddress.getByName("192.168.1.25");
-                local = InetAddress.getByName(otherIp);
-            } catch (SocketException | UnknownHostException e) {
-                e.printStackTrace();
-            }
-
-
-            String pingMsg = "pingMsg";
-
-
-            int msg_length=pingMsg.length();
-            byte[] message = pingMsg.getBytes();
-
-            DatagramPacket p = new DatagramPacket(message, msg_length,local,server_port);
-
-            int nbSend = nbPingMsg;
-
-            while (nbSend > 0){
-
-            try {
-                assert s != null;
-                s.send(p);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
-                Thread.sleep((long) pingDuration/nbPingMsg);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                Log.e(TAG_SD_PING,"unable to sleep 0o");
-            }
-
-            nbSend--;
-            Log.d(TAG_SD_PING,"SEND :"+nbSend);
-
-            }
-
-        }
-    }*/
     public void sendEvent(String msg){
 
         if(this.isCoTested()){
@@ -476,55 +305,8 @@ public class NetworkMulti {
         }
     }
 
-    /*public void initHeadSetMode(){
-
-        this.headSetMode=true;
-        // voir connecteur
-        // FeavrReceiver
-        //
-        // Thread get all msg and send it to FeavrReceiver through listener
-
-    }*/
 
 
-
-
-    // old verion not working !!!
-    /*
-    public void initRcvMsg(final networkMultiListenerNewPosition listPos, final networkMultiListenerNewBPM listBPM){
-
-
-
-
-        if(rcv_T == null){
-            rcv_T = new receiveMsg();
-            rcv_T.setList(listPos,listBPM);
-
-            Log.e("NW-multi","RunThread");
-            rcv_T.run();
-            Log.e("NW-multi","Thread started !");
-
-
-        }
-
-
-    }*/
-
-    /*public void stopRcvMsg(){
-        if(rcv_T!= null){
-            rcv_T.stopRCV();
-
-
-            try {
-                rcv_T.join();
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            rcv_T=null;
-        }
-    }*/
 
     Thread testThread;
 
@@ -551,7 +333,7 @@ public class NetworkMulti {
 
 
 
-    //public void startTestThread(final networkMultiListenerNewBPM lb, final networkMultiListenerNewPosition lp){
+
     public void startTestThread(final networkMultiListener l){
         //final networkMultiListenerNewBPM list_BPM = lb;
         //final networkMultiListenerNewPosition list_Pos = lp;
@@ -583,7 +365,7 @@ public class NetworkMulti {
 
                     while (testThreadActive){
 
-//randomNum = minimum + (int)(Math.random() * maximum);
+
 
                         int x =0;
                         int y =0;
@@ -687,48 +469,6 @@ public class NetworkMulti {
 
                             }
                         }
-
-                        /*try {
-                            Thread.sleep(500);
-                        } catch (InterruptedException e) {
-                            //e.printStackTrace();
-                        }
-                        x+= 10;
-                        y+= 10;
-
-                        b+=4;
-
-                        float[] ppos = {x%xMax,y%yMax};
-
-                        listener.setBPM(80+(b%5));
-                        listener.setPosition(ppos);*/
-
-
-
-
-
-
-
-
-
-                        /*i++;
-
-                        if(i%5000000==0){
-                            i=1;
-                            Log.e("nwM","moddullo");
-                            //list_BPM.getNewBPM(123);
-                            //float[] ppos = {1,4};
-                            x++;
-                            y++;
-                            b++;
-                            float[] ppos = {x%xMax,y%yMax};
-
-                            listener.setBPM(80+(b%5));
-                            listener.setPosition(ppos);
-
-
-                        }*/
-
 
                     }
 
@@ -933,220 +673,6 @@ public class NetworkMulti {
 
     }
 
-    /*
-    private class receiveMsg implements Runnable{
-
-        private final String TAG_RCV_MSG ="RECV_MSG";
-
-        private networkMultiListenerNewPosition listPos = null;
-        private networkMultiListenerNewBPM listBPM = null;
-
-        private boolean  active = true;
-
-
-        public void setList(final networkMultiListenerNewPosition lp, final networkMultiListenerNewBPM lb){
-            listPos=lp;
-            listBPM=lb;
-
-        }
-
-        @Override
-        public void run() {
-
-            byte[] message = new byte[500];
-            DatagramPacket p = new DatagramPacket(message, message.length);
-            DatagramSocket s = null;
-
-
-            int i = 0;
-
-            try {
-                s = new DatagramSocket(server_port);
-                s.setSoTimeout(1000);
-            } catch (SocketException e) {
-                e.printStackTrace();
-                active=false;
-                Log.e(TAG_RCV_MSG,"-fails init socket or fail set timout");
-                return;
-            }
-
-
-            boolean validMsg = true;
-
-            while (active) {
-
-                try {
-                    //quand meme mettre timout pour désactivé après si non on s'en sort jamais ....
-
-                    s.receive(p);
-                    validMsg = true;
-                } catch (IOException e) {
-                    //e.printStackTrace();
-                    //Log.e(TAG_RCV_MSG,"-IOException receive msg");
-
-                    validMsg = false;
-
-                }
-
-                if(validMsg){
-
-                    String text;
-                    text = new String(message, 0, p.getLength());
-
-
-                    String[] splitted = text.split("/");
-
-                    if (splitted.length != 0) {
-
-                        if (splitted[0].equals(MSG_POS)) {
-
-                            if (splitted.length == 3) {
-
-                                float[] ppos = {Float.parseFloat(splitted[1]), Float.parseFloat(splitted[2])};
-                                listPos.getNewPosition(ppos);
-
-                            } else {
-                                Log.e(TAG_RCV_MSG, "Wrong size msg pos :" + splitted.length);
-                            }
-
-
-                        } else if (splitted[0].equals(MSG_BPM)) {
-
-                            if (splitted.length == 2) {
-                                int b = Integer.parseInt(splitted[1]);
-                                listBPM.getNewBPM(b);
-
-                            } else {
-                                Log.e(TAG_RCV_MSG, "Wrong size msg bmp :" + splitted.length);
-                            }
-
-                        }
-
-                    }
-                }
-
-
-            }
-
-            if (s != null) {
-                s.close();
-            }
-
-
-        }
-    }*/
-
-    /*private class receiveMsg extends Thread{
-        private final String TAG_RCV_MSG ="RECV_MSG";
-
-        private networkMultiListenerNewPosition listPos = null;
-        private networkMultiListenerNewBPM listBPM = null;
-
-
-
-        public void stopRCV(){
-            active=false;
-        }
-
-        //faire qqch avec synchronised pour stopper le thread
-        private boolean  active = true;
-
-        public void setList(final networkMultiListenerNewPosition lp, final networkMultiListenerNewBPM lb){
-            listPos=lp;
-            listBPM=lb;
-
-        }
-
-        @Override
-        public void run() {
-
-
-
-            byte[] message = new byte[500];
-            DatagramPacket p = new DatagramPacket(message, message.length);
-            DatagramSocket s = null;
-
-
-            int i = 0;
-
-            try {
-                s = new DatagramSocket(server_port);
-            } catch (SocketException e) {
-                e.printStackTrace();
-                active=false;
-                Log.e(TAG_RCV_MSG,"-fails init socket");
-            }
-
-            try {
-                s.setSoTimeout(1000);
-            } catch (SocketException e) {
-                e.printStackTrace();
-                Log.e(TAG_RCV_MSG,"-fails set Timout socket");
-            }
-
-            boolean validMsg = true;
-            while (active) {
-
-                try {
-                    //quand meme mettre timout pour désactivé après si non on s'en sort jamais ....
-
-                    s.receive(p);
-                    validMsg = true;
-                } catch (IOException e) {
-                    //e.printStackTrace();
-                    //Log.e(TAG_RCV_MSG,"-IOException receive msg");
-
-                    validMsg = false;
-
-                }
-
-                if(validMsg){
-
-                    String text;
-                    text = new String(message, 0, p.getLength());
-
-
-                    String[] splitted = text.split("/");
-
-                    if (splitted.length != 0) {
-
-                        if (splitted[0].equals(MSG_POS)) {
-
-                            if (splitted.length == 3) {
-
-                                float[] ppos = {Float.parseFloat(splitted[1]), Float.parseFloat(splitted[2])};
-                                listPos.getNewPosition(ppos);
-
-                            } else {
-                                Log.e(TAG_RCV_MSG, "Wrong size msg pos :" + splitted.length);
-                            }
-
-
-                        } else if (splitted[0].equals(MSG_BPM)) {
-
-                            if (splitted.length == 2) {
-                                int b = Integer.parseInt(splitted[1]);
-                                listBPM.getNewBPM(b);
-
-                            } else {
-                                Log.e(TAG_RCV_MSG, "Wrong size msg bmp :" + splitted.length);
-                            }
-
-                        }
-
-                    }
-            }
-
-
-            }
-
-            if (s != null) {
-                s.close();
-            }
-
-
-        }
-    }*/
 
 
     public interface networkMultiListener{
