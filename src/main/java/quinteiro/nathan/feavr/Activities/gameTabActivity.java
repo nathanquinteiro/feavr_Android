@@ -370,7 +370,7 @@ public class gameTabActivity extends AppCompatActivity {
 
         private int widthMap = 63;
         private int heightMap = 55;
-        private float corridorSize = 7.5f;
+        private float corridorSize = 7f;//7.5
 
         float [][] extLimits ={{xOffset,yOffset,xOffset+widthMap,yOffset},
                 {xOffset+widthMap,yOffset,xOffset+widthMap,yOffset+heightMap},
@@ -384,9 +384,36 @@ public class gameTabActivity extends AppCompatActivity {
                 {xOffset+corridorSize,yOffset+heightMap-corridorSize,xOffset+corridorSize,yOffset+corridorSize}};
 
 
+        float [][] lampsPosition = {
+                //{corridorSize/2,heightMap-corridorSize-corridorSize/2},
+                {corridorSize/2,heightMap-corridorSize-corridorSize/2-8},
+                {corridorSize/2,heightMap-corridorSize-corridorSize/2-16},
+                {corridorSize/2,heightMap-corridorSize-corridorSize/2-24},
+                {corridorSize/2,heightMap-corridorSize-corridorSize/2-32},
+
+                {corridorSize/2,corridorSize/2},
+                {corridorSize/2+19,corridorSize/2},
+                {corridorSize/2+19*2,corridorSize/2},
+                {corridorSize/2+19*3-1,corridorSize/2},
+
+                //{59.5f,corridorSize/2},
+                {59.5f,corridorSize/2+12},
+                {59.5f,corridorSize/2+12*2},
+                {59.5f,corridorSize/2+12*3},
+                {59.5f,corridorSize/2+12*4},
+
+
+                {59.5f-17.5f,51.5f},
+                {59.5f-(17.5f*2),51.5f},
+                {59.5f-(17.5f*3),51.5f}};
 
         float [][] extLimitsScaled = null;
         float [][] intLimitsScaled = null;
+        float [][] lampsPosScaled = null;
+
+
+        int offsetTextLamps = 1;
+        float offsetTextLampsScaled;
 
 
         @Override
@@ -431,6 +458,8 @@ public class gameTabActivity extends AppCompatActivity {
                 Log.d("Scale :", " " + scale);
                 scaleX = scale;
                 scaleY = scale;
+
+                offsetTextLampsScaled = offsetTextLamps*scale;
             }
 
 
@@ -449,6 +478,21 @@ public class gameTabActivity extends AppCompatActivity {
 
             }
 
+            if(lampsPosScaled == null){
+                lampsPosScaled = new float[nbLamps][];
+
+                for(int i = 0; i< nbLamps; i++){
+
+                    lampsPosScaled[i] = new float[2];
+
+                    for(int j = 0; j< lampsPosition[i].length;j++){
+
+
+                        lampsPosScaled[i][j] = lampsPosition[i][j]*scale+xOffset;
+                    }
+                }
+            }
+
             // compute real position of map only once (the first time)
             if(intLimitsScaled == null){
 
@@ -461,6 +505,10 @@ public class gameTabActivity extends AppCompatActivity {
                 }
 
             }
+
+
+
+
 
 
             // custom drawing code here
@@ -490,6 +538,35 @@ public class gameTabActivity extends AppCompatActivity {
                 for (float[] p :intLimitsScaled){
                     canvas.drawLines(p,paint);
                 }
+
+
+                for(float[] p : lampsPosScaled){
+
+
+
+                    //canvas.drawCircle(p[0],p[1],5,paint);
+                }
+
+
+                for(int i = 0; i< nbLamps;i++){
+
+                    if(lampsState[i]){
+
+                        paint.setColor(Color.YELLOW);
+                        canvas.drawCircle(lampsPosScaled[i][0],lampsPosScaled[i][1],5,  paint);
+                        //canvas.drawCircle(p[0],p[1],5,paint);
+
+                    } else {
+                        paint.setColor(Color.BLACK);
+                        canvas.drawCircle(lampsPosScaled[i][0],lampsPosScaled[i][1],5,  paint);
+                    }
+
+                    paint.setColor(Color.BLACK);
+                    paint.setTextSize(12);
+                    canvas.drawText("L"+(i+1),lampsPosScaled[i][0]+offsetTextLampsScaled,lampsPosScaled[i][1],paint);
+
+                }
+
 
                 paint.setAntiAlias(true);
                 paint.setColor(Color.RED);
