@@ -111,6 +111,10 @@
 
     <string name="becare">BLE Handler</string>
 
+    <!-- GameTabe -->
+    <string name="text_lamps">Lamps:</string>
+    <string name="hr_graph_text">HeartRate [p/m]</string>
+
     <!--
 Google Vision
 	-->
@@ -146,7 +150,6 @@ Google Vision
     <string name="tvConnectionState">No Connected</string>
     <string name="tvConnectionStateCO">Successfully connected</string>
 
-    <string name="text_lamps">Lamps:</string>
 
     <string name="sw1">1</string>
     <string name="sw2">2</string>
