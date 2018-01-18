@@ -41,7 +41,6 @@ public class NetworkMulti {
     final private int server_port = 12345;
 
 
-    //PING setup
 
     private int waitConfirmation = 1000;
 
@@ -158,13 +157,10 @@ public class NetworkMulti {
             }
 
 
-            // GET ONE MSG CHECK IF  ici
 
             s.close();
 
             byte[] message = new byte[500];
-            //DatagramPacket p = new DatagramPacket(message, message.length);
-            //DatagramSocket s = null;
 
             p = new DatagramPacket(message, message.length);
             s = null;
@@ -192,12 +188,11 @@ public class NetworkMulti {
 
             boolean ok = false;
             if(text.equals("OK_IP_RECEIVED")){
-                Log.e("TAG_RCV_PING","MSG contains ping");
-                //connectionTested=true;
+                Log.d("TAG_RCV_PING","MSG contains ping");
                 ok = true;
 
             } else {
-                Log.e("TAG_RCV_PING","MSG not contains ping");
+                Log.d("TAG_RCV_PING","MSG not contains ping");
                 ok = false;
             }
 
@@ -274,7 +269,7 @@ public class NetworkMulti {
                 msg+="/"+MSG_NO_REF_GAME;
             }
 
-            Log.d("COM","send endGamemsg :"+msg);
+            Log.d("COM","send endGameMsg :"+msg);
             this.sendMsg(msg);
 
         }
@@ -301,12 +296,14 @@ public class NetworkMulti {
             outSocket.close();
         }
 
+        // ask for both thread to stop
         rcvEventThreadActive = false;
         rcvThreadActive = false;
 
         if(rcvEventThread!=null) {
 
             try {
+                // wait that rcvEventThread has stop
                 rcvEventThread.join();
             } catch (InterruptedException e) {
                 Log.e("NWMul", "fail join thread rcvEvent");
@@ -317,18 +314,16 @@ public class NetworkMulti {
 
         if(rcvMsgThread!=null) {
             try {
+                // wait that rcvMsgThread has stop
                 rcvMsgThread.join();
             } catch (InterruptedException e) {
                 e.printStackTrace();
                 Log.e("NWMul", "fail join thread rcvMsg");
             }
-            Log.e("NWMul", "join both thread");
+
             rcvMsgThread=null;
         }
     }
-
-
-
 
 
 
@@ -375,10 +370,8 @@ public class NetworkMulti {
                             s.receive(p);
                             validMsg = true;
                         } catch (IOException e) {
-                            //e.printStackTrace();
-                            //Log.e(TAG_RCV_MSG,"-IOException receive msg");
 
-                            validMsg = false;
+                                validMsg = false;
 
                         }
 
@@ -396,8 +389,6 @@ public class NetworkMulti {
 
                                     if (splitted.length == 2) {
 
-                                        //float[] ppos = {Float.parseFloat(splitted[1]), Float.parseFloat(splitted[2])};
-                                        //listener.setPosition(ppos);
                                         lIstener.setEvent(splitted[1]);
 
                                     } else {
@@ -430,10 +421,9 @@ public class NetworkMulti {
         rcvThreadActive = false;
     }
 
-    //public void startRcvMsgThread(final networkMultiListenerNewBPM lb, final networkMultiListenerNewPosition lp){
+
     public void startRcvThread(final networkMultiListener l){
-        //final networkMultiListenerNewBPM list_BPM = lb;
-        //final networkMultiListenerNewPosition list_Pos = lp;
+
         final networkMultiListener listener =l;
 
         final String TAG_RCV_MSG = "RCV-T";
@@ -473,8 +463,6 @@ public class NetworkMulti {
                         s.receive(p);
                         validMsg = true;
                     } catch (IOException e) {
-                        //e.printStackTrace();
-                        //Log.e(TAG_RCV_MSG,"-IOException receive msg");
 
                         validMsg = false;
 
@@ -545,7 +533,7 @@ public class NetworkMulti {
         void setPosition(float[] p);
         void setBPM(int bpm);
         void setEndGame(String gameReference);
-        //void setEvent(String msg);
+
     }
 
     public interface networkEventListener{
@@ -628,8 +616,6 @@ public class NetworkMulti {
 
 
     public void startTestThread(final networkMultiListener l){
-        //final networkMultiListenerNewBPM list_BPM = lb;
-        //final networkMultiListenerNewPosition list_Pos = lp;
         final networkMultiListener listener = l;
 
         testThreadActive=true;
