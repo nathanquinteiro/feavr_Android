@@ -14,4 +14,4 @@ _TODO_
 - [x] Add switch to lamps (controlle each lamp one by one)
 - [x] manage offset in mutliplayertab
 - [ ] Add button to play song / scream / whatever (so scared !)
-- [ ] Sometime multiplayer game VR won't start after scanning (however tablet start displaying game why ? when unity is still running in the same time )
+- [ ] (maybe solve when tablette leave the game when unity leave it)Sometime multiplayer game VR won't start after scanning (however tablet start displaying game why ? when unity is still running in the same time )
