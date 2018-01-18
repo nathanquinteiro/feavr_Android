@@ -112,6 +112,7 @@
 
     <!-- GameTabe -->
     <string name="text_lamps">Lamps:</string>
+    <string name="random_lamps">Random</string>
     <string name="hr_graph_text">HeartRate [p/m]</string>
 
     <!--
