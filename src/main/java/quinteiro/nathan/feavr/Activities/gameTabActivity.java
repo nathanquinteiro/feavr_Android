@@ -356,6 +356,11 @@ public class gameTabActivity extends AppCompatActivity {
         private float scaleY = 10;
 
 
+        private float radiusGamer = 1;
+        private int radiusGamerScaled ;
+
+        private float radiusLamps = 0.5f;
+        private int radiusLampsScaled;
 
 
 
@@ -454,6 +459,11 @@ public class gameTabActivity extends AppCompatActivity {
                 scaleY = scale;
 
                 offsetTextLampsScaled = offsetTextLamps*scale;
+
+
+                radiusGamerScaled = (int)  (radiusGamer*scale);
+                radiusLampsScaled = (int) (radiusLamps*scale);
+
             }
 
 
@@ -547,16 +557,16 @@ public class gameTabActivity extends AppCompatActivity {
                     if(lampsState[i]){
 
                         paint.setColor(Color.YELLOW);
-                        canvas.drawCircle(lampsPosScaled[i][0],lampsPosScaled[i][1],5,  paint);
+                        canvas.drawCircle(lampsPosScaled[i][0],lampsPosScaled[i][1],radiusLampsScaled,  paint);
                         //canvas.drawCircle(p[0],p[1],5,paint);
 
                     } else {
                         paint.setColor(Color.BLACK);
-                        canvas.drawCircle(lampsPosScaled[i][0],lampsPosScaled[i][1],5,  paint);
+                        canvas.drawCircle(lampsPosScaled[i][0],lampsPosScaled[i][1],radiusLampsScaled,  paint);
                     }
 
                     paint.setColor(Color.BLACK);
-                    paint.setTextSize(12);
+                    paint.setTextSize(1*scale);
                     canvas.drawText("L"+(i+1),lampsPosScaled[i][0]+offsetTextLampsScaled,lampsPosScaled[i][1],paint);
 
                 }
@@ -565,13 +575,13 @@ public class gameTabActivity extends AppCompatActivity {
                 paint.setAntiAlias(true);
                 paint.setColor(Color.RED);
                 //canvas.drawCircle(offsetPositionX+lastPosition[0]*scaleX,offsetPositionY+lastPosition[1]*scaleY,8,paint);
-                canvas.drawCircle(xOffset + lastPosition[0] * scaleX, yOffset + lastPosition[1] * scaleY, 8, paint);
+                canvas.drawCircle(xOffset + lastPosition[0] * scaleX, yOffset + lastPosition[1] * scaleY, radiusGamerScaled, paint);
 
 
                 paint.setAntiAlias(false);
             } else {
                 paint.setAntiAlias(true);
-                paint.setTextSize(18);
+                paint.setTextSize(4*scale);
                 paint.setColor(Color.RED);
                 paint.setStyle(Paint.Style.FILL);
 
