@@ -67,10 +67,10 @@
     <string name="menu_logout_cloud">Logout</string>
 
     <!-- BarcodeCaptureActivity -->
-    <string name="barcode_capture_hint">Scan the QR code on the FeaVR Control to establish connection</string>
+    <string name="barcode_capture_hint">Scan the QR code on the FeaVR Control to establish connection.\nMake sure both devices are connected to the same network.</string>
 
     <!-- BarcodeGeneratorActivity -->
-    <string name="barcode_generator_hint">Scan this QR code with the VR Player to establish connection</string>
+    <string name="barcode_generator_hint">Scan this QR code with the VR Player to establish connection.\nMake sure both devices are connected to the same network.</string>
 
     <!-- Technical settings -->
     <string name="technical_settings_text">In order to detect your device, make sure the Bluetooth
